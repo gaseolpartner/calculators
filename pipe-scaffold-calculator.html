@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="가설파트너 - 단관비계 물량산출 계산기">
+    <meta name="author" content="가설파트너">
+    <meta name="keywords" content="단관비계, 물량산출, 건설, 가설구조물">
+    <title>단관비계 물량산출 계산기 - 가설파트너</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            bottom: -50%;
+            left: -50%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 컨테이너 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 계산기 카드 */
+        .calculator-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .card-header h2 {
+            font-size: 28px;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        /* 입력 섹션 */
+        .input-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            border: 3px solid #2a5298;
+            border-radius: 10px;
+            font-size: 24px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #1e3c72;
+            background: #f0f5ff;
+        }
+        
+        .unit {
+            color: #666;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+        
+        /* 버튼 */
+        .calc-button {
+            padding: 20px 60px;
+            font-size: 22px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            color: white;
+            margin-top: 20px;
+        }
+        
+        .calc-button:hover {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.4);
+        }
+        
+        /* 결과 섹션 */
+        .result-section {
+            margin-top: 40px;
+            display: none;
+        }
+        
+        .result-section.active {
+            display: block;
+        }
+        
+        /* 결과 테이블 */
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .result-table th {
+            background: #1e3c72;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .result-table td {
+            padding: 15px 20px;
+            border-bottom: 2px solid #f0f0f0;
+            font-size: 16px;
+        }
+        
+        .result-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .result-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .result-table .item-name {
+            font-weight: bold;
+            color: #2a5298;
+        }
+        
+        .result-table .quantity {
+            text-align: right;
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        
+        .result-table .unit {
+            text-align: center;
+            color: #666;
+        }
+        
+        /* 기준 설명 */
+        .standard-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .standard-info h4 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        .standard-info p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* 버튼 그룹 */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        /* 공지사항 */
+        .notice {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #856404;
+            text-align: center;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .calculator-card {
+                padding: 20px;
+            }
+            
+            .form-group input {
+                font-size: 20px;
+            }
+            
+            .calc-button {
+                padding: 15px 40px;
+                font-size: 18px;
+            }
+            
+            .result-table th,
+            .result-table td {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        /* 프린트 스타일 */
+        @media print {
+            .header,
+            .button-group,
+            .notice,
+            .calc-button {
+                display: none;
+            }
+            
+            .calculator-card {
+                box-shadow: none;
+                padding: 20px;
+            }
+            
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <div class="header">
+        <h1>단관비계 물량산출 계산기</h1>
+        <p>면적만 입력하면 자동으로 자재 수량을 계산합니다</p>
+    </div>
+    
+    <!-- 컨테이너 -->
+    <div class="container">
+        <!-- 공지사항 -->
+        <div class="notice">
+            <h3>📢 산출 기준</h3>
+            <p>쌍줄비계 기준 | 연면적 = (건물가로길이 + 건물세로길이) × 2 × 건물높이</p>
+        </div>
+        
+        <!-- 계산기 카드 -->
+        <div class="calculator-card">
+            <div class="card-header">
+                <h2>단관비계 자재 수량 계산</h2>
+                <p>비계 설치 면적을 입력하세요</p>
+            </div>
+            
+            <!-- 입력 섹션 -->
+            <div class="input-section">
+                <div class="form-group">
+                    <label>비계 설치 면적</label>
+                    <input type="number" id="area" placeholder="0" step="0.1" min="0" autofocus>
+                    <span class="unit">㎡</span>
+                </div>
+                
+                <button class="calc-button" onclick="calculateQuantity()">자재 수량 계산</button>
+            </div>
+            
+            <!-- 결과 섹션 -->
+            <div id="result-section" class="result-section">
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th>자재명</th>
+                            <th style="text-align: center;">단위</th>
+                            <th style="text-align: right;">수량</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="item-name">단관파이프 (Φ48.6×2.3t×6.0M)</td>
+                            <td class="unit">본</td>
+                            <td class="quantity" id="pipe-6m">0</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">단관파이프 (Φ48.6×2.3t×4.0M)</td>
+                            <td class="unit">본</td>
+                            <td class="quantity" id="pipe-4m">0</td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">단관파이프 (Φ48.6×2.3t×2.0M)</td>
+                            <td class="unit">본</td>
+                            <td class="quantity" id="pipe-2m">0</td>
+                        </tr>
+                        <tr style="background: #f8f9fa;">
+                            <td class="item-name">클램프 (고정)</td>
+                            <td class="unit">개</td>
+                            <td class="quantity" id="clamp-right">0</td>
+                        </tr>
+                        <tr style="background: #f8f9fa;">
+                            <td class="item-name">클램프 (자동)</td>
+                            <td class="unit">개</td>
+                            <td class="quantity" id="clamp-swivel">0</td>
+                        </tr>
+                        <tr style="background: #f8f9fa;">
+                            <td class="item-name">연결핀</td>
+                            <td class="unit">개</td>
+                            <td class="quantity" id="connection-pin">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="standard-info">
+                    <h4>산출 기준</h4>
+                    <p>
+                        • 6M 파이프: 면적 × 0.3 × 1.15<br>
+                        • 4M 파이프: 면적 × 0.05 × 1.3<br>
+                        • 2M 파이프: 면적 × 0.156 × 1.3<br>
+                        • 클램프(고정): 6M 수량의 3.5배<br>
+                        • 클램프(자동): 고정 수량의 10%<br>
+                        • 연결핀: 6M + 4M 총수량의 1/2
+                    </p>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="printResult()">인쇄하기</button>
+                    <button class="btn btn-secondary" onclick="resetCalculator()">초기화</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 엔터키 이벤트
+        document.getElementById('area').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateQuantity();
+            }
+        });
+        
+        // 단관비계 물량 계산 (면적 기준)
+        function calculateQuantity() {
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            
+            if (area <= 0) {
+                alert('비계 설치 면적을 입력해주세요.');
+                return;
+            }
+            
+            // 엑셀 파일의 정확한 산출 기준
+            // 6M 파이프 수량 계산 (면적 × 0.3 × 1.15)
+            const pipe6m = Math.ceil(area * 0.3 * 1.15);
+            
+            // 4M 파이프 수량 계산 (면적 × 0.05 × 1.3)
+            const pipe4m = Math.ceil(area * 0.05 * 1.3);
+            
+            // 2M 파이프 수량 계산 (면적 × 0.156 × 1.3)
+            const pipe2m = Math.ceil(area * 0.156 * 1.3);
+            
+            // 클램프(고정) 수량 계산 (6M 수량의 3.5배)
+            const clampFixed = Math.ceil(pipe6m * 3.5);
+            
+            // 클램프(자동) 수량 계산 (고정 수량의 10%)
+            const clampAuto = Math.ceil(clampFixed * 0.1);
+            
+            // 연결핀 수량 계산 (6M + 4M 총수량의 1/2)
+            const connectionPin = Math.ceil((pipe6m + pipe4m) * 0.5);
+            
+            const quantities = {
+                pipe6m: pipe6m,
+                pipe4m: pipe4m,
+                pipe2m: pipe2m,
+                clampRight: clampFixed,
+                clampSwivel: clampAuto,
+                connectionPin: connectionPin
+            };
+            
+            // 결과 표시
+            document.getElementById('pipe-6m').textContent = quantities.pipe6m.toLocaleString();
+            document.getElementById('pipe-4m').textContent = quantities.pipe4m.toLocaleString();
+            document.getElementById('pipe-2m').textContent = quantities.pipe2m.toLocaleString();
+            document.getElementById('clamp-right').textContent = quantities.clampRight.toLocaleString();
+            document.getElementById('clamp-swivel').textContent = quantities.clampSwivel.toLocaleString();
+            document.getElementById('connection-pin').textContent = quantities.connectionPin.toLocaleString();
+            
+            // 결과 섹션 표시
+            document.getElementById('result-section').classList.add('active');
+            
+            // 결과 섹션으로 스크롤
+            document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // 초기화
+        function resetCalculator() {
+            document.getElementById('area').value = '';
+            document.getElementById('result-section').classList.remove('active');
+            document.getElementById('area').focus();
+        }
+        
+        // 인쇄
+        function printResult() {
+            window.print();
+        }
+        
+        // 페이지 로드 시 입력 필드에 포커스
+        window.onload = function() {
+            document.getElementById('area').focus();
+        };
+    </script>
+</body>
+</html>

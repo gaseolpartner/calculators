@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="가설파트너 - 시스템 동바리 및 비계 물량산출 계산기">
+    <meta name="description" content="가설파트너 스마트 솔루션 - 데이터 기반 가설재 산출 및 협의록 통합 관리">
     <meta name="author" content="가설파트너">
-    <meta name="keywords" content="시스템동바리, 시스템비계, 물량산출, 건설, 가설구조물">
-    <title>가설파트너 계산기 모음</title>
+    <meta name="keywords" content="시스템동바리, 시스템비계, 단관비계, 물량산출, 건설, 가설구조물">
+    <title>가설파트너 스마트 솔루션 - 데이터 기반 가설재 산출 및 협의록 통합 관리</title>
     
     <style>
         * {
@@ -333,13 +333,33 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        /* 신규 카드 표시 */
+        .new-badge {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #ff4757;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
     <!-- 헤더 -->
     <div class="header">
-        <h1>가설파트너 계산기 모음</h1>
-        <p>건설 현장에 필요한 정확한 물량 산출 프로그램</p>
+        <h1>가설파트너 스마트 솔루션</h1>
+        <p>데이터 기반 가설재 산출 및 협의록 통합 관리</p>
     </div>
     
     <!-- 메인 컨테이너 -->
@@ -375,7 +395,7 @@
             
             <!-- 시스템 비계 계산기 -->
             <div class="calculator-card">
-                <div class="version-badge">v1.00</div>
+                <div class="version-badge">v1.0</div>
                 <div class="calculator-icon">🏢</div>
                 <h2 class="calculator-title">시스템 비계 계산기</h2>
                 <p class="calculator-description">
@@ -390,6 +410,47 @@
                 </div>
                 <a href="system-scaffold-calculator.html" class="calculator-button">
                     시스템 비계 계산기 실행
+                </a>
+            </div>
+            
+            <!-- 단관비계 계산기 -->
+            <div class="calculator-card">
+                <div class="new-badge">NEW</div>
+                <div class="version-badge">v1.0</div>
+                <div class="calculator-icon">🔧</div>
+                <h2 class="calculator-title">단관비계 계산기</h2>
+                <p class="calculator-description">
+                    면적만 입력하면 쌍줄비계 기준 단관파이프 및 부자재 소요량을 자동으로 산출합니다.
+                </p>
+                <div class="calculator-features">
+                    <div class="feature-item">간편한 면적 입력 방식</div>
+                    <div class="feature-item">6M, 4M, 2M 파이프 자동 계산</div>
+                    <div class="feature-item">클램프 및 연결핀 수량 산출</div>
+                    <div class="feature-item">쌍줄비계 기준 적용</div>
+                    <div class="feature-item">인쇄 기능 지원</div>
+                </div>
+                <a href="pipe-scaffold-calculator.html" class="calculator-button">
+                    단관비계 계산기 실행
+                </a>
+            </div>
+            
+            <!-- 설치 협의록 -->
+            <div class="calculator-card">
+                <div class="version-badge">v1.0</div>
+                <div class="calculator-icon">📋</div>
+                <h2 class="calculator-title">설치 협의록</h2>
+                <p class="calculator-description">
+                    시스템 비계 및 동바리 설치 협의록을 작성하고 관리할 수 있는 전문 문서 시스템입니다.
+                </p>
+                <div class="calculator-features">
+                    <div class="feature-item">비계/동바리 협의록 작성</div>
+                    <div class="feature-item">도면 기준 선택 기능</div>
+                    <div class="feature-item">현장 정보 관리</div>
+                    <div class="feature-item">저장 및 인쇄 기능</div>
+                    <div class="feature-item">표준 양식 제공</div>
+                </div>
+                <a href="scaffold-support-agreement.html" class="calculator-button">
+                    설치 협의록 작성
                 </a>
             </div>
         </div>

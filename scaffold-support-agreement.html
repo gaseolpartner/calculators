@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="가설파트너 - 비계 및 동바리 설치 협의록 작성 시스템">
+    <meta name="author" content="가설파트너">
+    <meta name="keywords" content="시스템동바리, 시스템비계, 협의록, 건설, 가설구조물">
+    <title>가설파트너 - 설계 및 설치 협의록</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            bottom: -50%;
+            left: -50%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .gp-logo {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: #2a5298;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 60px;
+            text-align: center;
+        }
+        
+        /* 메인 네비게이션 */
+        .main-nav {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 0;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #fff;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-tab:hover {
+            background: #f0f0f0;
+            color: #2a5298;
+        }
+        
+        .nav-tab.active {
+            color: #2a5298;
+            background: #f8f9fa;
+        }
+        
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+        }
+        
+        /* 컨테이너 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        /* 협의록 폼 */
+        .agreement-form {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .form-header h2 {
+            font-size: 28px;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        .company-info {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* 기본 정보 입력 */
+        .basic-info {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+        
+        /* 섹션 타이틀 */
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e3c72;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2a5298;
+        }
+        
+        /* 체크박스 그룹 */
+        .checkbox-group {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .checkbox-item label {
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        /* 라디오 그룹 */
+        .radio-group {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .radio-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .radio-item label {
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        /* 이미지 선택 그리드 */
+        .image-select-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .image-option {
+            text-align: center;
+            cursor: pointer;
+            padding: 15px;
+            border: 3px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .image-option:hover {
+            border-color: #2a5298;
+            background: #f0f5ff;
+        }
+        
+        .image-option.selected {
+            border-color: #2a5298;
+            background: #e6f0ff;
+        }
+        
+        .image-option img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        
+        .image-option-label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        /* 버튼 */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        /* 추가 옵션 섹션 */
+        .additional-options {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .additional-options h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        /* 공지사항 */
+        .notice {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #0c5460;
+            text-align: center;
+        }
+        
+        .notice h3 {
+            margin-bottom: 10px;
+            color: #0c5460;
+        }
+        
+        /* 푸터 */
+        .footer {
+            background: #222;
+            color: #aaa;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        .footer h3 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .footer p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        
+        .footer a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            color: #6ba3e5;
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            font-size: 14px;
+            color: #888;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header-logo {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .gp-logo {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+                line-height: 40px;
+            }
+            
+            .nav-tab {
+                font-size: 16px;
+                padding: 15px 10px;
+            }
+            
+            .agreement-form {
+                padding: 20px;
+            }
+            
+            .form-header h2 {
+                font-size: 22px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        /* 프린트 스타일 */
+        @media print {
+            .header, .main-nav, .footer, .button-group, .notice {
+                display: none;
+            }
+            
+            .agreement-form {
+                box-shadow: none;
+                padding: 20px;
+            }
+            
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <div class="header">
+        <h1>가설파트너 설치 협의록 시스템</h1>
+        <p>시스템 비계 및 동바리 설치 협의록 작성</p>
+        <div class="header-logo">
+            <div class="gp-logo">GP</div>
+        </div>
+    </div>
+    
+    <!-- 공지사항 -->
+    <div class="container">
+        <div class="notice">
+            <h3>📋 협의록 작성 안내</h3>
+            <p>본 시스템은 시스템 비계 및 동바리 설치 협의록을 작성하는 프로그램입니다.<br>
+            정확한 현장 정보를 입력하여 협의록을 작성하시기 바랍니다.</p>
+        </div>
+    </div>
+    
+    <!-- 메인 네비게이션 -->
+    <div class="main-nav">
+        <div class="nav-container">
+            <button class="nav-tab active" onclick="showSection('scaffold')">시스템 비계 협의록</button>
+            <button class="nav-tab" onclick="showSection('support')">시스템 동바리 협의록</button>
+        </div>
+    </div>
+    
+    <!-- 메인 컨테이너 -->
+    <div class="container">
+        <!-- 시스템 비계 협의록 -->
+        <div id="scaffold-section" class="content-section active">
+            <div class="agreement-form">
+                <div class="form-header">
+                    <h2>시스템 비계 설치 협의록</h2>
+                    <div class="company-info">
+                        가설파트너<br>
+                        가설재 프로그램 및 구조 검토 전문<br>
+                        TEL: 010-7970-2108 | 이메일: fc112@naver.com
+                    </div>
+                </div>
+                
+                <!-- 기본 정보 -->
+                <div class="basic-info">
+                    <h3 class="section-title">협의 정보</h3>
+                    <div class="info-grid">
+                        <div class="form-group">
+                            <label>협의 일자</label>
+                            <input type="date" id="scaffold-date" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>업체명</label>
+                            <input type="text" id="scaffold-company" placeholder="업체명을 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label>현장명</label>
+                            <input type="text" id="scaffold-site" placeholder="현장명을 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label>담당자</label>
+                            <input type="text" id="scaffold-manager" placeholder="담당자명을 입력하세요">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 설치 구간 -->
+                <h3 class="section-title">1. 설치 구간</h3>
+                <div class="form-group">
+                    <label>기준</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="scaffold-base-frame" name="scaffold-base" value="frame" checked>
+                            <label for="scaffold-base-frame">① 골조</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="scaffold-base-stone" name="scaffold-base" value="stone">
+                            <label for="scaffold-base-stone">② 석재</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="form-group">
+                        <label>구간 (시작층)</label>
+                        <div style="display: flex; gap: 10px;">
+                            <select id="scaffold-floor-start-type" style="flex: 0 0 80px;">
+                                <option value="">지상</option>
+                                <option value="B">지하</option>
+                            </select>
+                            <input type="number" id="scaffold-floor-start" placeholder="층수" min="1" style="flex: 1;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>구간 (종료층)</label>
+                        <div style="display: flex; gap: 10px;">
+                            <select id="scaffold-floor-end-type" style="flex: 0 0 80px;">
+                                <option value="">지상</option>
+                                <option value="B">지하</option>
+                            </select>
+                            <input type="number" id="scaffold-floor-end" placeholder="층수" min="1" style="flex: 1;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>계단실 및 인양구</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="scaffold-stairs">
+                            <label for="scaffold-stairs">계단실 설치</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="scaffold-lift">
+                            <label for="scaffold-lift">인양구 설치</label>
+                        </div>
+                    </div>
+                    <div class="info-grid" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label>계단실 개소</label>
+                            <input type="number" id="scaffold-stairs-count" min="0" placeholder="개소 수">
+                        </div>
+                        <div class="form-group">
+                            <label>인양구 개소</label>
+                            <input type="number" id="scaffold-lift-count" min="0" placeholder="개소 수">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 물량 산출 기준 -->
+                <h3 class="section-title">2. 물량 산출 기준</h3>
+                
+                <h4 style="margin: 20px 0 10px;">① 길이 (골조)</h4>
+                <div class="image-select-grid">
+                    <div class="image-option" onclick="selectOption('scaffold-length-frame', 'a')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>외벽기준</span>
+                        </div>
+                        <div class="image-option-label">ⓐ 외벽기준</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('scaffold-length-frame', 'b')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>외벽기준 + 1.00M</span>
+                        </div>
+                        <div class="image-option-label">ⓑ 외벽기준 + 1.00M</div>
+                    </div>
+                </div>
+                
+                <h4 style="margin: 20px 0 10px;">① 길이 (마감)</h4>
+                <div class="image-select-grid">
+                    <div class="image-option" onclick="selectOption('scaffold-length-finish', 'a')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>마감기준</span>
+                        </div>
+                        <div class="image-option-label">ⓐ 마감기준</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('scaffold-length-finish', 'b')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>마감기준 + 0.90M</span>
+                        </div>
+                        <div class="image-option-label">ⓑ 마감기준 + 0.90M</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('scaffold-length-finish', 'c')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>골조기준 + 1.20M</span>
+                        </div>
+                        <div class="image-option-label">ⓒ 골조기준 + 1.20M</div>
+                    </div>
+                </div>
+                
+                <h4 style="margin: 20px 0 10px;">② 높이 (골조)</h4>
+                <div class="image-select-grid">
+                    <div class="image-option" onclick="selectOption('scaffold-height-frame', 'a')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>골조 끝선</span>
+                        </div>
+                        <div class="image-option-label">ⓐ 골조 끝선</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('scaffold-height-frame', 'b')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>골조 끝선 + 1.00M</span>
+                        </div>
+                        <div class="image-option-label">ⓑ 골조 끝선 + 1.00M</div>
+                    </div>
+                </div>
+                
+                <h4 style="margin: 20px 0 10px;">② 높이 (마감)</h4>
+                <div class="image-select-grid">
+                    <div class="image-option" onclick="selectOption('scaffold-height-finish', 'a')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>마감기준</span>
+                        </div>
+                        <div class="image-option-label">ⓐ 마감기준</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('scaffold-height-finish', 'b')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>마감기준 + 1.20M</span>
+                        </div>
+                        <div class="image-option-label">ⓑ 마감기준 + 1.20M</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('scaffold-height-finish', 'c')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>마감기준 + 1.00M</span>
+                        </div>
+                        <div class="image-option-label">ⓒ 마감기준 + 1.00M</div>
+                    </div>
+                </div>
+                
+                <!-- 추가 옵션 -->
+                <h3 class="section-title">3. 추가 옵션</h3>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="scaffold-internal">
+                        <label for="scaffold-internal">내부 비계</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="scaffold-bottom">
+                        <label for="scaffold-bottom">밑면 (시다바)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="scaffold-reinstall">
+                        <label for="scaffold-reinstall">재설치</label>
+                    </div>
+                </div>
+                
+                <!-- 일반사항 -->
+                <h3 class="section-title">4. 일반사항 및 현장 요청사항</h3>
+                <div class="form-group">
+                    <label>대각재 / 버팀대</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="scaffold-diagonal">
+                            <label for="scaffold-diagonal">대각재 설치</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="scaffold-support">
+                            <label for="scaffold-support">버팀대 설치</label>
+                        </div>
+                    </div>
+                    <div class="info-grid" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label>버팀대 설치 간격 (㎡)</label>
+                            <input type="number" id="scaffold-support-spacing" placeholder="25" min="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>현장 요청사항</label>
+                    <textarea id="scaffold-requests" rows="5" placeholder="추가 요청사항을 입력하세요"></textarea>
+                </div>
+                
+                <!-- 버튼 그룹 -->
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="saveScaffoldAgreement()">저장하기</button>
+                    <button class="btn btn-secondary" onclick="printAgreement('scaffold')">인쇄하기</button>
+                    <button class="btn btn-secondary" onclick="resetForm('scaffold')">초기화</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 시스템 동바리 협의록 -->
+        <div id="support-section" class="content-section">
+            <div class="agreement-form">
+                <div class="form-header">
+                    <h2>시스템 동바리 설치 협의록</h2>
+                    <div class="company-info">
+                        가설파트너<br>
+                        가설재 프로그램 및 구조 검토 전문<br>
+                        TEL: 010-7970-2108 | 이메일: fc112@naver.com
+                    </div>
+                </div>
+                
+                <!-- 기본 정보 -->
+                <div class="basic-info">
+                    <h3 class="section-title">협의 정보</h3>
+                    <div class="info-grid">
+                        <div class="form-group">
+                            <label>협의 일자</label>
+                            <input type="date" id="support-date" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>업체명</label>
+                            <input type="text" id="support-company" placeholder="업체명을 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label>현장명</label>
+                            <input type="text" id="support-site" placeholder="현장명을 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label>담당자</label>
+                            <input type="text" id="support-manager" placeholder="담당자명을 입력하세요">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 벽식구조 설치 구간 -->
+                <h3 class="section-title">1. 벽식구조 (도면 첨부)</h3>
+                <div class="form-group">
+                    <label>공고 구간</label>
+                    <div class="info-grid">
+                        <div class="form-group">
+                            <label>층고 (m)</label>
+                            <input type="number" id="support-floor-height" placeholder="3.0" step="0.1">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>공구 분할 여부</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="support-division-yes" name="support-division" value="yes">
+                            <label for="support-division-yes">분할</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="support-division-no" name="support-division" value="no" checked>
+                            <label for="support-division-no">미분할</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>공내역서 (㎡)</label>
+                    <input type="number" id="support-area" placeholder="면적을 입력하세요" min="0">
+                </div>
+                
+                <!-- 물량 산출 기준 -->
+                <h3 class="section-title">2. 물량 산출 기준</h3>
+                
+                <h4 style="margin: 20px 0 10px;">1. RC 구간</h4>
+                <div class="image-select-grid">
+                    <div class="image-option" onclick="selectOption('support-rc', 'a')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>슬라브상단*0.9</span>
+                        </div>
+                        <div class="image-option-label">ⓐ 슬라브상단*0.9</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('support-rc', 'b')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>슬라브하단*0.9</span>
+                        </div>
+                        <div class="image-option-label">ⓑ 슬라브하단*0.9</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('support-rc', 'c')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>슬라브하단</span>
+                        </div>
+                        <div class="image-option-label">ⓒ 슬라브하단</div>
+                    </div>
+                </div>
+                
+                <h4 style="margin: 20px 0 10px;">2. DECK 구간</h4>
+                <div class="image-select-grid">
+                    <div class="image-option" onclick="selectOption('support-deck', 'a')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>슬라브상단*0.9</span>
+                        </div>
+                        <div class="image-option-label">ⓐ 슬라브상단*0.9</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('support-deck', 'b')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>슬라브하단*0.9</span>
+                        </div>
+                        <div class="image-option-label">ⓑ 슬라브하단*0.9</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('support-deck', 'c')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>보하단+날개추가*0.9</span>
+                        </div>
+                        <div class="image-option-label">ⓒ 보하단+날개추가*0.9</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('support-deck', 'd')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>슬라브상단*0.9</span>
+                        </div>
+                        <div class="image-option-label">ⓓ 슬라브상단*0.9</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('support-deck', 'e')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>보하단*0.9</span>
+                        </div>
+                        <div class="image-option-label">ⓔ 보하단*0.9</div>
+                    </div>
+                    <div class="image-option" onclick="selectOption('support-deck', 'f')">
+                        <div style="height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <span>슬라브하단+날개추가*0.9</span>
+                        </div>
+                        <div class="image-option-label">ⓕ 슬라브하단+날개추가*0.9</div>
+                    </div>
+                </div>
+                
+                <!-- TP구간 -->
+                <h3 class="section-title">3. TP구간</h3>
+                <div class="form-group">
+                    <label>서스웰 서포트 선택</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="support-tp-p04" name="support-tp" value="p04" checked>
+                            <label for="support-tp-p04">P04 설치</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="support-tp-p17" name="support-tp" value="p17">
+                            <label for="support-tp-p17">P17 설치</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="support-tp-p02" name="support-tp" value="p02">
+                            <label for="support-tp-p02">P02 설치</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>날개 서포트 설치</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="support-wing-yes" name="support-wing" value="yes">
+                            <label for="support-wing-yes">설치</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="support-wing-no" name="support-wing" value="no" checked>
+                            <label for="support-wing-no">미설치</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 추가 옵션 -->
+                <h3 class="section-title">4. 일반사항</h3>
+                <div class="form-group">
+                    <label>방화두 설치</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="support-firewall-before" name="support-firewall" value="before">
+                            <label for="support-firewall-before">방수턱 선시공</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="support-firewall-after" name="support-firewall" value="after">
+                            <label for="support-firewall-after">방수턱 후시공</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>단열재 설치</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="support-insulation-before" name="support-insulation" value="before">
+                            <label for="support-insulation-before">단열재 선시공</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="support-insulation-after" name="support-insulation" value="after">
+                            <label for="support-insulation-after">단열재 후시공</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>현장 요청사항</label>
+                    <textarea id="support-requests" rows="5" placeholder="추가 요청사항을 입력하세요"></textarea>
+                </div>
+                
+                <div class="additional-options">
+                    <h4>⚠️ 중요 안내</h4>
+                    <p>* 물량 산출 기준에 따라 자재비, 노무비 단가 상이함.<br>
+                    * 물량 의뢰전에 확인후 협의서 및 체크리스트 작성<br>
+                    * 대각재 : 구조적 (20m 이하구간에는 대각재 미설치 가능)<br>
+                    * 버팀대 : 일반적으로 25㎡ (가로세로)로 진행하나 특정지역(제주도등) 상이함. / 구조검토서 참조</p>
+                </div>
+                
+                <!-- 버튼 그룹 -->
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="saveSupportAgreement()">저장하기</button>
+                    <button class="btn btn-secondary" onclick="printAgreement('support')">인쇄하기</button>
+                    <button class="btn btn-secondary" onclick="resetForm('support')">초기화</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 푸터 -->
+    <div class="footer">
+        <h3>가설파트너</h3>
+        <p>
+            가설재 프로그램 및 구조 검토 전문<br>
+            📞 문의: 010-7970-2108 | ✉️ 이메일: fc112@naver.com<br>
+            🌐 웹사이트: <a href="https://gaseolpartner.com" target="_blank">gaseolpartner.com</a>
+        </p>
+        <div class="copyright">
+            <p>
+                © 2025 가설파트너. All rights reserved.<br>
+                본 프로그램의 모든 저작권은 가설파트너에 있습니다.<br>
+                무단 복제 및 배포를 금지합니다.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // 오늘 날짜 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('scaffold-date').value = today;
+            document.getElementById('support-date').value = today;
+        });
+        
+        // 섹션 전환
+        function showSection(section) {
+            // 모든 섹션 숨기기
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            
+            // 모든 탭 비활성화
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 선택된 섹션 표시
+            document.getElementById(section + '-section').classList.add('active');
+            
+            // 선택된 탭 활성화
+            event.target.classList.add('active');
+        }
+        
+        // 이미지 옵션 선택
+        const selectedOptions = {};
+        
+        function selectOption(groupName, value) {
+            // 이전 선택 제거
+            const group = document.querySelectorAll(`[onclick*="${groupName}"]`);
+            group.forEach(option => {
+                option.parentElement.classList.remove('selected');
+            });
+            
+            // 새 선택 추가
+            event.currentTarget.classList.add('selected');
+            selectedOptions[groupName] = value;
+        }
+        
+        // 비계 협의록 저장
+        function saveScaffoldAgreement() {
+            const data = {
+                type: 'scaffold',
+                date: document.getElementById('scaffold-date').value,
+                company: document.getElementById('scaffold-company').value,
+                site: document.getElementById('scaffold-site').value,
+                manager: document.getElementById('scaffold-manager').value,
+                base: document.querySelector('input[name="scaffold-base"]:checked')?.value,
+                floorStartType: document.getElementById('scaffold-floor-start-type').value,
+                floorStart: document.getElementById('scaffold-floor-start').value,
+                floorEndType: document.getElementById('scaffold-floor-end-type').value,
+                floorEnd: document.getElementById('scaffold-floor-end').value,
+                stairs: document.getElementById('scaffold-stairs').checked,
+                lift: document.getElementById('scaffold-lift').checked,
+                stairsCount: document.getElementById('scaffold-stairs-count').value,
+                liftCount: document.getElementById('scaffold-lift-count').value,
+                internal: document.getElementById('scaffold-internal').checked,
+                bottom: document.getElementById('scaffold-bottom').checked,
+                reinstall: document.getElementById('scaffold-reinstall').checked,
+                diagonal: document.getElementById('scaffold-diagonal').checked,
+                support: document.getElementById('scaffold-support').checked,
+                supportSpacing: document.getElementById('scaffold-support-spacing').value,
+                requests: document.getElementById('scaffold-requests').value,
+                selectedOptions: { ...selectedOptions }
+            };
+            
+            // 로컬 스토리지에 저장
+            localStorage.setItem('scaffold-agreement-' + new Date().getTime(), JSON.stringify(data));
+            alert('비계 협의록이 저장되었습니다.');
+        }
+        
+        // 동바리 협의록 저장
+        function saveSupportAgreement() {
+            const data = {
+                type: 'support',
+                date: document.getElementById('support-date').value,
+                company: document.getElementById('support-company').value,
+                site: document.getElementById('support-site').value,
+                manager: document.getElementById('support-manager').value,
+                floorHeight: document.getElementById('support-floor-height').value,
+                division: document.querySelector('input[name="support-division"]:checked')?.value,
+                area: document.getElementById('support-area').value,
+                tp: document.querySelector('input[name="support-tp"]:checked')?.value,
+                wing: document.querySelector('input[name="support-wing"]:checked')?.value,
+                firewall: document.querySelector('input[name="support-firewall"]:checked')?.value,
+                insulation: document.querySelector('input[name="support-insulation"]:checked')?.value,
+                requests: document.getElementById('support-requests').value,
+                selectedOptions: { ...selectedOptions }
+            };
+            
+            // 로컬 스토리지에 저장
+            localStorage.setItem('support-agreement-' + new Date().getTime(), JSON.stringify(data));
+            alert('동바리 협의록이 저장되었습니다.');
+        }
+        
+        // 인쇄
+        function printAgreement(type) {
+            window.print();
+        }
+        
+        // 폼 초기화
+        function resetForm(type) {
+            if (confirm('모든 입력 내용이 초기화됩니다. 계속하시겠습니까?')) {
+                const form = document.getElementById(type + '-section').querySelector('.agreement-form');
+                const inputs = form.querySelectorAll('input[type="text"], input[type="number"], textarea');
+                inputs.forEach(input => input.value = '');
+                
+                const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => checkbox.checked = false);
+                
+                // 라디오 버튼은 기본값으로
+                const radios = form.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => {
+                    if (radio.hasAttribute('checked')) {
+                        radio.checked = true;
+                    }
+                });
+                
+                // 선택된 이미지 옵션 초기화
+                form.querySelectorAll('.image-option.selected').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // 오늘 날짜 재설정
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById(type + '-date').value = today;
+                
+                alert('초기화되었습니다.');
+            }
+        }
+        
+        // 체크박스 연동
+        document.getElementById('scaffold-stairs').addEventListener('change', function() {
+            document.getElementById('scaffold-stairs-count').disabled = !this.checked;
+            if (!this.checked) document.getElementById('scaffold-stairs-count').value = '';
+        });
+        
+        document.getElementById('scaffold-lift').addEventListener('change', function() {
+            document.getElementById('scaffold-lift-count').disabled = !this.checked;
+            if (!this.checked) document.getElementById('scaffold-lift-count').value = '';
+        });
+        
+        document.getElementById('scaffold-support').addEventListener('change', function() {
+            document.getElementById('scaffold-support-spacing').disabled = !this.checked;
+            if (!this.checked) document.getElementById('scaffold-support-spacing').value = '';
+        });
+    </script>
+</body>
+</html>
