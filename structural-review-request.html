@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HJ구조사무실 구조검토 의뢰서</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 28px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-group label {
+            width: 120px;
+            font-weight: bold;
+            color: #555;
+            flex-shrink: 0;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group input[type="date"],
+        .form-group input[type="number"],
+        .form-group select {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group input[type="tel"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .inline-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .inline-group .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        table th {
+            background-color: #34495e;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        table input[type="text"],
+        table input[type="number"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            text-align: center;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .add-row-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .add-row-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .submit-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .submit-btn:hover {
+            background-color: #229954;
+        }
+        
+        .print-btn {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .print-btn:hover {
+            background-color: #7f8c8d;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            
+            .add-row-btn,
+            .submit-section {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HJ구조사무실 구조검토 의뢰서</h1>
+        
+        <!-- 수신/발신 정보 -->
+        <div class="section">
+            <div class="section-title">수신/발신 정보</div>
+            <div class="inline-group">
+                <div class="form-group">
+                    <label>수신처:</label>
+                    <input type="text" name="recipient" value="HJ구조사무실" readonly style="background-color: #f0f0f0;">
+                </div>
+                <div class="form-group">
+                    <label>메일:</label>
+                    <input type="email" name="email" value="hj_str@naver.com" readonly style="background-color: #f0f0f0;">
+                </div>
+            </div>
+            <div class="inline-group">
+                <div class="form-group">
+                    <label>연락처:</label>
+                    <input type="tel" name="tel" value="010-7970-2108" readonly style="background-color: #f0f0f0;">
+                </div>
+            </div>
+            <div class="inline-group">
+                <div class="form-group">
+                    <label>발신처:</label>
+                    <input type="text" name="sender" placeholder="의뢰 회사명" required>
+                </div>
+                <div class="form-group">
+                    <label>영업담당:</label>
+                    <input type="text" name="sales" placeholder="담당자명" required>
+                </div>
+            </div>
+            <div class="inline-group">
+                <div class="form-group">
+                    <label>H.P:</label>
+                    <input type="tel" name="mobile" placeholder="010-0000-0000" required>
+                </div>
+                <div class="form-group">
+                    <label>접수날짜:</label>
+                    <input type="date" name="receiveDate" required>
+                </div>
+                <div class="form-group">
+                    <label>희망날짜:</label>
+                    <input type="date" name="hopeDate" required>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 프로젝트 정보 -->
+        <div class="section">
+            <div class="section-title">프로젝트 정보</div>
+            <div class="form-group">
+                <label>업체명:</label>
+                <input type="text" name="company" placeholder="예: XX건설" required>
+            </div>
+            <div class="form-group">
+                <label>현장명:</label>
+                <input type="text" name="site" placeholder="예: 청주 지원관 신축공사" required>
+            </div>
+            <div class="form-group">
+                <label>검토구분:</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="dongbari" name="reviewType" value="동바리">
+                        <label for="dongbari">시스템동바리</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="bigye" name="reviewType" value="비계">
+                        <label for="bigye">시스템비계</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 시스템동바리 검토 -->
+        <div class="section" id="dongbariSection">
+            <div class="section-title">시스템동바리 검토내용</div>
+            
+            <!-- 슬라브 -->
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin-bottom: 10px; color: #34495e;">슬라브</h4>
+                <table id="slabTable">
+                    <thead>
+                        <tr>
+                            <th>구간명</th>
+                            <th>두께(mm)</th>
+                            <th>시스템 설계배치</th>
+                            <th>비고</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" placeholder="구간명 입력"></td>
+                            <td><input type="number" placeholder="150"></td>
+                            <td><input type="text" placeholder="1829 x 1219"></td>
+                            <td><input type="text" placeholder="비고사항"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="add-row-btn" onclick="addRow('slabTable')">행 추가</button>
+            </div>
+            
+            <!-- 보 -->
+            <div>
+                <h4 style="margin-bottom: 10px; color: #34495e;">보 (멍에 단방향)</h4>
+                <table id="beamTable">
+                    <thead>
+                        <tr>
+                            <th>구간명</th>
+                            <th>보폭(mm)</th>
+                            <th>보두께(mm)</th>
+                            <th>시스템 설계배치</th>
+                            <th>비고</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" placeholder="구간명 입력"></td>
+                            <td><input type="number" placeholder="400"></td>
+                            <td><input type="number" placeholder="500"></td>
+                            <td><input type="text" placeholder="610 x 1219"></td>
+                            <td><input type="text" placeholder="비고사항"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="add-row-btn" onclick="addRow('beamTable')">행 추가</button>
+            </div>
+        </div>
+        
+        <!-- 시스템비계 검토 -->
+        <div class="section" id="bigyeSection" style="display: none;">
+            <div class="section-title">시스템비계 검토내용</div>
+            
+            <div class="form-group">
+                <label>작업구분:</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="radio" id="light" name="workType" value="경작업">
+                        <label for="light">경작업</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="radio" id="medium" name="workType" value="중작업">
+                        <label for="medium">중작업</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="radio" id="stone" name="workType" value="석재작업">
+                        <label for="stone">석재작업</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="inline-group">
+                <div class="form-group">
+                    <label>설치 최고높이:</label>
+                    <input type="number" name="maxHeight" placeholder="높이 입력" step="0.1">
+                    <span style="margin-left: 5px;">m</span>
+                </div>
+                <div class="form-group">
+                    <label>설치 길이:</label>
+                    <input type="number" name="length" placeholder="길이 입력" step="0.1">
+                    <span style="margin-left: 5px;">m</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>설치 위치:</label>
+                <input type="text" name="location" placeholder="예: 건물 외벽, 내부 천장 등">
+            </div>
+            
+            <div>
+                <h4 style="margin-bottom: 10px; color: #34495e;">비계 상세내역</h4>
+                <table id="scaffoldTable">
+                    <thead>
+                        <tr>
+                            <th>구간</th>
+                            <th>수직재 간격(mm)</th>
+                            <th>수평재 간격(mm)</th>
+                            <th>띠장 간격(mm)</th>
+                            <th>비고</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" placeholder="구간명"></td>
+                            <td><input type="number" placeholder="1800"></td>
+                            <td><input type="number" placeholder="1800"></td>
+                            <td><input type="number" placeholder="900"></td>
+                            <td><input type="text" placeholder="비고사항"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="add-row-btn" onclick="addRow('scaffoldTable')">행 추가</button>
+            </div>
+        </div>
+        
+        <!-- 추가 요청사항 -->
+        <div class="section">
+            <div class="section-title">추가 요청사항</div>
+            <textarea style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;" 
+                      placeholder="기타 검토 요청사항을 입력하세요..."></textarea>
+            <p class="info-text" style="color: #666; margin-top: 10px; background: #f0f0f0; padding: 10px; border-radius: 5px;">
+                <strong>💡 다른 가설재 검토 의뢰 안내</strong><br>
+                잭서포트, 브라켓, 작업대, 안전발판, 낙하물방호덕트 등 기타 가설재 검토가 필요하신 경우<br>
+                이 추가요청사항란에 상세 내용을 작성해주시면 검토 가능합니다.<br>
+                <span style="color: #ff8800;">예시: "잭서포트 3.5m 높이, 2m 간격 설치 시 구조검토 요청"</span>
+            </p>
+        </div>
+        
+        <!-- 첨부파일 섹션 -->
+        <div class="section">
+            <div class="section-title">첨부파일</div>
+            <div class="form-group">
+                <label>파일 선택:</label>
+                <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.dwg,.jpg,.jpeg,.png,.zip,.rar" style="padding: 10px;">
+            </div>
+            <p class="info-text" style="color: #ff8800; margin-top: 10px;">
+                ※ 파일 용량이 클 경우(10MB 이상) 이메일로 별도 전송 부탁드립니다.<br>
+                ※ 원도 도면(DWG, PDF 등)은 정확한 검토를 위해 반드시 첨부해주시기 바랍니다.<br>
+                ※ 여러 파일 선택 가능 (Ctrl+클릭 또는 Shift+클릭)
+            </p>
+            <div id="fileList" style="margin-top: 10px;"></div>
+        </div>
+        
+        <!-- 제출 버튼 -->
+        <div class="submit-section">
+            <button class="submit-btn" onclick="submitForm()">의뢰서 제출</button>
+            <button class="print-btn" onclick="window.print()">인쇄하기</button>
+        </div>
+    </div>
+    
+    <script>
+        // 체크박스에 따른 섹션 표시/숨김
+        document.getElementById('dongbari').addEventListener('change', function() {
+            document.getElementById('dongbariSection').style.display = this.checked ? 'block' : 'none';
+        });
+        
+        document.getElementById('bigye').addEventListener('change', function() {
+            document.getElementById('bigyeSection').style.display = this.checked ? 'block' : 'none';
+        });
+        
+        // 테이블 행 추가 함수
+        function addRow(tableId) {
+            const table = document.getElementById(tableId);
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const newRow = tbody.rows[0].cloneNode(true);
+            
+            // 입력 필드 초기화
+            const inputs = newRow.getElementsByTagName('input');
+            for (let input of inputs) {
+                input.value = '';
+            }
+            
+            tbody.appendChild(newRow);
+        }
+        
+        // 폼 제출 함수
+        function submitForm() {
+            // 필수 입력 검증
+            const requiredFields = document.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+            
+            if (!isValid) {
+                alert('필수 항목을 모두 입력해주세요.');
+                return;
+            }
+            
+            // 검토구분 체크 확인
+            const reviewTypes = document.querySelectorAll('input[name="reviewType"]:checked');
+            if (reviewTypes.length === 0) {
+                alert('검토구분을 선택해주세요.');
+                return;
+            }
+            
+            // 폼 데이터 수집
+            const formData = collectFormData();
+            
+            // 제출 방법 선택 모달 표시
+            showSubmitModal(formData);
+        }
+        
+        // 제출 방법 선택 모달
+        function showSubmitModal(formData) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 40px; border-radius: 10px; text-align: center; max-width: 600px;">
+                    <h2 style="color: #ff8800; margin-bottom: 20px;">HJ구조사무실 의뢰서 제출 방법을 선택하세요</h2>
+                    <p style="color: #666; margin-bottom: 30px;">아래 방법 중 편하신 방법으로 의뢰서를 제출해주세요.</p>
+                    
+                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="sendEmail(${JSON.stringify(formData).replace(/"/g, '&quot;')})" 
+                                style="background: #0066cc; color: white; border: none; padding: 30px 40px; 
+                                       border-radius: 10px; cursor: pointer; font-size: 18px; transition: all 0.3s;">
+                            <div style="font-size: 30px; margin-bottom: 10px;">✉️</div>
+                            이메일로 발송
+                            <div style="font-size: 14px; margin-top: 10px;">hj_str@naver.com</div>
+                        </button>
+                        
+                        <button onclick="sendKakaoTalk(${JSON.stringify(formData).replace(/"/g, '&quot;')})" 
+                                style="background: #f9e000; color: #3c1e1e; border: none; padding: 30px 40px; 
+                                       border-radius: 10px; cursor: pointer; font-size: 18px; transition: all 0.3s;">
+                            <div style="font-size: 30px; margin-bottom: 10px;">💬</div>
+                            오픈카카오톡
+                            <div style="font-size: 14px; margin-top: 10px;">실시간 상담 가능</div>
+                        </button>
+                        
+                        <button onclick="downloadFile(${JSON.stringify(formData).replace(/"/g, '&quot;')})" 
+                                style="background: #28a745; color: white; border: none; padding: 30px 40px; 
+                                       border-radius: 10px; cursor: pointer; font-size: 18px; transition: all 0.3s;">
+                            <div style="font-size: 30px; margin-bottom: 10px;">📄</div>
+                            파일 다운로드
+                            <div style="font-size: 14px; margin-top: 10px;">의뢰서 저장</div>
+                        </button>
+                    </div>
+                    
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            style="margin-top: 20px; background: #666; color: white; border: none; 
+                                   padding: 10px 30px; border-radius: 5px; cursor: pointer;">
+                        취소
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        // 폼 데이터 수집 함수
+        function collectFormData() {
+            const data = {
+                발신정보: {
+                    회사: document.querySelector('input[name="sender"]').value,
+                    담당자: document.querySelector('input[name="sales"]').value,
+                    연락처: document.querySelector('input[name="mobile"]').value,
+                    접수날짜: document.querySelector('input[name="receiveDate"]').value,
+                    희망날짜: document.querySelector('input[name="hopeDate"]').value
+                },
+                프로젝트정보: {
+                    업체명: document.querySelector('input[name="company"]').value,
+                    현장명: document.querySelector('input[name="site"]').value,
+                    검토구분: Array.from(document.querySelectorAll('input[name="reviewType"]:checked')).map(cb => cb.value).join(', ')
+                }
+            };
+            
+            // 시스템동바리 데이터 수집
+            if (document.getElementById('dongbari').checked) {
+                data.시스템동바리 = {
+                    슬라브: collectTableData('slabTable'),
+                    보: collectTableData('beamTable')
+                };
+            }
+            
+            // 시스템비계 데이터 수집
+            if (document.getElementById('bigye').checked) {
+                const workType = document.querySelector('input[name="workType"]:checked');
+                data.시스템비계 = {
+                    작업구분: workType ? workType.value : '',
+                    최고높이: document.querySelector('input[name="maxHeight"]').value + 'm',
+                    설치길이: document.querySelector('input[name="length"]').value + 'm',
+                    설치위치: document.querySelector('input[name="location"]').value,
+                    상세내역: collectTableData('scaffoldTable')
+                };
+            }
+            
+            // 추가 요청사항
+            const additionalRequest = document.querySelector('textarea').value;
+            if (additionalRequest) {
+                data.추가요청사항 = additionalRequest;
+            }
+            
+            // 첨부파일 정보
+            const fileInput = document.getElementById('attachments');
+            if (fileInput.files.length > 0) {
+                data.첨부파일 = [];
+                let totalSize = 0;
+                for (let file of fileInput.files) {
+                    data.첨부파일.push({
+                        이름: file.name,
+                        크기: (file.size / 1024 / 1024).toFixed(2) + 'MB'
+                    });
+                    totalSize += file.size;
+                }
+                data.총파일크기 = (totalSize / 1024 / 1024).toFixed(2) + 'MB';
+            }
+            
+            return data;
+        }
+        
+        // 테이블 데이터 수집 함수
+        function collectTableData(tableId) {
+            const table = document.getElementById(tableId);
+            const rows = table.getElementsByTagName('tbody')[0].rows;
+            const data = [];
+            
+            for (let row of rows) {
+                const inputs = row.getElementsByTagName('input');
+                const rowData = [];
+                for (let input of inputs) {
+                    if (input.value.trim()) {
+                        rowData.push(input.value);
+                    }
+                }
+                if (rowData.length > 0) {
+                    data.push(rowData);
+                }
+            }
+            
+            return data;
+        }
+        
+        // 이메일 전송 함수
+        function sendEmail(formData) {
+            // 이메일 본문 생성
+            const emailBody = generateEmailBody(formData);
+            
+            // mailto 링크 생성
+            const subject = encodeURIComponent(`[구조검토의뢰] ${formData.프로젝트정보.현장명} - ${formData.프로젝트정보.업체명}`);
+            const body = encodeURIComponent(emailBody);
+            const mailtoLink = `mailto:hj_str@naver.com?subject=${subject}&body=${body}`;
+            
+            // 이메일 클라이언트 열기
+            window.location.href = mailtoLink;
+            
+            // 모달 닫기
+            document.querySelector('div[style*="position: fixed"]').remove();
+            
+            // 안내 메시지
+            setTimeout(() => {
+                alert('이메일 클라이언트가 열렸습니다.\n내용을 확인하시고 전송해주세요.\n\n만약 이메일 클라이언트가 열리지 않았다면,\n파일을 다운로드하여 직접 hj_str@naver.com으로 발송해주세요.');
+            }, 1000);
+        }
+        
+        // 카카오톡 전송 함수
+        function sendKakaoTalk(formData) {
+            const message = generateKakaoMessage(formData);
+            
+            // 카카오톡 오픈채팅 링크
+            const kakaoLink = 'https://open.kakao.com/o/sq6cfvBh';
+            
+            // 클립보드에 복사
+            navigator.clipboard.writeText(message).then(() => {
+                window.open(kakaoLink, '_blank');
+                
+                // 모달 닫기
+                document.querySelector('div[style*="position: fixed"]').remove();
+                
+                alert('의뢰서 내용이 클립보드에 복사되었습니다.\n\n오픈카카오톡 채팅창에 붙여넣기(Ctrl+V) 해주세요.');
+            }).catch(() => {
+                // 클립보드 복사 실패 시 다운로드
+                downloadFile(formData);
+                window.open(kakaoLink, '_blank');
+            });
+        }
+        
+        // 파일 다운로드 함수
+        function downloadFile(formData) {
+            const content = generateFileContent(formData);
+            
+            // Blob 생성
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            // 다운로드 링크 생성
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `구조검토의뢰서_${formData.프로젝트정보.현장명}_${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // 모달 닫기
+            const modal = document.querySelector('div[style*="position: fixed"]');
+            if (modal) modal.remove();
+            
+            alert('의뢰서가 다운로드되었습니다.\n\n다운로드한 파일을 아래 방법으로 전송해주세요:\n\n1. 이메일: hj_str@naver.com\n2. 오픈카카오톡: https://open.kakao.com/o/sq6cfvBh');
+        }
+        
+                    // 이메일 본문 생성
+        function generateEmailBody(formData) {
+            let body = 'HJ구조사무실 구조검토 의뢰서\n\n';
+            body += '=== 발신 정보 ===\n';
+            body += `회사: ${formData.발신정보.회사}\n`;
+            body += `담당자: ${formData.발신정보.담당자}\n`;
+            body += `연락처: ${formData.발신정보.연락처}\n`;
+            body += `접수날짜: ${formData.발신정보.접수날짜}\n`;
+            body += `희망날짜: ${formData.발신정보.희망날짜}\n\n`;
+            
+            body += '=== 프로젝트 정보 ===\n';
+            body += `업체명: ${formData.프로젝트정보.업체명}\n`;
+            body += `현장명: ${formData.프로젝트정보.현장명}\n`;
+            body += `검토구분: ${formData.프로젝트정보.검토구분}\n\n`;
+            
+            // 시스템동바리 정보
+            if (formData.시스템동바리) {
+                body += '=== 시스템동바리 검토내용 ===\n';
+                body += '슬라브:\n';
+                formData.시스템동바리.슬라브.forEach(row => {
+                    body += row.join(' | ') + '\n';
+                });
+                body += '\n보:\n';
+                formData.시스템동바리.보.forEach(row => {
+                    body += row.join(' | ') + '\n';
+                });
+                body += '\n';
+            }
+            
+            // 시스템비계 정보
+            if (formData.시스템비계) {
+                body += '=== 시스템비계 검토내용 ===\n';
+                body += `작업구분: ${formData.시스템비계.작업구분}\n`;
+                body += `최고높이: ${formData.시스템비계.최고높이}\n`;
+                body += `설치길이: ${formData.시스템비계.설치길이}\n`;
+                body += `설치위치: ${formData.시스템비계.설치위치}\n`;
+                body += '상세내역:\n';
+                formData.시스템비계.상세내역.forEach(row => {
+                    body += row.join(' | ') + '\n';
+                });
+                body += '\n';
+            }
+            
+            // 추가 요청사항
+            if (formData.추가요청사항) {
+                body += '=== 추가 요청사항 ===\n';
+                body += formData.추가요청사항 + '\n\n';
+            }
+            
+            // 첨부파일 정보
+            if (formData.첨부파일 && formData.첨부파일.length > 0) {
+                body += '=== 첨부파일 정보 ===\n';
+                formData.첨부파일.forEach((file, index) => {
+                    body += `${index + 1}. ${file.이름} (${file.크기})\n`;
+                });
+                body += `총 파일 크기: ${formData.총파일크기}\n`;
+                
+                if (parseFloat(formData.총파일크기) > 10) {
+                    body += '\n※ 파일 용량이 10MB를 초과하여 별도 이메일로 전송 부탁드립니다.\n';
+                    body += '※ 원도 도면(DWG, PDF)은 정확한 검토를 위해 반드시 전송해주시기 바랍니다.\n';
+                }
+            }
+            
+            return body;
+        }
+        
+                    // 카카오톡 메시지 생성
+        function generateKakaoMessage(formData) {
+            let message = '[HJ구조사무실 구조검토 의뢰서]\n\n';
+            message += `📋 현장명: ${formData.프로젝트정보.현장명}\n`;
+            message += `🏢 업체명: ${formData.프로젝트정보.업체명}\n`;
+            message += `📞 담당자: ${formData.발신정보.담당자} (${formData.발신정보.연락처})\n`;
+            message += `📅 희망날짜: ${formData.발신정보.희망날짜}\n\n`;
+            
+            message += `✅ 검토구분: ${formData.프로젝트정보.검토구분}\n\n`;
+            
+            if (formData.시스템동바리) {
+                message += '【시스템동바리】\n';
+                message += `- 슬라브: ${formData.시스템동바리.슬라브.length}개 구간\n`;
+                message += `- 보: ${formData.시스템동바리.보.length}개 구간\n\n`;
+            }
+            
+            if (formData.시스템비계) {
+                message += '【시스템비계】\n';
+                message += `- 작업구분: ${formData.시스템비계.작업구분}\n`;
+                message += `- 최고높이: ${formData.시스템비계.최고높이}\n`;
+                message += `- 설치위치: ${formData.시스템비계.설치위치}\n\n`;
+            }
+            
+            if (formData.추가요청사항) {
+                message += `📝 추가요청: ${formData.추가요청사항}\n\n`;
+            }
+            
+            if (formData.첨부파일 && formData.첨부파일.length > 0) {
+                message += `📎 첨부파일: ${formData.첨부파일.length}개 (${formData.총파일크기})\n`;
+                if (parseFloat(formData.총파일크기) > 10) {
+                    message += '⚠️ 파일이 10MB를 초과하여 이메일로 별도 전송 필요\n';
+                }
+            }
+            
+            return message;
+        }
+        
+        // 파일 내용 생성
+        function generateFileContent(formData) {
+            let content = 'HJ구조사무실\n';
+            content += '구조검토 의뢰서\n';
+            content += '=' .repeat(50) + '\n\n';
+            
+            content += generateEmailBody(formData);
+            
+            content += '\n' + '=' .repeat(50) + '\n';
+            content += '수신: HJ구조사무실\n';
+            content += '연락처: 010-7970-2108\n';
+            content += '이메일: hj_str@naver.com\n';
+            content += '오픈카카오톡: https://open.kakao.com/o/sq6cfvBh\n';
+            content += '\n발송일시: ' + new Date().toLocaleString() + '\n';
+            
+            return content;
+        }
+        
+        // 오늘 날짜 기본값 설정
+        window.onload = function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelector('input[name="receiveDate"]').value = today;
+            
+            // 첨부파일 이벤트 리스너
+            document.getElementById('attachments').addEventListener('change', function() {
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = '';
+                
+                if (this.files.length > 0) {
+                    let totalSize = 0;
+                    fileList.innerHTML = '<h4 style="margin-bottom: 10px;">선택된 파일:</h4>';
+                    
+                    for (let i = 0; i < this.files.length; i++) {
+                        const file = this.files[i];
+                        const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                        totalSize += file.size;
+                        
+                        fileList.innerHTML += `
+                            <div style="padding: 5px; background: #f5f5f5; margin: 5px 0; border-radius: 3px;">
+                                📄 ${file.name} (${fileSize}MB)
+                            </div>
+                        `;
+                    }
+                    
+                    const totalSizeMB = (totalSize / 1024 / 1024).toFixed(2);
+                    fileList.innerHTML += `
+                        <div style="margin-top: 10px; font-weight: bold; color: ${totalSizeMB > 10 ? '#ff4444' : '#27ae60'};">
+                            총 파일 크기: ${totalSizeMB}MB
+                            ${totalSizeMB > 10 ? '<br><span style="color: #ff4444;">⚠️ 10MB를 초과하여 이메일로 별도 전송이 필요합니다.</span>' : ''}
+                        </div>
+                    `;
+                }
+            });
+        };
+    </script>
+</body>
+</html>
