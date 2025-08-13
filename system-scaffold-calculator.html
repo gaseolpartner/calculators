@@ -33,6 +33,15 @@
     <meta http-equiv="Expires" content="0">
     <title>시스템 비계 물량산출 v1.00 - 가설파트너</title>
     
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K8NMSLZ841"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-K8NMSLZ841');
+    </script>
+
     <style>
         * {
             margin: 0;
@@ -1241,6 +1250,59 @@
         let priceData = {};
         let savedPriceInputs = {}; // 단가 입력값 저장용
         
+        // Google Analytics 데이터 전송 함수
+function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
+    // 평균 단가 계산
+    let avgBasicPrice = 0;
+    let avgDailyPrice = 0;
+    let materialCount = 0;
+    
+    Object.keys(materials).forEach(key => {
+        if (materials[key].finalQty > 0) {
+            const price = savedPriceInputs[key] || defaultPrices[key] || { basic: 0, daily: 0 };
+            avgBasicPrice += price.basic;
+            avgDailyPrice += price.daily;
+            materialCount++;
+        }
+    });
+    
+    if (materialCount > 0) {
+        avgBasicPrice = Math.round(avgBasicPrice / materialCount);
+        avgDailyPrice = Math.round(avgDailyPrice / materialCount);
+    }
+    
+    // 1. 전체 계산 이벤트
+    gtag('event', 'price_calculation', {
+        'event_category': '단가계산',
+        'event_label': structureType,
+        'value': totalPrice,
+        'structure_type': structureType,
+        'avg_basic_price': avgBasicPrice,
+        'avg_daily_price': avgDailyPrice,
+        'total_price': totalPrice,
+        'material_count': materialCount,
+        'usage_days': usageDays
+    });
+    
+    // 2. 자재별 상세 이벤트
+    Object.keys(materials).forEach(key => {
+        if (materials[key].finalQty > 0) {
+            const price = savedPriceInputs[key] || defaultPrices[key] || { basic: 0, daily: 0 };
+            gtag('event', 'material_price', {
+                'event_category': '자재단가',
+                'event_label': materials[key].name + ' ' + materials[key].spec,
+                'structure_type': structureType,
+                'material_name': materials[key].name,
+                'material_spec': materials[key].spec,
+                'basic_price': price.basic,
+                'daily_price': price.daily,
+                'quantity': materials[key].finalQty,
+                'usage_days': usageDays
+            });
+        }
+    });
+}
+
         // 자재별 비율 데이터 (완전한 버전)
         const scaffoldData = {
             'general-frame': {
@@ -1709,6 +1771,11 @@
             // 가격 관련 요소 표시
             document.querySelectorAll('.price-column').forEach(el => el.style.display = '');
             document.querySelectorAll('.price-summary').forEach(el => el.style.display = '');
+        
+            // Google Analytics 데이터 전송
+    const structureType = scaffoldData[currentType].name;
+    sendPriceAnalytics(structureType, calculatedMaterials, totalPrice, usageDays);
+        
         }
         
         // 단가 데이터 저장
