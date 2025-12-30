@@ -1118,6 +1118,9 @@
                             <button class="toggle-price-btn" onclick="togglePriceSection()">단가 입력</button>
                             <button class="price-action-btn" onclick="savePriceData()">단가 저장</button>
                             <button class="price-action-btn" onclick="loadPriceData()">단가 불러오기</button>
+                            <button class="price-action-btn" onclick="exportPriceToExcel()" style="background: #28a745;">📥 엑셀 내보내기</button>
+                            <button class="price-action-btn" onclick="document.getElementById('priceFileInput').click()" style="background: #17a2b8;">📤 엑셀 불러오기</button>
+                            <input type="file" id="priceFileInput" accept=".csv" style="display:none;" onchange="importPriceFromExcel(event)">
                         </div>
                     </div>
                     
@@ -1820,329 +1823,165 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
             alert('단가 정보를 불러왔습니다.');
         }
         
-        // 견적서 생성
+        // 단가 엑셀로 내보내기
+        function exportPriceToExcel() {
+            if (Object.keys(calculatedMaterials).length === 0) {
+                alert('먼저 물량 계산을 실행해주세요.');
+                return;
+            }
+            
+            var csvContent = '\ufeff';
+            csvContent += '자재코드,자재명,규격,기본료(원),일단가(원)\n';
+            
+            for (var key in calculatedMaterials) {
+                var material = calculatedMaterials[key];
+                var basicInput = document.getElementById('basic-' + key);
+                var dailyInput = document.getElementById('daily-' + key);
+                var basic = basicInput ? basicInput.value || 0 : 0;
+                var daily = dailyInput ? dailyInput.value || 0 : 0;
+                
+                csvContent += key + ',"' + material.name + '","' + material.spec + '",' + basic + ',' + daily + '\n';
+            }
+            
+            var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '비계_단가표_' + new Date().toISOString().slice(0,10) + '.csv';
+            link.click();
+            
+            alert('단가표가 CSV 파일로 저장되었습니다.');
+        }
+        
+        // 단가 엑셀에서 불러오기
+        function importPriceFromExcel(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+            
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var content = e.target.result;
+                    var lines = content.split('\n');
+                    var importCount = 0;
+                    
+                    for (var i = 1; i < lines.length; i++) {
+                        var line = lines[i].trim();
+                        if (!line) continue;
+                        
+                        var cols = line.match(/(\".*?\"|[^\",\s]+)(?=\s*,|\s*$)/g);
+                        if (cols && cols.length >= 5) {
+                            var key = cols[0].replace(/\"/g, '').trim();
+                            var basic = parseFloat(cols[3].replace(/\"/g, '')) || 0;
+                            var daily = parseFloat(cols[4].replace(/\"/g, '')) || 0;
+                            
+                            var basicInput = document.getElementById('basic-' + key);
+                            var dailyInput = document.getElementById('daily-' + key);
+                            
+                            if (basicInput && dailyInput) {
+                                basicInput.value = basic;
+                                dailyInput.value = daily;
+                                savedPriceInputs[key] = { basic: basic, daily: daily };
+                                importCount++;
+                            }
+                        }
+                    }
+                    
+                    if (importCount > 0) {
+                        alert('단가 정보를 불러왔습니다. (' + importCount + '개 항목)');
+                        var container = document.getElementById('priceInputContainer');
+                        if (container && container.style.display === 'none') {
+                            container.style.display = 'block';
+                            document.querySelector('.toggle-price-btn').textContent = '단가 입력 닫기';
+                        }
+                    } else {
+                        alert('불러올 수 있는 단가 정보가 없습니다.');
+                    }
+                } catch (error) {
+                    alert('파일을 읽는 중 오류가 발생했습니다.');
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file, 'UTF-8');
+            event.target.value = '';
+        }
+        
+        // 견적서 생성 (새 버전)
         function generateQuotation() {
-            const companyName = prompt('업체명을 입력하세요:', '');
+            if (Object.keys(calculatedMaterials).length === 0) {
+                alert('먼저 물량 계산을 실행해주세요.');
+                return;
+            }
+            
+            var companyName = prompt('업체명을 입력하세요:', '');
             if (!companyName) return;
             
-            const projectName = prompt('공사명을 입력하세요:', '');
+            var projectName = prompt('공사명을 입력하세요:', '');
             if (!projectName) return;
             
-            // 비고란 기본 내용
-            const defaultNotes = `- 부가세 별도
-- 자재는 일단가 청구조건이며, 시험에 필요한 자재비 및 경비 별도 조건
-- 물량은 산출 기준 : ${scaffoldData[currentType].description}
-- 물량은 변경될 수 있으며, 실제 설치 물량으로 정산 조건
-- 운반비 왕복 조건이며, 11톤 미만 출고시 청구조건`;
+            var area = parseFloat(document.getElementById('area').value) || 0;
+            var usageDays = parseInt(document.getElementById('usageDays').value) || 30;
+            var structureName = scaffoldData[currentType].name;
             
-            // 비고란 내용 입력받기
-            const notes = prompt('비고란 내용을 입력하세요 (각 항목은 줄바꿈으로 구분):', defaultNotes);
+            var totalAmount = 0;
+            var itemsHTML = '';
             
-            const quotationWindow = window.open('', '_blank', 'width=900,height=1200');
-            const area = parseFloat(document.getElementById('area').value);
-            const today = new Date();
-            const todayStr = today.getFullYear() + '년 ' + (today.getMonth() + 1) + '월 ' + today.getDate() + '일';
-            const usageDays = parseInt(document.getElementById('usageDays').value) || 30;
-            
-            let totalAmount = 0;
-            
-            // 각 자재별 금액 계산
-            for (const [key, material] of Object.entries(calculatedMaterials)) {
-                if (material.finalQty === 0) continue;
-                const price = savedPriceInputs[key] || defaultPrices[key] || { basic: 0, daily: 0 };
-                totalAmount += (price.basic + (price.daily * usageDays)) * material.finalQty;
-            }
-            
-            let quotationHTML = `
-                <!DOCTYPE html>
-                <html lang="ko">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>견적서 - ${companyName}</title>
-                    <style>
-                        @media print {
-                            body { margin: 0; }
-                            .page-break { page-break-after: always; }
-                        }
-                        body { 
-                            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; 
-                            margin: 0;
-                            padding: 20px;
-                            background: white;
-                        }
-                        .quotation-container { 
-                            max-width: 900px; 
-                            margin: 0 auto; 
-                            background: white;
-                            padding: 40px;
-                        }
-                        .header {
-                            text-align: center;
-                            margin-bottom: 50px;
-                        }
-                        .title { 
-                            font-size: 40px; 
-                            font-weight: bold; 
-                            margin-bottom: 40px;
-                            letter-spacing: 20px;
-                        }
-                        .to-company {
-                            font-size: 20px;
-                            font-weight: bold;
-                            margin-bottom: 20px;
-                        }
-                        .summary {
-                            background: #f5f5f5;
-                            padding: 20px;
-                            margin-bottom: 30px;
-                            border: 1px solid #ddd;
-                        }
-                        .summary-grid {
-                            display: grid;
-                            grid-template-columns: 1fr 1fr;
-                            gap: 10px;
-                        }
-                        .summary-item {
-                            display: flex;
-                            justify-content: space-between;
-                            padding: 5px 0;
-                        }
-                        .summary-label {
-                            font-weight: bold;
-                        }
-                        .amount-box {
-                            text-align: center;
-                            margin: 30px 0;
-                            padding: 20px;
-                            border: 2px solid #333;
-                        }
-                        .amount-label {
-                            font-size: 18px;
-                            margin-bottom: 10px;
-                        }
-                        .amount-value {
-                            font-size: 28px;
-                            font-weight: bold;
-                            color: #2a5298;
-                        }
-                        .main-table { 
-                            width: 100%; 
-                            border-collapse: collapse; 
-                            margin-bottom: 30px; 
-                        }
-                        .main-table th { 
-                            background: #e8e8e8; 
-                            padding: 10px; 
-                            text-align: center; 
-                            font-weight: bold;
-                            border: 1px solid #999;
-                            font-size: 14px;
-                        }
-                        .main-table td { 
-                            padding: 8px; 
-                            border: 1px solid #ccc; 
-                            text-align: center;
-                            font-size: 13px;
-                        }
-                        .main-table .category {
-                            background: #f5f5f5;
-                            font-weight: bold;
-                            text-align: left;
-                            padding-left: 15px;
-                        }
-                        .notes {
-                            margin-top: 30px;
-                            padding: 20px;
-                            background: #f9f9f9;
-                            border: 1px solid #ddd;
-                        }
-                        .notes h4 {
-                            margin-bottom: 10px;
-                            color: #333;
-                        }
-                        .notes ul {
-                            margin: 0;
-                            padding-left: 20px;
-                        }
-                        .notes li {
-                            margin: 5px 0;
-                            font-size: 13px;
-                            color: #555;
-                        }
-                        .footer {
-                            margin-top: 50px;
-                            text-align: right;
-                        }
-                        .text-right { text-align: right !important; }
-                        .text-left { text-align: left !important; }
-                        .text-center { text-align: center !important; }
-                        .edit-notes {
-                            background: #fffbf0;
-                            border: 1px dashed #ccc;
-                            padding: 10px;
-                            margin-bottom: 20px;
-                            font-size: 12px;
-                            color: #666;
-                            text-align: center;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="quotation-container">
-                        <div class="header">
-                            <h1 class="title">견 적 서</h1>
-                        </div>
-                        
-                        <div class="to-company">${companyName} 귀하</div>
-                        
-                        <p style="font-size: 16px; margin-bottom: 30px;">아래와 같이 견적 합니다.</p>
-                        
-                        <div class="amount-box">
-                            <div class="amount-label">금 액</div>
-                            <div class="amount-value">₩ ${totalAmount.toLocaleString()}</div>
-                        </div>
-                        
-                        <div class="summary">
-                            <div class="summary-grid">
-                                <div class="summary-item">
-                                    <span class="summary-label">공 사 명 :</span>
-                                    <span>${projectName}</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">납 기 :</span>
-                                    <span>추후 협의</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">결제조건 :</span>
-                                    <span>정기 결제</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">인도장소 :</span>
-                                    <span>추후 협의</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">견적유효 :</span>
-                                    <span>견적일로부터 10일</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">견 적 일 :</span>
-                                    <span>${todayStr}</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <table class="main-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%;">품 명<br>ITEM</th>
-                                    <th style="width: 20%;">규 격<br>SIZE</th>
-                                    <th style="width: 10%;">단위<br>UNIT</th>
-                                    <th style="width: 10%;">수량<br>Q'TY</th>
-                                    <th style="width: 8%;">사용일<br>DAY</th>
-                                    <th style="width: 12%;">단가<br>PRICE</th>
-                                    <th style="width: 15%;">금액<br>AMOUNT</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-            `;
-            
-            // 카테고리별로 자재 그룹화
-            const categories = {
-                '수직재': [],
-                '수평재': [],
-                '하부자키': [],
-                '대각가새': [],
-                '계단발판': [],
-                '비계버팀대': [],
-                '안전발판': [],
-                'B/T사다리': [],
-                '개폐형발판': []
-            };
-            
-            for (const [key, material] of Object.entries(calculatedMaterials)) {
-                if (material.finalQty === 0) continue;
-                const category = material.name;
-                if (categories[category]) {
-                    categories[category].push({ key, ...material });
-                }
-            }
-            
-            // 테이블에 자재 추가
-            for (const [category, items] of Object.entries(categories)) {
-                if (items.length === 0) continue;
+            for (var key in calculatedMaterials) {
+                var material = calculatedMaterials[key];
+                if (material.finalQty <= 0) continue;
                 
-                // 카테고리 헤더
-                quotationHTML += `
-                    <tr>
-                        <td colspan="7" class="category">${category}</td>
-                    </tr>
-                `;
+                var price = savedPriceInputs[key] || defaultPrices[key] || { basic: 0, daily: 0 };
+                var unitPrice = price.basic + (price.daily * usageDays);
+                var amount = unitPrice * material.finalQty;
+                totalAmount += amount;
                 
-                // 각 아이템
-                items.forEach(item => {
-                    const price = savedPriceInputs[item.key] || defaultPrices[item.key] || { basic: 0, daily: 0 };
-                    const unitPrice = price.basic + (price.daily * usageDays);
-                    const itemTotal = unitPrice * item.finalQty;
-                    
-                    quotationHTML += `
-                        <tr>
-                            <td class="text-left" style="padding-left: 20px;">${item.name}</td>
-                            <td>${item.spec}</td>
-                            <td>EA</td>
-                            <td>${item.finalQty.toLocaleString()}</td>
-                            <td>${usageDays}</td>
-                            <td class="text-right">${unitPrice.toLocaleString()}</td>
-                            <td class="text-right">${itemTotal.toLocaleString()}</td>
-                        </tr>
-                    `;
-                });
+                itemsHTML += '<tr><td>' + material.name + '</td><td>' + material.spec + '</td><td>EA</td>' +
+                    '<td class="num">' + material.finalQty.toLocaleString() + '</td><td>' + usageDays + '</td>' +
+                    '<td class="num">' + unitPrice.toLocaleString() + '</td><td class="num">' + amount.toLocaleString() + '</td></tr>';
             }
             
-            quotationHTML += `
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="6" class="text-center" style="font-weight: bold; background: #f0f0f0;">합 계</td>
-                                    <td class="text-right" style="font-weight: bold; background: #f0f0f0;">${totalAmount.toLocaleString()}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        
-                        <div class="notes">
-                            <h4>[ 비 고 ]</h4>
-                            <ul>
-            `;
+            var pricePerM2 = area > 0 ? Math.round(totalAmount / area) : 0;
+            var today = new Date();
+            var dateStr = today.getFullYear() + '. ' + String(today.getMonth()+1).padStart(2,'0') + '. ' + String(today.getDate()).padStart(2,'0');
             
-            // 비고란 내용 처리
-            if (notes) {
-                const noteLines = notes.split('\n');
-                noteLines.forEach(line => {
-                    if (line.trim()) {
-                        // - 로 시작하지 않으면 추가
-                        const formattedLine = line.trim().startsWith('-') ? line.trim().substring(1).trim() : line.trim();
-                        quotationHTML += `<li>${formattedLine}</li>\n`;
-                    }
-                });
-            }
+            var quotationHTML = '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>견적서</title>' +
+                '<style>@page{size:A4;margin:10mm 15mm}@media print{body{-webkit-print-color-adjust:exact}}' +
+                '*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Malgun Gothic",sans-serif;font-size:11px;line-height:1.4;color:#000;background:#fff}' +
+                '.container{max-width:210mm;margin:0 auto;padding:15px 25px}' +
+                '.title{text-align:center;font-size:28px;font-weight:bold;letter-spacing:20px;margin-bottom:25px;padding-bottom:15px;border-bottom:2px solid #000}' +
+                '.header-info{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}' +
+                '.company-name{font-size:18px;font-weight:bold;margin-bottom:5px}' +
+                '.amount-box{text-align:right}.amount-label{font-size:12px;color:#666}.amount-value{font-size:24px;font-weight:bold}' +
+                '.project-name{background:#f5f5f5;padding:10px 15px;margin-bottom:15px;font-size:13px}' +
+                'table{width:100%;border-collapse:collapse;margin-bottom:15px;font-size:11px}' +
+                'th{background:#e8e8e8;border:1px solid #999;padding:8px 5px;font-weight:bold;text-align:center}' +
+                'td{border:1px solid #ccc;padding:6px 5px;text-align:center}td.num{text-align:right;padding-right:8px}' +
+                '.total-row{background:#f0f0f0;font-weight:bold}.total-row td{border:1px solid #999}' +
+                '.notes{background:#fafafa;border:1px solid #ddd;padding:12px 15px;margin-top:15px}' +
+                '.notes h4{font-size:12px;margin-bottom:8px}.notes ul{margin:0;padding-left:18px}.notes li{margin:3px 0;font-size:11px}' +
+                '.footer{margin-top:20px;text-align:right;font-size:12px}.footer p{margin:3px 0}.company-stamp{font-size:16px;font-weight:bold;margin-top:15px}' +
+                '</style></head><body><div class="container">' +
+                '<h1 class="title">견 적 서</h1>' +
+                '<div class="header-info"><div><div class="company-name">' + companyName + ' 귀하</div></div>' +
+                '<div class="amount-box"><div class="amount-label">금 액</div><div class="amount-value">₩ ' + totalAmount.toLocaleString() + '</div></div></div>' +
+                '<div class="project-name"><strong>공사명:</strong> ' + projectName + ' (시스템비계)</div>' +
+                '<table><thead><tr><th style="width:18%">품명</th><th style="width:14%">규격</th><th style="width:8%">단위</th>' +
+                '<th style="width:12%">수량</th><th style="width:10%">일수</th><th style="width:14%">단가</th><th style="width:18%">금액</th></tr></thead>' +
+                '<tbody>' + itemsHTML + '</tbody>' +
+                '<tfoot><tr class="total-row"><td colspan="6" style="text-align:center">합 계</td><td class="num">₩ ' + totalAmount.toLocaleString() + '</td></tr></tfoot></table>' +
+                '<div class="notes"><h4>[ 비 고 ]</h4><ul>' +
+                '<li>부가세 별도</li>' +
+                '<li>자재는 일단가 청구조건이며, 시험에 필요한 자재비 및 경비 별도 조건</li>' +
+                '<li>물량 산출 기준: ' + structureName + ' / ' + area.toLocaleString() + '㎡</li>' +
+                '<li>㎡당 단가: ' + pricePerM2.toLocaleString() + '원 (' + usageDays + '일 기준)</li>' +
+                '<li>물량은 변경될 수 있으며, 실제 설치 물량으로 정산 조건</li>' +
+                '<li>운반비 편도 조건이며, 11톤 미만 출고시 청구조건</li>' +
+                '</ul></div>' +
+                '<div class="footer"><p>' + dateStr + '</p><p class="company-stamp">가설파트너</p><p>📞 010-7970-2108 | ✉️ fc112@naver.com</p></div>' +
+                '</div><script>window.onload=function(){window.print();}<\/script></body></html>';
             
-            quotationHTML += `
-                            </ul>
-                        </div>
-                        
-                        <div class="edit-notes no-print">
-                            ※ 인쇄 후 비고란에 추가 내용을 수기로 작성하실 수 있습니다.
-                        </div>
-                        
-                        <div class="footer">
-                            <p style="font-size: 16px;">위와 같이 견적합니다.</p>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `;
-            
-            quotationWindow.document.write(quotationHTML);
-            quotationWindow.document.close();
+            var printWindow = window.open('', '_blank');
+            printWindow.document.write(quotationHTML);
+            printWindow.document.close();
         }
         
         // 엑셀 내보내기

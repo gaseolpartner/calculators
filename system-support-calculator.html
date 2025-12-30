@@ -1060,6 +1060,9 @@
                             <button class="toggle-price-btn" onclick="togglePriceSection()">단가 입력</button>
                             <button class="price-action-btn" onclick="savePriceData()">단가 저장</button>
                             <button class="price-action-btn" onclick="loadPriceData()">단가 불러오기</button>
+                            <button class="price-action-btn" onclick="exportPriceToExcel()" style="background: #28a745;">📥 엑셀 내보내기</button>
+                            <button class="price-action-btn" onclick="document.getElementById('priceFileInput').click()" style="background: #17a2b8;">📤 엑셀 불러오기</button>
+                            <input type="file" id="priceFileInput" accept=".csv" style="display:none;" onchange="importPriceFromExcel(event)">
                         </div>
                     </div>
                     
@@ -1176,6 +1179,34 @@
                         🔄 초기화
                     </button>
                 </div>
+                
+                <!-- 다중 구간 견적 섹션 -->
+                <div class="multi-section-container no-print" style="margin-top: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; color: white;">
+                    <h3 style="margin-bottom: 20px; font-size: 20px;">📋 다중 구간 통합 견적</h3>
+                    <p style="margin-bottom: 15px; opacity: 0.9; font-size: 14px;">
+                        여러 구간(데크, RC, 보 등)을 각각 계산 후 저장하고, 한 번에 통합 견적서를 생성할 수 있습니다.
+                    </p>
+                    
+                    <div class="button-group" style="margin-bottom: 20px;">
+                        <button class="button" onclick="addToQuotationList()" style="background: #28a745; border: none;">
+                            ➕ 현재 구간 견적에 추가
+                        </button>
+                        <button class="button" onclick="showQuotationList()" style="background: #17a2b8; border: none;">
+                            📋 저장된 구간 보기 (<span id="quotationCount">0</span>개)
+                        </button>
+                        <button class="button" onclick="generateCombinedQuotation()" style="background: #ffc107; color: #333; border: none;">
+                            📄 통합 견적서 생성
+                        </button>
+                        <button class="button" onclick="clearQuotationList()" style="background: #dc3545; border: none;">
+                            🗑️ 구간 목록 초기화
+                        </button>
+                    </div>
+                    
+                    <div id="quotationListPreview" style="display: none; background: rgba(255,255,255,0.15); border-radius: 10px; padding: 15px; margin-top: 15px;">
+                        <h4 style="margin-bottom: 10px;">저장된 구간 목록</h4>
+                        <div id="quotationListContent"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1210,6 +1241,7 @@
         let savedCalculations = [];
         let selectedDataIndices = [];
         let savedPriceInputs = {}; // 단가 입력값 저장용
+        let quotationSections = []; // 다중 구간 견적 저장용
         
         // Google Analytics 데이터 전송 함수
 function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
@@ -1880,328 +1912,98 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
         }
         
-        // 견적서 생성
+        
+        // 견적서 생성 (새 버전)
         function generateQuotation() {
-            const companyName = prompt('업체명을 입력하세요:', '');
+            if (Object.keys(calculatedMaterials).length === 0) {
+                alert('먼저 물량 계산을 실행해주세요.');
+                return;
+            }
+            
+            var companyName = prompt('업체명을 입력하세요:', '');
             if (!companyName) return;
             
-            const projectName = prompt('공사명을 입력하세요:', '');
+            var projectName = prompt('공사명을 입력하세요:', '');
             if (!projectName) return;
             
-            // 비고란 기본 내용
-            const defaultNotes = `- 부가세 별도
-- 자재는 일단가 청구조건이며, 시험에 필요한 자재비 및 경비 별도 조건
-- 물량은 산출 기준 : ${materialRatios[currentStructureType].name}
-- 물량은 변경될 수 있으며, 실제 설치 물량으로 정산 조건
-- 운반비 왕복 조건이며, 11톤 미만 출고시 청구조건`;
+            var volume = parseFloat(document.getElementById('volume').value) || 0;
+            var usageDays = parseInt(document.getElementById('usageDays').value) || 30;
+            var structureName = materialRatios[currentStructureType].name;
             
-            // 비고란 내용 입력받기
-            const notes = prompt('비고란 내용을 입력하세요 (각 항목은 줄바꿈으로 구분):', defaultNotes);
+            var totalAmount = 0;
+            var itemsHTML = '';
             
-            const quotationWindow = window.open('', '_blank', 'width=900,height=1200');
-            const volume = parseFloat(document.getElementById('volume').value);
-            const today = new Date();
-            const todayStr = today.getFullYear() + '년 ' + (today.getMonth() + 1) + '월 ' + today.getDate() + '일';
-            const usageDays = parseInt(document.getElementById('usageDays').value) || 30;
+            var specs = {
+                'P17': '1725mm', 'P12': '1225mm', 'P08': '825mm', 'P04': '425mm', 'P02': '216mm',
+                'H18': '1829mm', 'H15': '1524mm', 'H12': '1219mm', 'H09': '914mm', 'H06': '610mm', 'H03': '305mm',
+                'H': '-', 'J': '-', 'S': '-', 'T': '-',
+                'M3': '3000mm', 'M2.5': '2500mm', 'M2': '2000mm', 'M1.5': '1500mm', 'M1': '1000mm'
+            };
             
-            let totalAmount = 0;
+            var materialOrder = ['P17', 'P12', 'P08', 'P04', 'P02', 'H18', 'H15', 'H12', 'H09', 'H06', 'H03', 'H', 'J', 'S', 'T', 'M3', 'M2.5', 'M2', 'M1.5', 'M1'];
             
-            // 각 자재별 금액 계산
-            for (const [key, material] of Object.entries(calculatedMaterials)) {
-                if (material.quantity === 0) continue;
-                const price = savedPriceInputs[key] || defaultPrices[key] || { basic: 0, daily: 0 };
-                totalAmount += (price.basic + (price.daily * usageDays)) * material.quantity;
+            for (var i = 0; i < materialOrder.length; i++) {
+                var key = materialOrder[i];
+                if (calculatedMaterials[key] && calculatedMaterials[key].quantity > 0) {
+                    var material = calculatedMaterials[key];
+                    var qty = material.quantity;
+                    var price = savedPriceInputs[key] || { basic: 0, daily: 0 };
+                    var unitPrice = price.basic + (price.daily * usageDays);
+                    var amount = unitPrice * qty;
+                    totalAmount += amount;
+                    
+                    itemsHTML += '<tr><td>' + (materialNames[key] || key) + '</td><td>' + (specs[key] || key) + '</td><td>EA</td>' +
+                        '<td class="num">' + qty.toLocaleString() + '</td><td>' + usageDays + '</td>' +
+                        '<td class="num">' + unitPrice.toLocaleString() + '</td><td class="num">' + amount.toLocaleString() + '</td></tr>';
+                }
             }
             
-            let quotationHTML = `
-                <!DOCTYPE html>
-                <html lang="ko">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>견적서 - ${companyName}</title>
-                    <style>
-                        @media print {
-                            body { margin: 0; }
-                            .page-break { page-break-after: always; }
-                        }
-                        body { 
-                            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; 
-                            margin: 0;
-                            padding: 20px;
-                            background: white;
-                        }
-                        .quotation-container { 
-                            max-width: 900px; 
-                            margin: 0 auto; 
-                            background: white;
-                            padding: 40px;
-                        }
-                        .header {
-                            text-align: center;
-                            margin-bottom: 50px;
-                        }
-                        .title { 
-                            font-size: 40px; 
-                            font-weight: bold; 
-                            margin-bottom: 40px;
-                            letter-spacing: 20px;
-                        }
-                        .to-company {
-                            font-size: 20px;
-                            font-weight: bold;
-                            margin-bottom: 20px;
-                        }
-                        .summary {
-                            background: #f5f5f5;
-                            padding: 20px;
-                            margin-bottom: 30px;
-                            border: 1px solid #ddd;
-                        }
-                        .summary-grid {
-                            display: grid;
-                            grid-template-columns: 1fr 1fr;
-                            gap: 10px;
-                        }
-                        .summary-item {
-                            display: flex;
-                            justify-content: space-between;
-                            padding: 5px 0;
-                        }
-                        .summary-label {
-                            font-weight: bold;
-                        }
-                        .amount-box {
-                            text-align: center;
-                            margin: 30px 0;
-                            padding: 20px;
-                            border: 2px solid #333;
-                        }
-                        .amount-label {
-                            font-size: 18px;
-                            margin-bottom: 10px;
-                        }
-                        .amount-value {
-                            font-size: 28px;
-                            font-weight: bold;
-                            color: #2a5298;
-                        }
-                        .main-table { 
-                            width: 100%; 
-                            border-collapse: collapse; 
-                            margin-bottom: 30px; 
-                        }
-                        .main-table th { 
-                            background: #e8e8e8; 
-                            padding: 10px; 
-                            text-align: center; 
-                            font-weight: bold;
-                            border: 1px solid #999;
-                            font-size: 14px;
-                        }
-                        .main-table td { 
-                            padding: 8px; 
-                            border: 1px solid #ccc; 
-                            text-align: center;
-                            font-size: 13px;
-                        }
-                        .main-table .category {
-                            background: #f5f5f5;
-                            font-weight: bold;
-                            text-align: left;
-                            padding-left: 15px;
-                        }
-                        .notes {
-                            margin-top: 30px;
-                            padding: 20px;
-                            background: #f9f9f9;
-                            border: 1px solid #ddd;
-                        }
-                        .notes h4 {
-                            margin-bottom: 10px;
-                            color: #333;
-                        }
-                        .notes ul {
-                            margin: 0;
-                            padding-left: 20px;
-                        }
-                        .notes li {
-                            margin: 5px 0;
-                            font-size: 13px;
-                            color: #555;
-                        }
-                        .footer {
-                            margin-top: 50px;
-                            text-align: right;
-                        }
-                        .text-right { text-align: right !important; }
-                        .text-left { text-align: left !important; }
-                        .text-center { text-align: center !important; }
-                        .edit-notes {
-                            background: #fffbf0;
-                            border: 1px dashed #ccc;
-                            padding: 10px;
-                            margin-bottom: 20px;
-                            font-size: 12px;
-                            color: #666;
-                            text-align: center;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="quotation-container">
-                        <div class="header">
-                            <h1 class="title">견 적 서</h1>
-                        </div>
-                        
-                        <div class="to-company">${companyName} 귀하</div>
-                        
-                        <p style="font-size: 16px; margin-bottom: 30px;">아래와 같이 견적 합니다.</p>
-                        
-                        <div class="amount-box">
-                            <div class="amount-label">금 액</div>
-                            <div class="amount-value">₩ ${totalAmount.toLocaleString()}</div>
-                        </div>
-                        
-                        <div class="summary">
-                            <div class="summary-grid">
-                                <div class="summary-item">
-                                    <span class="summary-label">공 사 명 :</span>
-                                    <span>${projectName}</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">납 기 :</span>
-                                    <span>추후 협의</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">결제조건 :</span>
-                                    <span>정기 결제</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">인도장소 :</span>
-                                    <span>추후 협의</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">견적유효 :</span>
-                                    <span>견적일로부터 10일</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">견 적 일 :</span>
-                                    <span>${todayStr}</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <table class="main-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%;">품 명<br>ITEM</th>
-                                    <th style="width: 20%;">규 격<br>SIZE</th>
-                                    <th style="width: 10%;">단위<br>UNIT</th>
-                                    <th style="width: 10%;">수량<br>Q'TY</th>
-                                    <th style="width: 8%;">사용일<br>DAY</th>
-                                    <th style="width: 12%;">단가<br>PRICE</th>
-                                    <th style="width: 15%;">금액<br>AMOUNT</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-            `;
+            var pricePerM3 = volume > 0 ? Math.round(totalAmount / volume) : 0;
+            var today = new Date();
+            var dateStr = today.getFullYear() + '. ' + String(today.getMonth()+1).padStart(2,'0') + '. ' + String(today.getDate()).padStart(2,'0');
             
-            // 카테고리별로 자재 그룹화
-            const categories = [
-                { title: '수직재', items: ['P17', 'P12', 'P08', 'P04', 'P02'] },
-                { title: '수평재', items: ['H18', 'H15', 'H12', 'H09', 'H06', 'H03'] },
-                { title: '부속자재', items: ['H', 'J', 'S', 'T'] },
-                { title: '멍에재', items: ['M3', 'M2.5', 'M2', 'M1.5', 'M1'] }
-            ];
+            var quotationHTML = '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>견적서</title>' +
+                '<style>@page{size:A4;margin:10mm 15mm}@media print{body{-webkit-print-color-adjust:exact}}' +
+                '*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Malgun Gothic",sans-serif;font-size:11px;line-height:1.4;color:#000;background:#fff}' +
+                '.container{max-width:210mm;margin:0 auto;padding:15px 25px}' +
+                '.title{text-align:center;font-size:28px;font-weight:bold;letter-spacing:20px;margin-bottom:25px;padding-bottom:15px;border-bottom:2px solid #000}' +
+                '.header-info{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}' +
+                '.company-name{font-size:18px;font-weight:bold;margin-bottom:5px}' +
+                '.amount-box{text-align:right}.amount-label{font-size:12px;color:#666}.amount-value{font-size:24px;font-weight:bold}' +
+                '.project-name{background:#f5f5f5;padding:10px 15px;margin-bottom:15px;font-size:13px}' +
+                'table{width:100%;border-collapse:collapse;margin-bottom:15px;font-size:11px}' +
+                'th{background:#e8e8e8;border:1px solid #999;padding:8px 5px;font-weight:bold;text-align:center}' +
+                'td{border:1px solid #ccc;padding:6px 5px;text-align:center}td.num{text-align:right;padding-right:8px}' +
+                '.total-row{background:#f0f0f0;font-weight:bold}.total-row td{border:1px solid #999}' +
+                '.notes{background:#fafafa;border:1px solid #ddd;padding:12px 15px;margin-top:15px}' +
+                '.notes h4{font-size:12px;margin-bottom:8px}.notes ul{margin:0;padding-left:18px}.notes li{margin:3px 0;font-size:11px}' +
+                '.footer{margin-top:20px;text-align:right;font-size:12px}.footer p{margin:3px 0}.company-stamp{font-size:16px;font-weight:bold;margin-top:15px}' +
+                '</style></head><body><div class="container">' +
+                '<h1 class="title">견 적 서</h1>' +
+                '<div class="header-info"><div><div class="company-name">' + companyName + ' 귀하</div></div>' +
+                '<div class="amount-box"><div class="amount-label">금 액</div><div class="amount-value">₩ ' + totalAmount.toLocaleString() + '</div></div></div>' +
+                '<div class="project-name"><strong>공사명:</strong> ' + projectName + ' (시스템동바리)</div>' +
+                '<table><thead><tr><th style="width:18%">품명</th><th style="width:14%">규격</th><th style="width:8%">단위</th>' +
+                '<th style="width:12%">수량</th><th style="width:10%">일수</th><th style="width:14%">단가</th><th style="width:18%">금액</th></tr></thead>' +
+                '<tbody>' + itemsHTML + '</tbody>' +
+                '<tfoot><tr class="total-row"><td colspan="6" style="text-align:center">합 계</td><td class="num">₩ ' + totalAmount.toLocaleString() + '</td></tr></tfoot></table>' +
+                '<div class="notes"><h4>[ 비 고 ]</h4><ul>' +
+                '<li>부가세 별도</li>' +
+                '<li>자재는 일단가 청구조건이며, 시험에 필요한 자재비 및 경비 별도 조건</li>' +
+                '<li>물량 산출 기준: ' + structureName + ' / ' + volume.toLocaleString() + '㎥</li>' +
+                '<li>㎥당 단가: ' + pricePerM3.toLocaleString() + '원 (' + usageDays + '일 기준)</li>' +
+                '<li>물량은 변경될 수 있으며, 실제 설치 물량으로 정산 조건</li>' +
+                '<li>운반비 편도 조건이며, 11톤 미만 출고시 청구조건</li>' +
+                '</ul></div>' +
+                '<div class="footer"><p>' + dateStr + '</p><p class="company-stamp">가설파트너</p><p>📞 010-7970-2108 | ✉️ fc112@naver.com</p></div>' +
+                '</div><script>window.onload=function(){window.print();}<\/script></body></html>';
             
-            // 테이블에 자재 추가
-            for (const category of categories) {
-                let categoryHasItems = false;
-                category.items.forEach(item => {
-                    if (calculatedMaterials[item] && calculatedMaterials[item].quantity > 0) {
-                        categoryHasItems = true;
-                    }
-                });
-                
-                if (!categoryHasItems) continue;
-                
-                // 카테고리 헤더
-                quotationHTML += `
-                    <tr>
-                        <td colspan="7" class="category">${category.title}</td>
-                    </tr>
-                `;
-                
-                // 각 아이템
-                category.items.forEach(item => {
-                    if (calculatedMaterials[item] && calculatedMaterials[item].quantity > 0) {
-                        const material = calculatedMaterials[item];
-                        const price = savedPriceInputs[item] || defaultPrices[item] || { basic: 0, daily: 0 };
-                        const unitPrice = price.basic + (price.daily * usageDays);
-                        const itemTotal = unitPrice * material.quantity;
-                        
-                        quotationHTML += `
-                            <tr>
-                                <td class="text-left" style="padding-left: 20px;">${materialNames[item]}</td>
-                                <td>${item}</td>
-                                <td>EA</td>
-                                <td>${material.quantity.toLocaleString()}</td>
-                                <td>${usageDays}</td>
-                                <td class="text-right">${unitPrice.toLocaleString()}</td>
-                                <td class="text-right">${itemTotal.toLocaleString()}</td>
-                            </tr>
-                        `;
-                    }
-                });
-            }
-            
-            quotationHTML += `
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="6" class="text-center" style="font-weight: bold; background: #f0f0f0;">합 계</td>
-                                    <td class="text-right" style="font-weight: bold; background: #f0f0f0;">${totalAmount.toLocaleString()}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        
-                        <div class="notes">
-                            <h4>[ 비 고 ]</h4>
-                            <ul>
-            `;
-            
-            // 비고란 내용 처리
-            if (notes) {
-                const noteLines = notes.split('\n');
-                noteLines.forEach(line => {
-                    if (line.trim()) {
-                        // - 로 시작하지 않으면 추가
-                        const formattedLine = line.trim().startsWith('-') ? line.trim().substring(1).trim() : line.trim();
-                        quotationHTML += `<li>${formattedLine}</li>\n`;
-                    }
-                });
-            }
-            
-            quotationHTML += `
-                            </ul>
-                        </div>
-                        
-                        <div class="edit-notes no-print">
-                            ※ 인쇄 후 비고란에 추가 내용을 수기로 작성하실 수 있습니다.
-                        </div>
-                        
-                        <div class="footer">
-                            <p style="font-size: 16px;">위와 같이 견적합니다.</p>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `;
-            
-            quotationWindow.document.write(quotationHTML);
-            quotationWindow.document.close();
+            var printWindow = window.open('', '_blank');
+            printWindow.document.write(quotationHTML);
+            printWindow.document.close();
         }
         
+        // 단가 데이터 저장
         // 단가 데이터 저장
         function savePriceData() {
             const priceDataToSave = {};
@@ -2246,6 +2048,311 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
             });
             
             alert('단가 정보를 불러왔습니다.');
+        }
+        
+        // 단가 엑셀로 내보내기
+        function exportPriceToExcel() {
+            if (Object.keys(calculatedMaterials).length === 0) {
+                alert('먼저 물량 계산을 실행해주세요.');
+                return;
+            }
+            
+            var csvContent = '\ufeff';
+            csvContent += '자재코드,자재명,기본료(원),일단가(원)\n';
+            
+            for (var key in calculatedMaterials) {
+                var material = calculatedMaterials[key];
+                var basicInput = document.getElementById('basic_' + key);
+                var dailyInput = document.getElementById('daily_' + key);
+                var basic = basicInput ? basicInput.value || 0 : 0;
+                var daily = dailyInput ? dailyInput.value || 0 : 0;
+                
+                csvContent += key + ',"' + (materialNames[key] || key) + '",' + basic + ',' + daily + '\n';
+            }
+            
+            var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '동바리_단가표_' + new Date().toISOString().slice(0,10) + '.csv';
+            link.click();
+            
+            alert('단가표가 CSV 파일로 저장되었습니다.');
+        }
+        
+        // 단가 엑셀에서 불러오기
+        function importPriceFromExcel(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+            
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var content = e.target.result;
+                    var lines = content.split('\n');
+                    var importCount = 0;
+                    
+                    for (var i = 1; i < lines.length; i++) {
+                        var line = lines[i].trim();
+                        if (!line) continue;
+                        
+                        var cols = line.match(/(\".*?\"|[^\",\s]+)(?=\s*,|\s*$)/g);
+                        if (cols && cols.length >= 4) {
+                            var key = cols[0].replace(/\"/g, '').trim();
+                            var basic = parseFloat(cols[2].replace(/\"/g, '')) || 0;
+                            var daily = parseFloat(cols[3].replace(/\"/g, '')) || 0;
+                            
+                            var basicInput = document.getElementById('basic_' + key);
+                            var dailyInput = document.getElementById('daily_' + key);
+                            
+                            if (basicInput && dailyInput) {
+                                basicInput.value = basic;
+                                dailyInput.value = daily;
+                                savedPriceInputs[key] = { basic: basic, daily: daily };
+                                importCount++;
+                            }
+                        }
+                    }
+                    
+                    if (importCount > 0) {
+                        alert('단가 정보를 불러왔습니다. (' + importCount + '개 항목)');
+                        var container = document.getElementById('priceInputContainer');
+                        if (container && container.style.display === 'none') {
+                            container.style.display = 'block';
+                            document.querySelector('.toggle-price-btn').textContent = '단가 입력 닫기';
+                        }
+                    } else {
+                        alert('불러올 수 있는 단가 정보가 없습니다.');
+                    }
+                } catch (error) {
+                    alert('파일을 읽는 중 오류가 발생했습니다.');
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file, 'UTF-8');
+            event.target.value = '';
+        }
+        
+        // 다중 구간 - 현재 구간을 견적 목록에 추가
+        function addToQuotationList() {
+            if (Object.keys(calculatedMaterials).length === 0) {
+                alert('먼저 물량 계산을 실행해주세요.');
+                return;
+            }
+            
+            var sectionName = prompt('구간명을 입력하세요:', materialRatios[currentStructureType].name + ' 구간');
+            if (!sectionName) return;
+            
+            var volume = parseFloat(document.getElementById('volume').value) || 0;
+            var usageDays = parseInt(document.getElementById('usageDays').value) || 30;
+            
+            var section = {
+                id: Date.now(),
+                name: sectionName,
+                structureType: currentStructureType,
+                structureName: materialRatios[currentStructureType].name,
+                volume: volume,
+                usageDays: usageDays,
+                materials: JSON.parse(JSON.stringify(calculatedMaterials)),
+                prices: JSON.parse(JSON.stringify(savedPriceInputs)),
+                addedAt: new Date().toLocaleString()
+            };
+            
+            quotationSections.push(section);
+            updateQuotationCount();
+            updateQuotationListPreview();
+            
+            alert('"' + sectionName + '" 구간이 견적 목록에 추가되었습니다.\n현재 ' + quotationSections.length + '개 구간이 저장되어 있습니다.');
+        }
+        
+        function updateQuotationCount() {
+            document.getElementById('quotationCount').textContent = quotationSections.length;
+        }
+        
+        function updateQuotationListPreview() {
+            var preview = document.getElementById('quotationListPreview');
+            var content = document.getElementById('quotationListContent');
+            
+            if (quotationSections.length === 0) {
+                preview.style.display = 'none';
+                return;
+            }
+            
+            preview.style.display = 'block';
+            
+            var html = '<table style="width:100%;border-collapse:collapse;font-size:14px;">';
+            html += '<thead><tr style="border-bottom:2px solid rgba(255,255,255,0.3);">';
+            html += '<th style="padding:8px;text-align:left;">구간명</th>';
+            html += '<th style="padding:8px;text-align:center;">구조타입</th>';
+            html += '<th style="padding:8px;text-align:right;">물량(㎥)</th>';
+            html += '<th style="padding:8px;text-align:center;">삭제</th>';
+            html += '</tr></thead><tbody>';
+            
+            for (var i = 0; i < quotationSections.length; i++) {
+                var section = quotationSections[i];
+                html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.1);">';
+                html += '<td style="padding:8px;">' + section.name + '</td>';
+                html += '<td style="padding:8px;text-align:center;">' + section.structureName + '</td>';
+                html += '<td style="padding:8px;text-align:right;">' + section.volume.toLocaleString() + '</td>';
+                html += '<td style="padding:8px;text-align:center;"><button onclick="removeQuotationSection(' + i + ')" style="background:#dc3545;color:white;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">✕</button></td>';
+                html += '</tr>';
+            }
+            
+            html += '</tbody></table>';
+            content.innerHTML = html;
+        }
+        
+        function removeQuotationSection(index) {
+            var section = quotationSections[index];
+            if (confirm('"' + section.name + '" 구간을 삭제하시겠습니까?')) {
+                quotationSections.splice(index, 1);
+                updateQuotationCount();
+                updateQuotationListPreview();
+            }
+        }
+        
+        function showQuotationList() {
+            if (quotationSections.length === 0) {
+                alert('저장된 구간이 없습니다.\n물량 계산 후 "현재 구간 견적에 추가" 버튼을 클릭하세요.');
+                return;
+            }
+            
+            var message = '📋 저장된 구간 목록\n========================================\n\n';
+            
+            for (var i = 0; i < quotationSections.length; i++) {
+                var section = quotationSections[i];
+                message += (i + 1) + '. ' + section.name + '\n';
+                message += '   구조: ' + section.structureName + '\n';
+                message += '   물량: ' + section.volume.toLocaleString() + '㎥\n\n';
+            }
+            
+            message += '========================================\n';
+            message += '총 ' + quotationSections.length + '개 구간';
+            
+            alert(message);
+        }
+        
+        function clearQuotationList() {
+            if (quotationSections.length === 0) {
+                alert('저장된 구간이 없습니다.');
+                return;
+            }
+            
+            if (confirm('저장된 ' + quotationSections.length + '개 구간을 모두 삭제하시겠습니까?')) {
+                quotationSections = [];
+                updateQuotationCount();
+                updateQuotationListPreview();
+                alert('구간 목록이 초기화되었습니다.');
+            }
+        }
+        
+        // 통합 견적서 생성
+        function generateCombinedQuotation() {
+            if (quotationSections.length === 0) {
+                alert('저장된 구간이 없습니다.\n물량 계산 후 "현재 구간 견적에 추가" 버튼을 클릭하세요.');
+                return;
+            }
+            
+            var companyName = prompt('업체명을 입력하세요:', '');
+            if (!companyName) return;
+            
+            var projectName = prompt('공사명을 입력하세요:', '');
+            if (!projectName) return;
+            
+            var today = new Date();
+            var dateStr = today.getFullYear() + '. ' + String(today.getMonth()+1).padStart(2,'0') + '. ' + String(today.getDate()).padStart(2,'0');
+            
+            var specs = {
+                'P17': '1725mm', 'P12': '1225mm', 'P08': '825mm', 'P04': '425mm', 'P02': '216mm',
+                'H18': '1829mm', 'H15': '1524mm', 'H12': '1219mm', 'H09': '914mm', 'H06': '610mm', 'H03': '305mm',
+                'H': '-', 'J': '-', 'S': '-', 'T': '-',
+                'M3': '3000mm', 'M2.5': '2500mm', 'M2': '2000mm', 'M1.5': '1500mm', 'M1': '1000mm'
+            };
+            
+            var materialOrder = ['P17', 'P12', 'P08', 'P04', 'P02', 'H18', 'H15', 'H12', 'H09', 'H06', 'H03', 'H', 'J', 'S', 'T', 'M3', 'M2.5', 'M2', 'M1.5', 'M1'];
+            
+            var grandTotal = 0;
+            var totalVolume = 0;
+            var sectionsHTML = '';
+            
+            for (var s = 0; s < quotationSections.length; s++) {
+                var section = quotationSections[s];
+                var usageDays = section.usageDays || 30;
+                var sectionTotal = 0;
+                var itemsHTML = '';
+                
+                totalVolume += section.volume;
+                
+                for (var m = 0; m < materialOrder.length; m++) {
+                    var key = materialOrder[m];
+                    if (section.materials[key] && section.materials[key].quantity > 0) {
+                        var material = section.materials[key];
+                        var qty = material.quantity;
+                        var price = section.prices[key] || { basic: 0, daily: 0 };
+                        var unitPrice = price.basic + (price.daily * usageDays);
+                        var amount = unitPrice * qty;
+                        sectionTotal += amount;
+                        
+                        itemsHTML += '<tr><td>' + (materialNames[key] || key) + '</td><td>' + (specs[key] || key) + '</td><td>EA</td>' +
+                            '<td class="num">' + qty.toLocaleString() + '</td><td>' + usageDays + '</td>' +
+                            '<td class="num">' + unitPrice.toLocaleString() + '</td><td class="num">' + amount.toLocaleString() + '</td></tr>';
+                    }
+                }
+                
+                grandTotal += sectionTotal;
+                var pricePerM3 = section.volume > 0 ? Math.round(sectionTotal / section.volume) : 0;
+                
+                sectionsHTML += '<div class="section-block">' +
+                    '<div class="section-header">📍 ' + section.name + ' (' + section.structureName + ' / ' + section.volume.toLocaleString() + '㎥)</div>' +
+                    '<table><thead><tr><th style="width:18%">품명</th><th style="width:14%">규격</th><th style="width:8%">단위</th>' +
+                    '<th style="width:12%">수량</th><th style="width:10%">일수</th><th style="width:14%">단가</th><th style="width:18%">금액</th></tr></thead>' +
+                    '<tbody>' + itemsHTML + '</tbody>' +
+                    '<tfoot><tr class="subtotal-row"><td colspan="6">소계 (㎥당 ' + pricePerM3.toLocaleString() + '원)</td>' +
+                    '<td class="num">₩ ' + sectionTotal.toLocaleString() + '</td></tr></tfoot></table></div>';
+            }
+            
+            var totalPricePerM3 = totalVolume > 0 ? Math.round(grandTotal / totalVolume) : 0;
+            
+            var quotationHTML = '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>통합견적서</title>' +
+                '<style>@page{size:A4;margin:10mm 15mm}@media print{body{-webkit-print-color-adjust:exact}.section-block{page-break-inside:avoid}}' +
+                '*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Malgun Gothic",sans-serif;font-size:10px;line-height:1.3;color:#000;background:#fff}' +
+                '.container{max-width:210mm;margin:0 auto;padding:15px 20px}' +
+                '.title{text-align:center;font-size:26px;font-weight:bold;letter-spacing:15px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid #000}' +
+                '.header-info{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:15px}' +
+                '.company-name{font-size:16px;font-weight:bold;margin-bottom:5px}' +
+                '.amount-box{text-align:right}.amount-label{font-size:11px;color:#666}.amount-value{font-size:22px;font-weight:bold}' +
+                '.project-name{background:#f5f5f5;padding:8px 12px;margin-bottom:12px;font-size:12px}' +
+                '.summary-info{display:flex;gap:20px;margin-bottom:15px;font-size:11px}.summary-info span{background:#e8e8e8;padding:5px 12px;border-radius:3px}' +
+                '.section-block{margin-bottom:15px}.section-header{background:#2a5298;color:white;padding:8px 12px;font-size:12px;font-weight:bold}' +
+                'table{width:100%;border-collapse:collapse;font-size:10px}' +
+                'th{background:#e8e8e8;border:1px solid #999;padding:6px 4px;font-weight:bold;text-align:center}' +
+                'td{border:1px solid #ccc;padding:5px 4px;text-align:center}td.num{text-align:right;padding-right:6px}' +
+                '.subtotal-row{background:#f0f0f0;font-weight:bold}.subtotal-row td{border:1px solid #999}' +
+                '.grand-total{background:#1e3c72;color:white;padding:12px 15px;margin-top:15px;display:flex;justify-content:space-between;align-items:center;font-size:14px}' +
+                '.grand-total .amount{font-size:20px;font-weight:bold}' +
+                '.notes{background:#fafafa;border:1px solid #ddd;padding:10px 12px;margin-top:12px;font-size:10px}' +
+                '.notes h4{font-size:11px;margin-bottom:6px}.notes ul{margin:0;padding-left:15px}.notes li{margin:2px 0}' +
+                '.footer{margin-top:15px;text-align:right;font-size:11px}.footer p{margin:2px 0}.company-stamp{font-size:14px;font-weight:bold;margin-top:10px}' +
+                '</style></head><body><div class="container">' +
+                '<h1 class="title">견 적 서</h1>' +
+                '<div class="header-info"><div><div class="company-name">' + companyName + ' 귀하</div></div>' +
+                '<div class="amount-box"><div class="amount-label">금 액</div><div class="amount-value">₩ ' + grandTotal.toLocaleString() + '</div></div></div>' +
+                '<div class="project-name"><strong>공사명:</strong> ' + projectName + ' (시스템동바리)</div>' +
+                '<div class="summary-info"><span>총 물량: ' + totalVolume.toLocaleString() + '㎥</span><span>구간 수: ' + quotationSections.length + '개</span><span>㎥당 평균단가: ' + totalPricePerM3.toLocaleString() + '원</span></div>' +
+                sectionsHTML +
+                '<div class="grand-total"><span>합계 (VAT 별도)</span><span class="amount">₩ ' + grandTotal.toLocaleString() + '</span></div>' +
+                '<div class="notes"><h4>[ 비고 ]</h4><ul>' +
+                '<li>부가세 별도</li>' +
+                '<li>자재는 일단가 청구조건이며, 시험에 필요한 자재비 및 경비 별도 조건</li>' +
+                '<li>총 물량: ' + totalVolume.toLocaleString() + '㎥ / ㎥당 평균단가: ' + totalPricePerM3.toLocaleString() + '원</li>' +
+                '<li>물량은 변경될 수 있으며, 실제 설치 물량으로 정산 조건</li>' +
+                '<li>운반비 편도 조건이며, 11톤 미만 출고시 청구조건</li>' +
+                '</ul></div>' +
+                '<div class="footer"><p>' + dateStr + '</p><p class="company-stamp">가설파트너</p><p>📞 010-7970-2108 | ✉️ fc112@naver.com</p></div>' +
+                '</div><script>window.onload=function(){window.print();}<\/script></body></html>';
+            
+            var printWindow = window.open('', '_blank');
+            printWindow.document.write(quotationHTML);
+            printWindow.document.close();
         }
         
         // 현재 계산 결과 저장
