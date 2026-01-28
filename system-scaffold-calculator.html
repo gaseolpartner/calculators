@@ -2146,4 +2146,13 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                     if (!devtools.open) {
                         devtools.open = true;
                         console.clear();
-                        console.log('%c보안 경고!', 'color: red; font-size: 30px; font-weight
+                        console.log('%c보안 경고!', 'color: red; font-size: 30px; font-weight: bold;');
+                    }
+                } else {
+                    devtools.open = false;
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
