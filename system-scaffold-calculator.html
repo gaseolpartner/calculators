@@ -1182,6 +1182,14 @@
                             <div class="summary-value" id="totalPrice">-</div>
                         </div>
                         <div class="summary-item price-summary" style="display: none;">
+                            <div class="summary-label">㎡당 기본료</div>
+                            <div class="summary-value" id="basicPerM2">-</div>
+                        </div>
+                        <div class="summary-item price-summary" style="display: none;">
+                            <div class="summary-label">㎡당 임대료</div>
+                            <div class="summary-value" id="rentalPerM2">-</div>
+                        </div>
+                        <div class="summary-item price-summary" style="display: none;">
                             <div class="summary-label">㎡당 단가</div>
                             <div class="summary-value" id="pricePerM2">-</div>
                         </div>
@@ -1534,37 +1542,37 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
             }
         };
         
-        // 기본 단가 데이터
+        // 기본 단가 데이터 (기본료, 일단가)
         const defaultPrices = {
-            'SP-3800': { basic: 12000, daily: 400 },
-            'SP-1900': { basic: 6000, daily: 200 },
-            'SP-950': { basic: 3000, daily: 100 },
-            'SP-475': { basic: 1500, daily: 50 },
-            'SP-275': { basic: 1000, daily: 30 },
-            'SH-1829': { basic: 4000, daily: 130 },
-            'SH-1524': { basic: 3500, daily: 110 },
-            'SH-1219': { basic: 3000, daily: 100 },
-            'SH-914': { basic: 2500, daily: 80 },
-            'SH-610': { basic: 2000, daily: 60 },
-            'SH-305': { basic: 1500, daily: 50 },
-            'JACK': { basic: 3000, daily: 100 },
-            'BRACE': { basic: 4500, daily: 150 },
-            'STEP': { basic: 15000, daily: 500 },
-            'HK-2434': { basic: 8000, daily: 250 },
-            'HK-3352': { basic: 10000, daily: 330 },
-            'HK-4872': { basic: 15000, daily: 500 },
-            'DECK-400-610': { basic: 2500, daily: 80 },
-            'DECK-400-914': { basic: 3500, daily: 110 },
-            'DECK-400-1219': { basic: 4500, daily: 150 },
-            'DECK-400-1524': { basic: 5500, daily: 180 },
-            'DECK-400-1829': { basic: 6500, daily: 210 },
-            'DECK-500-610': { basic: 3000, daily: 100 },
-            'DECK-500-914': { basic: 4000, daily: 130 },
-            'DECK-500-1219': { basic: 5000, daily: 160 },
-            'DECK-500-1524': { basic: 6000, daily: 200 },
-            'DECK-500-1829': { basic: 7000, daily: 230 },
-            'LADDER': { basic: 20000, daily: 650 },
-            'OPENABLE-DECK': { basic: 15000, daily: 500 }
+            'SP-3800': { basic: 400, daily: 10.0 },
+            'SP-1900': { basic: 350, daily: 6.0 },
+            'SP-950': { basic: 250, daily: 3.2 },
+            'SP-475': { basic: 150, daily: 2.0 },
+            'SP-275': { basic: 70, daily: 2.0 },
+            'SH-1829': { basic: 270, daily: 3.7 },
+            'SH-1524': { basic: 240, daily: 3.4 },
+            'SH-1219': { basic: 210, daily: 3.1 },
+            'SH-914': { basic: 210, daily: 2.9 },
+            'SH-610': { basic: 180, daily: 2.7 },
+            'SH-305': { basic: 180, daily: 2.4 },
+            'JACK': { basic: 300, daily: 4.0 },
+            'BRACE': { basic: 270, daily: 6.0 },
+            'STEP': { basic: 1500, daily: 28.0 },
+            'HK-2434': { basic: 380, daily: 4.0 },
+            'HK-3352': { basic: 380, daily: 4.0 },
+            'HK-4872': { basic: 380, daily: 4.0 },
+            'DECK-400-610': { basic: 600, daily: 10.0 },
+            'DECK-400-914': { basic: 700, daily: 11.0 },
+            'DECK-400-1219': { basic: 800, daily: 11.0 },
+            'DECK-400-1524': { basic: 900, daily: 12.0 },
+            'DECK-400-1829': { basic: 1000, daily: 13.0 },
+            'DECK-500-610': { basic: 600, daily: 10.0 },
+            'DECK-500-914': { basic: 700, daily: 11.0 },
+            'DECK-500-1219': { basic: 800, daily: 12.0 },
+            'DECK-500-1524': { basic: 900, daily: 13.0 },
+            'DECK-500-1829': { basic: 1000, daily: 14.0 },
+            'LADDER': { basic: 1500, daily: 28.0 },
+            'OPENABLE-DECK': { basic: 1500, daily: 28.0 }
         };
         
         // 슬라이더 이벤트 리스너
@@ -1741,20 +1749,29 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
         function calculatePrice() {
             const usageDays = parseInt(document.getElementById('usageDays').value) || 30;
             let totalPrice = 0;
-            
+            let totalBasic = 0;
+            let totalRental = 0;
+
             // 각 자재별 금액 계산
             for (const [key, material] of Object.entries(calculatedMaterials)) {
                 if (material.finalQty === 0) continue;
-                
-                const basicPrice = parseInt(document.getElementById(`basic-${key}`)?.value) || 0;
-                const dailyPrice = parseInt(document.getElementById(`daily-${key}`)?.value) || 0;
-                
+
+                const existingPrice = savedPriceInputs[key] || defaultPrices[key] || { basic: 0, daily: 0 };
+                const basicEl = document.getElementById(`basic-${key}`);
+                const dailyEl = document.getElementById(`daily-${key}`);
+                const basicPrice = basicEl ? (parseFloat(basicEl.value) || 0) : existingPrice.basic;
+                const dailyPrice = dailyEl ? (parseFloat(dailyEl.value) || 0) : existingPrice.daily;
+
                 // 단가 저장
                 savedPriceInputs[key] = { basic: basicPrice, daily: dailyPrice };
-                
-                const itemTotal = (basicPrice + (dailyPrice * usageDays)) * material.finalQty;
+
+                const basicAmount = basicPrice * material.finalQty;
+                const rentalAmount = (dailyPrice * usageDays) * material.finalQty;
+                totalBasic += basicAmount;
+                totalRental += rentalAmount;
+                const itemTotal = basicAmount + rentalAmount;
                 totalPrice += itemTotal;
-                
+
                 // 테이블 업데이트
                 const row = document.querySelector(`tr[data-key="${key}"]`);
                 if (row) {
@@ -1764,12 +1781,16 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                     cells[6].textContent = itemTotal.toLocaleString();
                 }
             }
-            
+
             // 총계 표시
             document.getElementById('totalPrice').textContent = `₩ ${totalPrice.toLocaleString()}`;
             const area = parseFloat(document.getElementById('area').value);
             const pricePerM2 = Math.round(totalPrice / area);
+            const basicPerM2 = Math.round(totalBasic / area);
+            const rentalPerM2 = Math.round(totalRental / area);
             document.getElementById('pricePerM2').textContent = `₩ ${pricePerM2.toLocaleString()}`;
+            document.getElementById('basicPerM2').textContent = `₩ ${basicPerM2.toLocaleString()}`;
+            document.getElementById('rentalPerM2').textContent = `₩ ${rentalPerM2.toLocaleString()}`;
             
             // 가격 관련 요소 표시
             document.querySelectorAll('.price-column').forEach(el => el.style.display = '');
@@ -1911,38 +1932,44 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                 alert('먼저 물량 계산을 실행해주세요.');
                 return;
             }
-            
+
             var companyName = prompt('업체명을 입력하세요:', '');
             if (!companyName) return;
-            
-            var projectName = prompt('공사명을 입력하세요:', '');
+
+            var projectName = prompt('현장명을 입력하세요:', '');
             if (!projectName) return;
-            
+
             var area = parseFloat(document.getElementById('area').value) || 0;
             var usageDays = parseInt(document.getElementById('usageDays').value) || 30;
             var structureName = scaffoldData[currentType].name;
-            
+
             var totalAmount = 0;
             var itemsHTML = '';
-            
+
             for (var key in calculatedMaterials) {
                 var material = calculatedMaterials[key];
                 if (material.finalQty <= 0) continue;
-                
+
                 var price = savedPriceInputs[key] || defaultPrices[key] || { basic: 0, daily: 0 };
-                var unitPrice = price.basic + (price.daily * usageDays);
+                var basicPrice = price.basic;
+                var dailyPrice = price.daily;
+                var rentalPrice = dailyPrice * usageDays;
+                var unitPrice = basicPrice + rentalPrice;
                 var amount = unitPrice * material.finalQty;
                 totalAmount += amount;
-                
+
                 itemsHTML += '<tr><td>' + material.name + '</td><td>' + material.spec + '</td><td>EA</td>' +
                     '<td class="num">' + material.finalQty.toLocaleString() + '</td><td>' + usageDays + '</td>' +
-                    '<td class="num">' + unitPrice.toLocaleString() + '</td><td class="num">' + amount.toLocaleString() + '</td></tr>';
+                    '<td class="num">' + basicPrice.toLocaleString() + '</td>' +
+                    '<td class="num">' + dailyPrice.toFixed(1) + '</td>' +
+                    '<td class="num">' + unitPrice.toLocaleString() + '</td>' +
+                    '<td class="num">' + amount.toLocaleString() + '</td></tr>';
             }
-            
+
             var pricePerM2 = area > 0 ? Math.round(totalAmount / area) : 0;
             var today = new Date();
             var dateStr = today.getFullYear() + '. ' + String(today.getMonth()+1).padStart(2,'0') + '. ' + String(today.getDate()).padStart(2,'0');
-            
+
             var quotationHTML = '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>견적서</title>' +
                 '<style>@page{size:A4;margin:10mm 15mm}@media print{body{-webkit-print-color-adjust:exact}}' +
                 '*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Malgun Gothic",sans-serif;font-size:11px;line-height:1.4;color:#000;background:#fff}' +
@@ -1964,10 +1991,12 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                 '<div class="header-info"><div><div class="company-name">' + companyName + ' 귀하</div></div>' +
                 '<div class="amount-box"><div class="amount-label">금 액</div><div class="amount-value">₩ ' + totalAmount.toLocaleString() + '</div></div></div>' +
                 '<div class="project-name"><strong>공사명:</strong> ' + projectName + ' (시스템비계)</div>' +
-                '<table><thead><tr><th style="width:18%">품명</th><th style="width:14%">규격</th><th style="width:8%">단위</th>' +
-                '<th style="width:12%">수량</th><th style="width:10%">일수</th><th style="width:14%">단가</th><th style="width:18%">금액</th></tr></thead>' +
+                '<table><thead><tr><th style="width:13%">품명</th><th style="width:11%">규격</th><th style="width:6%">단위</th>' +
+                '<th style="width:8%">수량</th><th style="width:7%">일수</th>' +
+                '<th style="width:10%">기본료</th><th style="width:10%">임대료</th>' +
+                '<th style="width:12%">단가</th><th style="width:15%">금액</th></tr></thead>' +
                 '<tbody>' + itemsHTML + '</tbody>' +
-                '<tfoot><tr class="total-row"><td colspan="6" style="text-align:center">합 계</td><td class="num">₩ ' + totalAmount.toLocaleString() + '</td></tr></tfoot></table>' +
+                '<tfoot><tr class="total-row"><td colspan="8" style="text-align:center">합 계</td><td class="num">₩ ' + totalAmount.toLocaleString() + '</td></tr></tfoot></table>' +
                 '<div class="notes"><h4>[ 비 고 ]</h4><ul>' +
                 '<li>부가세 별도</li>' +
                 '<li>자재는 일단가 청구조건이며, 시험에 필요한 자재비 및 경비 별도 조건</li>' +
@@ -1978,7 +2007,7 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                 '</ul></div>' +
                 '<div class="footer"><p>' + dateStr + '</p><p class="company-stamp">가설파트너</p><p>📞 010-7970-2108 | ✉️ fc112@naver.com</p></div>' +
                 '</div><script>window.onload=function(){window.print();}<\/script></body></html>';
-            
+
             var printWindow = window.open('', '_blank');
             printWindow.document.write(quotationHTML);
             printWindow.document.close();

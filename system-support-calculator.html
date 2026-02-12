@@ -1139,6 +1139,14 @@
                             <div class="summary-value" id="totalPrice">-</div>
                         </div>
                         <div class="summary-item price-summary" style="display: none;">
+                            <div class="summary-label">㎥당 기본료</div>
+                            <div class="summary-value" id="basicPerM3">-</div>
+                        </div>
+                        <div class="summary-item price-summary" style="display: none;">
+                            <div class="summary-label">㎥당 임대료</div>
+                            <div class="summary-value" id="rentalPerM3">-</div>
+                        </div>
+                        <div class="summary-item price-summary" style="display: none;">
                             <div class="summary-label">㎥당 단가</div>
                             <div class="summary-value" id="pricePerM3">-</div>
                         </div>
@@ -1240,7 +1248,28 @@
         let priceData = {};
         let savedCalculations = [];
         let selectedDataIndices = [];
-        let savedPriceInputs = {}; // 단가 입력값 저장용
+        let savedPriceInputs = { // 기본 단가 세팅 (기본료, 일단가)
+            'P17': { basic: 300, daily: 4.0 },
+            'P12': { basic: 270, daily: 3.8 },
+            'P08': { basic: 240, daily: 3.4 },
+            'P04': { basic: 210, daily: 3.0 },
+            'P02': { basic: 180, daily: 2.7 },
+            'H18': { basic: 270, daily: 3.7 },
+            'H15': { basic: 240, daily: 3.4 },
+            'H12': { basic: 210, daily: 3.1 },
+            'H09': { basic: 210, daily: 2.9 },
+            'H06': { basic: 180, daily: 2.7 },
+            'H03': { basic: 180, daily: 2.4 },
+            'H': { basic: 350, daily: 4.0 },
+            'J': { basic: 350, daily: 4.5 },
+            'S': { basic: 70, daily: 1.0 },
+            'T': { basic: 300, daily: 5.5 },
+            'M3': { basic: 700, daily: 20.0 },
+            'M2.5': { basic: 500, daily: 25.0 },
+            'M2': { basic: 480, daily: 20.0 },
+            'M1.5': { basic: 350, daily: 15.0 },
+            'M1': { basic: 240, daily: 10.0 }
+        }; // 단가 입력값 저장용
         let quotationSections = []; // 다중 구간 견적 저장용
         
         // Google Analytics 데이터 전송 함수
@@ -1708,8 +1737,8 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                     
                     item.innerHTML = `
                         <label>${materialNames[material]}</label>
-                        <input type="number" id="basic_${material}" placeholder="기본료" value="${savedPrice.basic}" min="0" step="100">
-                        <input type="number" id="daily_${material}" placeholder="일단가" value="${savedPrice.daily}" min="0" step="10">
+                        <input type="number" id="basic_${material}" placeholder="기본료" value="${savedPrice.basic}" min="0" step="1">
+                        <input type="number" id="daily_${material}" placeholder="일단가" value="${savedPrice.daily}" min="0" step="0.1">
                     `;
                     priceInputGrid.appendChild(item);
                 }
@@ -1734,30 +1763,41 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
         function calculatePrice() {
             const usageDays = parseInt(document.getElementById('usageDays').value) || 30;
             let totalPrice = 0;
-            
+            let totalBasic = 0;
+            let totalRental = 0;
+
             // 각 자재별 금액 계산
             Object.keys(calculatedMaterials).forEach(material => {
-                const basicPrice = parseFloat(document.getElementById(`basic_${material}`)?.value) || 0;
-                const dailyPrice = parseFloat(document.getElementById(`daily_${material}`)?.value) || 0;
+                const existingPrice = savedPriceInputs[material] || { basic: 0, daily: 0 };
+                const basicEl = document.getElementById(`basic_${material}`);
+                const dailyEl = document.getElementById(`daily_${material}`);
+                const basicPrice = basicEl ? (parseFloat(basicEl.value) || 0) : existingPrice.basic;
+                const dailyPrice = dailyEl ? (parseFloat(dailyEl.value) || 0) : existingPrice.daily;
                 const quantity = calculatedMaterials[material].quantity;
-                
+
                 // 단가 저장
                 savedPriceInputs[material] = { basic: basicPrice, daily: dailyPrice };
-                
-                // 총금액 = 수량 × (기본료 + (일단가 × 사용일수))
-                const materialTotal = quantity * (basicPrice + (dailyPrice * usageDays));
-                
+
+                // 기본료 금액 = 수량 × 기본료
+                const basicAmount = basicPrice * quantity;
+                // 임대료 금액 = 수량 × (일단가 × 사용일수)
+                const rentalAmount = (dailyPrice * usageDays) * quantity;
+                // 총금액 = 기본료 + 임대료
+                const materialTotal = basicAmount + rentalAmount;
+
                 priceData[material] = {
                     basicPrice,
                     dailyPrice,
                     totalPrice: materialTotal
                 };
-                
+
+                totalBasic += basicAmount;
+                totalRental += rentalAmount;
                 totalPrice += materialTotal;
             });
-            
+
             // 금액 정보 업데이트
-            updatePriceDisplay(totalPrice);
+            updatePriceDisplay(totalPrice, totalBasic, totalRental);
 
             // Google Analytics 데이터 전송
     const structureType = materialRatios[currentStructureType].name;
@@ -1765,19 +1805,29 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
         }
         
         // 금액 표시 업데이트
-        function updatePriceDisplay(totalPrice) {
+        function updatePriceDisplay(totalPrice, totalBasic, totalRental) {
             // 금액 관련 열 표시
             document.querySelectorAll('.price-column').forEach(col => {
                 col.style.display = 'table-cell';
             });
-            
+
             document.querySelectorAll('.price-summary').forEach(elem => {
                 elem.style.display = 'block';
             });
-            
+
             // 총 금액 표시
             const volume = parseFloat(document.getElementById('volume').value);
             document.getElementById('totalPrice').textContent = totalPrice.toLocaleString() + '원';
+
+            // ㎥당 기본료 평균
+            const basicPerM3 = Math.round(totalBasic / volume);
+            document.getElementById('basicPerM3').textContent = '₩ ' + basicPerM3.toLocaleString();
+
+            // ㎥당 임대료 평균
+            const rentalPerM3 = Math.round(totalRental / volume);
+            document.getElementById('rentalPerM3').textContent = '₩ ' + rentalPerM3.toLocaleString();
+
+            // ㎥당 전체 평균
             document.getElementById('pricePerM3').textContent = Math.round(totalPrice / volume).toLocaleString() + '원';
             
             // 테이블 다시 그리기
@@ -1919,49 +1969,55 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                 alert('먼저 물량 계산을 실행해주세요.');
                 return;
             }
-            
+
             var companyName = prompt('업체명을 입력하세요:', '');
             if (!companyName) return;
-            
-            var projectName = prompt('공사명을 입력하세요:', '');
+
+            var projectName = prompt('현장명을 입력하세요:', '');
             if (!projectName) return;
-            
+
             var volume = parseFloat(document.getElementById('volume').value) || 0;
             var usageDays = parseInt(document.getElementById('usageDays').value) || 30;
             var structureName = materialRatios[currentStructureType].name;
-            
+
             var totalAmount = 0;
             var itemsHTML = '';
-            
+
             var specs = {
                 'P17': '1725mm', 'P12': '1225mm', 'P08': '825mm', 'P04': '425mm', 'P02': '216mm',
                 'H18': '1829mm', 'H15': '1524mm', 'H12': '1219mm', 'H09': '914mm', 'H06': '610mm', 'H03': '305mm',
                 'H': '-', 'J': '-', 'S': '-', 'T': '-',
                 'M3': '3000mm', 'M2.5': '2500mm', 'M2': '2000mm', 'M1.5': '1500mm', 'M1': '1000mm'
             };
-            
+
             var materialOrder = ['P17', 'P12', 'P08', 'P04', 'P02', 'H18', 'H15', 'H12', 'H09', 'H06', 'H03', 'H', 'J', 'S', 'T', 'M3', 'M2.5', 'M2', 'M1.5', 'M1'];
-            
+
             for (var i = 0; i < materialOrder.length; i++) {
                 var key = materialOrder[i];
                 if (calculatedMaterials[key] && calculatedMaterials[key].quantity > 0) {
                     var material = calculatedMaterials[key];
                     var qty = material.quantity;
                     var price = savedPriceInputs[key] || { basic: 0, daily: 0 };
-                    var unitPrice = price.basic + (price.daily * usageDays);
+                    var basicPrice = price.basic;
+                    var dailyPrice = price.daily;
+                    var rentalPrice = dailyPrice * usageDays;
+                    var unitPrice = basicPrice + rentalPrice;
                     var amount = unitPrice * qty;
                     totalAmount += amount;
-                    
+
                     itemsHTML += '<tr><td>' + (materialNames[key] || key) + '</td><td>' + (specs[key] || key) + '</td><td>EA</td>' +
                         '<td class="num">' + qty.toLocaleString() + '</td><td>' + usageDays + '</td>' +
-                        '<td class="num">' + unitPrice.toLocaleString() + '</td><td class="num">' + amount.toLocaleString() + '</td></tr>';
+                        '<td class="num">' + basicPrice.toLocaleString() + '</td>' +
+                        '<td class="num">' + dailyPrice.toFixed(1) + '</td>' +
+                        '<td class="num">' + unitPrice.toLocaleString() + '</td>' +
+                        '<td class="num">' + amount.toLocaleString() + '</td></tr>';
                 }
             }
-            
+
             var pricePerM3 = volume > 0 ? Math.round(totalAmount / volume) : 0;
             var today = new Date();
             var dateStr = today.getFullYear() + '. ' + String(today.getMonth()+1).padStart(2,'0') + '. ' + String(today.getDate()).padStart(2,'0');
-            
+
             var quotationHTML = '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>견적서</title>' +
                 '<style>@page{size:A4;margin:10mm 15mm}@media print{body{-webkit-print-color-adjust:exact}}' +
                 '*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Malgun Gothic",sans-serif;font-size:11px;line-height:1.4;color:#000;background:#fff}' +
@@ -1983,10 +2039,12 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                 '<div class="header-info"><div><div class="company-name">' + companyName + ' 귀하</div></div>' +
                 '<div class="amount-box"><div class="amount-label">금 액</div><div class="amount-value">₩ ' + totalAmount.toLocaleString() + '</div></div></div>' +
                 '<div class="project-name"><strong>공사명:</strong> ' + projectName + ' (시스템동바리)</div>' +
-                '<table><thead><tr><th style="width:18%">품명</th><th style="width:14%">규격</th><th style="width:8%">단위</th>' +
-                '<th style="width:12%">수량</th><th style="width:10%">일수</th><th style="width:14%">단가</th><th style="width:18%">금액</th></tr></thead>' +
+                '<table><thead><tr><th style="width:13%">품명</th><th style="width:11%">규격</th><th style="width:6%">단위</th>' +
+                '<th style="width:8%">수량</th><th style="width:7%">일수</th>' +
+                '<th style="width:10%">기본료</th><th style="width:10%">임대료</th>' +
+                '<th style="width:12%">단가</th><th style="width:15%">금액</th></tr></thead>' +
                 '<tbody>' + itemsHTML + '</tbody>' +
-                '<tfoot><tr class="total-row"><td colspan="6" style="text-align:center">합 계</td><td class="num">₩ ' + totalAmount.toLocaleString() + '</td></tr></tfoot></table>' +
+                '<tfoot><tr class="total-row"><td colspan="8" style="text-align:center">합 계</td><td class="num">₩ ' + totalAmount.toLocaleString() + '</td></tr></tfoot></table>' +
                 '<div class="notes"><h4>[ 비 고 ]</h4><ul>' +
                 '<li>부가세 별도</li>' +
                 '<li>자재는 일단가 청구조건이며, 시험에 필요한 자재비 및 경비 별도 조건</li>' +
@@ -1997,7 +2055,7 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                 '</ul></div>' +
                 '<div class="footer"><p>' + dateStr + '</p><p class="company-stamp">가설파트너</p><p>📞 010-7970-2108 | ✉️ fc112@naver.com</p></div>' +
                 '</div><script>window.onload=function(){window.print();}<\/script></body></html>';
-            
+
             var printWindow = window.open('', '_blank');
             printWindow.document.write(quotationHTML);
             printWindow.document.close();
@@ -2251,67 +2309,75 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                 alert('저장된 구간이 없습니다.\n물량 계산 후 "현재 구간 견적에 추가" 버튼을 클릭하세요.');
                 return;
             }
-            
+
             var companyName = prompt('업체명을 입력하세요:', '');
             if (!companyName) return;
-            
-            var projectName = prompt('공사명을 입력하세요:', '');
+
+            var projectName = prompt('현장명을 입력하세요:', '');
             if (!projectName) return;
-            
+
             var today = new Date();
             var dateStr = today.getFullYear() + '. ' + String(today.getMonth()+1).padStart(2,'0') + '. ' + String(today.getDate()).padStart(2,'0');
-            
+
             var specs = {
                 'P17': '1725mm', 'P12': '1225mm', 'P08': '825mm', 'P04': '425mm', 'P02': '216mm',
                 'H18': '1829mm', 'H15': '1524mm', 'H12': '1219mm', 'H09': '914mm', 'H06': '610mm', 'H03': '305mm',
                 'H': '-', 'J': '-', 'S': '-', 'T': '-',
                 'M3': '3000mm', 'M2.5': '2500mm', 'M2': '2000mm', 'M1.5': '1500mm', 'M1': '1000mm'
             };
-            
+
             var materialOrder = ['P17', 'P12', 'P08', 'P04', 'P02', 'H18', 'H15', 'H12', 'H09', 'H06', 'H03', 'H', 'J', 'S', 'T', 'M3', 'M2.5', 'M2', 'M1.5', 'M1'];
-            
+
             var grandTotal = 0;
             var totalVolume = 0;
             var sectionsHTML = '';
-            
+
             for (var s = 0; s < quotationSections.length; s++) {
                 var section = quotationSections[s];
                 var usageDays = section.usageDays || 30;
                 var sectionTotal = 0;
                 var itemsHTML = '';
-                
+
                 totalVolume += section.volume;
-                
+
                 for (var m = 0; m < materialOrder.length; m++) {
                     var key = materialOrder[m];
                     if (section.materials[key] && section.materials[key].quantity > 0) {
                         var material = section.materials[key];
                         var qty = material.quantity;
                         var price = section.prices[key] || { basic: 0, daily: 0 };
-                        var unitPrice = price.basic + (price.daily * usageDays);
+                        var basicPrice = price.basic;
+                        var dailyPrice = price.daily;
+                        var rentalPrice = dailyPrice * usageDays;
+                        var unitPrice = basicPrice + rentalPrice;
                         var amount = unitPrice * qty;
                         sectionTotal += amount;
-                        
+
                         itemsHTML += '<tr><td>' + (materialNames[key] || key) + '</td><td>' + (specs[key] || key) + '</td><td>EA</td>' +
                             '<td class="num">' + qty.toLocaleString() + '</td><td>' + usageDays + '</td>' +
-                            '<td class="num">' + unitPrice.toLocaleString() + '</td><td class="num">' + amount.toLocaleString() + '</td></tr>';
+                            '<td class="num">' + basicPrice.toLocaleString() + '</td>' +
+                            '<td class="num">' + dailyPrice.toFixed(1) + '</td>' +
+                            '<td class="num">' + unitPrice.toLocaleString() + '</td>' +
+                            '<td class="num">' + amount.toLocaleString() + '</td></tr>';
                     }
                 }
-                
+
                 grandTotal += sectionTotal;
                 var pricePerM3 = section.volume > 0 ? Math.round(sectionTotal / section.volume) : 0;
-                
+
                 sectionsHTML += '<div class="section-block">' +
                     '<div class="section-header">📍 ' + section.name + ' (' + section.structureName + ' / ' + section.volume.toLocaleString() + '㎥)</div>' +
-                    '<table><thead><tr><th style="width:18%">품명</th><th style="width:14%">규격</th><th style="width:8%">단위</th>' +
-                    '<th style="width:12%">수량</th><th style="width:10%">일수</th><th style="width:14%">단가</th><th style="width:18%">금액</th></tr></thead>' +
+                    '<table><thead><tr><th style="width:13%">품명</th><th style="width:11%">규격</th><th style="width:6%">단위</th>' +
+                    '<th style="width:8%">수량</th><th style="width:7%">일수</th>' +
+                    '<th style="width:10%">기본료</th><th style="width:10%">임대료</th>' +
+                    '<th style="width:12%">단가</th><th style="width:15%">금액</th></tr></thead>' +
                     '<tbody>' + itemsHTML + '</tbody>' +
-                    '<tfoot><tr class="subtotal-row"><td colspan="6">소계 (㎥당 ' + pricePerM3.toLocaleString() + '원)</td>' +
+                    '<tfoot><tr class="subtotal-row"><td colspan="8">소계 (㎥당 ' + pricePerM3.toLocaleString() + '원)</td>' +
                     '<td class="num">₩ ' + sectionTotal.toLocaleString() + '</td></tr></tfoot></table></div>';
             }
-            
+
             var totalPricePerM3 = totalVolume > 0 ? Math.round(grandTotal / totalVolume) : 0;
-            
+
             var quotationHTML = '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>통합견적서</title>' +
                 '<style>@page{size:A4;margin:10mm 15mm}@media print{body{-webkit-print-color-adjust:exact}.section-block{page-break-inside:avoid}}' +
                 '*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Malgun Gothic",sans-serif;font-size:10px;line-height:1.3;color:#000;background:#fff}' +
@@ -2340,7 +2406,7 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                 '<div class="summary-info"><span>총 물량: ' + totalVolume.toLocaleString() + '㎥</span><span>구간 수: ' + quotationSections.length + '개</span><span>㎥당 평균단가: ' + totalPricePerM3.toLocaleString() + '원</span></div>' +
                 sectionsHTML +
                 '<div class="grand-total"><span>합계 (VAT 별도)</span><span class="amount">₩ ' + grandTotal.toLocaleString() + '</span></div>' +
-                '<div class="notes"><h4>[ 비고 ]</h4><ul>' +
+                '<div class="notes"><h4>[ 비 고 ]</h4><ul>' +
                 '<li>부가세 별도</li>' +
                 '<li>자재는 일단가 청구조건이며, 시험에 필요한 자재비 및 경비 별도 조건</li>' +
                 '<li>총 물량: ' + totalVolume.toLocaleString() + '㎥ / ㎥당 평균단가: ' + totalPricePerM3.toLocaleString() + '원</li>' +
@@ -2349,7 +2415,7 @@ function sendPriceAnalytics(structureType, materials, totalPrice, usageDays) {
                 '</ul></div>' +
                 '<div class="footer"><p>' + dateStr + '</p><p class="company-stamp">가설파트너</p><p>📞 010-7970-2108 | ✉️ fc112@naver.com</p></div>' +
                 '</div><script>window.onload=function(){window.print();}<\/script></body></html>';
-            
+
             var printWindow = window.open('', '_blank');
             printWindow.document.write(quotationHTML);
             printWindow.document.close();
