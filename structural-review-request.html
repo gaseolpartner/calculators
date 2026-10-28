@@ -244,6 +244,36 @@ input:focus,select:focus,textarea:focus{border-color:#F2B705 !important;outline:
 .section-title{border-bottom-color:#F2B705 !important}
 .nav-tab.active::after{background:#F2B705 !important}
 
+@media(max-width:600px){
+ .container{padding:18px 14px !important}
+ input,select,textarea{width:100%;max-width:100%;box-sizing:border-box}
+ input[type="checkbox"],input[type="radio"]{width:auto}
+ .form-group{flex-direction:column;align-items:stretch;gap:6px}
+ .form-group label{width:auto !important}
+ .inline-group{gap:0;flex-direction:column}
+ .inline-group .form-group{min-width:0 !important}
+ .checkbox-group{flex-wrap:wrap;gap:8px 16px}
+ table,table thead,table tbody,table tr,table th,table td{display:block;width:100%;box-sizing:border-box}
+ table thead{display:none}
+ table tr{border:1px solid #E3E3E3;border-radius:10px;padding:8px 10px;margin-bottom:10px}
+ table td{border:0 !important;padding:4px 0 !important}
+ table td:before{display:block;font-size:12px;font-weight:700;color:#666;margin-bottom:3px}
+#slabTable td:nth-child(1):before{content:"구간명"}
+#slabTable td:nth-child(2):before{content:"두께(mm)"}
+#slabTable td:nth-child(3):before{content:"시스템 설계배치"}
+#slabTable td:nth-child(4):before{content:"비고"}
+#beamTable td:nth-child(1):before{content:"구간명"}
+#beamTable td:nth-child(2):before{content:"보폭(mm)"}
+#beamTable td:nth-child(3):before{content:"보두께(mm)"}
+#beamTable td:nth-child(4):before{content:"시스템 설계배치"}
+#beamTable td:nth-child(5):before{content:"비고"}
+#scaffoldTable td:nth-child(1):before{content:"구간"}
+#scaffoldTable td:nth-child(2):before{content:"수직재 간격(mm)"}
+#scaffoldTable td:nth-child(3):before{content:"수평재 간격(mm)"}
+#scaffoldTable td:nth-child(4):before{content:"띠장 간격(mm)"}
+#scaffoldTable td:nth-child(5):before{content:"비고"}
+}
+
 </style>
 </head>
 <body>
