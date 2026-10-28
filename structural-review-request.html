@@ -560,7 +560,7 @@ input:focus,select:focus,textarea:focus{border-color:#F2B705 !important;outline:
                                 style="background: #f9e000; color: #3c1e1e; border: none; padding: 30px 40px; 
                                        border-radius: 10px; cursor: pointer; font-size: 18px; transition: all 0.3s;">
                             <div style="font-size: 30px; margin-bottom: 10px;">💬</div>
-                            오픈카카오톡
+                            카카오톡 채널
                             <div style="font-size: 14px; margin-top: 10px;">실시간 상담 가능</div>
                         </button>
                         
@@ -693,7 +693,7 @@ input:focus,select:focus,textarea:focus{border-color:#F2B705 !important;outline:
         function sendKakaoTalk(formData) {
             const message = generateKakaoMessage(formData);
             
-            // 카카오톡 오픈채팅 링크
+            // 카카오톡 채널 링크
             const kakaoLink = 'https://pf.kakao.com/_xovuVG/chat';
             
             // 클립보드에 복사
@@ -703,7 +703,7 @@ input:focus,select:focus,textarea:focus{border-color:#F2B705 !important;outline:
                 // 모달 닫기
                 document.querySelector('div[style*="position: fixed"]').remove();
                 
-                alert('의뢰서 내용이 클립보드에 복사되었습니다.\n\n오픈카카오톡 채팅창에 붙여넣기(Ctrl+V) 해주세요.');
+                alert('의뢰서 내용이 클립보드에 복사되었습니다.\n\n카카오톡 채널 채팅창에 붙여넣기(Ctrl+V) 해주세요.');
             }).catch(() => {
                 // 클립보드 복사 실패 시 다운로드
                 downloadFile(formData);
