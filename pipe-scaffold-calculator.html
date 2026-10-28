@@ -6,7 +6,7 @@
     <meta name="description" content="가설파트너 - 단관비계 물량산출 계산기">
     <meta name="author" content="가설파트너">
     <meta name="keywords" content="단관비계, 물량산출, 건설, 가설구조물">
-    <title>단관비계 물량산출 계산기 - 가설파트너</title>
+    <title>단관비계 물량산출 | 가설파트너</title>
     
     <style>
         * {
@@ -24,7 +24,7 @@
         
         /* 헤더 */
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #1B1B1B 0%, #1B1B1B 100%);
             padding: 30px 20px;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
@@ -90,7 +90,7 @@
         
         .card-header h2 {
             font-size: 28px;
-            color: #1e3c72;
+            color: #1B1B1B;
             margin-bottom: 10px;
         }
         
@@ -119,7 +119,7 @@
             width: 100%;
             max-width: 300px;
             padding: 15px;
-            border: 3px solid #2a5298;
+            border: 3px solid #1B1B1B;
             border-radius: 10px;
             font-size: 24px;
             text-align: center;
@@ -128,7 +128,7 @@
         
         .form-group input:focus {
             outline: none;
-            border-color: #1e3c72;
+            border-color: #1B1B1B;
             background: #f0f5ff;
         }
         
@@ -147,15 +147,15 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
-            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            background: linear-gradient(135deg, #1B1B1B, #1B1B1B);
             color: white;
             margin-top: 20px;
         }
         
         .calc-button:hover {
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #1B1B1B, #1B1B1B);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.4);
+            box-shadow: 0 5px 15px rgba(27, 27, 27, 0.4);
         }
         
         /* 결과 섹션 */
@@ -180,7 +180,7 @@
         }
         
         .result-table th {
-            background: #1e3c72;
+            background: #1B1B1B;
             color: white;
             padding: 20px;
             text-align: left;
@@ -204,14 +204,14 @@
         
         .result-table .item-name {
             font-weight: bold;
-            color: #2a5298;
+            color: #1B1B1B;
         }
         
         .result-table .quantity {
             text-align: right;
             font-size: 20px;
             font-weight: bold;
-            color: #1e3c72;
+            color: #1B1B1B;
         }
         
         .result-table .unit {
@@ -221,7 +221,7 @@
         
         /* 기준 설명 */
         .standard-info {
-            background: #e3f2fd;
+            background: #F6F6F4;
             padding: 20px;
             border-radius: 10px;
             margin-top: 30px;
@@ -229,7 +229,7 @@
         }
         
         .standard-info h4 {
-            color: #1e3c72;
+            color: #1B1B1B;
             margin-bottom: 10px;
         }
         
@@ -329,8 +329,25 @@
             }
         }
     </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="gp-common.css">
+<style id="gp-page">
+
+body{background:#F6F6F4 !important;color:#2B2B2B !important}
+.calculate-button,.button-primary,.toggle-price-btn,.price-action-btn{background:#F2B705 !important;color:#1B1B1B !important}
+.calculate-button:hover,.button-primary:hover,.toggle-price-btn:hover,.price-action-btn:hover{background:#D9A300 !important}
+.structure-type-card.active{background:#F2B705 !important;border-color:#F2B705 !important;color:#1B1B1B !important}
+.structure-type-card.active h3,.structure-type-card.active h4,.structure-type-card.active p{color:#1B1B1B !important}
+input:focus,select:focus,textarea:focus{border-color:#F2B705 !important;outline:none;box-shadow:0 0 0 3px rgba(242,183,5,.25)}
+
+.section-title{border-bottom-color:#F2B705 !important}
+.nav-tab.active::after{background:#F2B705 !important}
+
+</style>
 </head>
 <body>
+<div class="gp-topbar"><div class="gp-topbar-inner"><a href="https://gaseolpartner.com"><span class="dot"></span>가설파트너 홈페이지 ↗</a><nav><a href="https://gaseolpartner.com/pages/introduction">가설 설계 프로그램</a><a href="https://gaseolpartner.com/pages/precio">가설재 견적 비교</a><a href="https://gaseolpartner.com/pages/structureatuntroduction">구조검토</a><a href="https://gaseolpartner.com/pages/calculators">지원 서비스</a><a href="https://gaseolpartner.com/pages/support">고객지원</a></nav></div></div><header class="gp-brandbar"><div class="gp-brandbar-inner"><a class="gp-logo" href="index.html" aria-label="가설파트너"><span class="gp-li"></span><span class="gp-lt"><b>가설파트너</b><small>GASEOL PARTNER</small></span></a><div class="gp-brand-links"><a href="index.html">← 목록으로</a><a href="https://pf.kakao.com/_xovuVG/chat" class="gp-cta" target="_blank" rel="noopener">카카오톡 문의</a></div></div></header>
+
     <!-- 헤더 -->
     <div class="header">
         <h1>단관비계 물량산출 계산기</h1>
@@ -504,5 +521,6 @@
             document.getElementById('area').focus();
         };
     </script>
+<footer class="gp-footer"><div class="gp-footer-inner"><div>회사명 : 가설파트너<span class="gp-sep">|</span>주소 : 서울 강남구 가로수길 5<span class="gp-sep">|</span>이메일 : <a href="mailto:fc112@naver.com">fc112@naver.com</a><span class="gp-sep">|</span>전화 : <a href="tel:01079702108">010-7970-2108</a><span class="gp-sep">|</span>사업자등록번호 : 549-20-01841</div><div class="gp-copyline">ⓒ <span class="gp-year">2026</span> 가설파트너 · <a href="https://gaseolpartner.com" target="_blank" rel="noopener">gaseolpartner.com</a></div></div></footer><script>(function(){var y=new Date().getFullYear();document.querySelectorAll('.gp-year').forEach(function(e){e.textContent=y});})();</script>
 </body>
 </html>

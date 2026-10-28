@@ -6,7 +6,7 @@
     <meta name="description" content="가설파트너 - 비계 및 동바리 설치 협의록 작성 시스템">
     <meta name="author" content="가설파트너">
     <meta name="keywords" content="시스템동바리, 시스템비계, 협의록, 건설, 가설구조물">
-    <title>가설파트너 - 설계 및 설치 협의록</title>
+    <title>설계 및 설치 협의록 | 가설파트너</title>
     
     <style>
         * {
@@ -24,7 +24,7 @@
         
         /* 헤더 */
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #1B1B1B 0%, #1B1B1B 100%);
             padding: 30px 20px;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
@@ -75,11 +75,11 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
         
-        .gp-logo {
+        .gp-oldlogo {
             display: inline-block;
             width: 60px;
             height: 60px;
-            background: #2a5298;
+            background: #1B1B1B;
             border-radius: 50%;
             color: white;
             font-weight: bold;
@@ -121,11 +121,11 @@
         
         .nav-tab:hover {
             background: #f0f0f0;
-            color: #2a5298;
+            color: #1B1B1B;
         }
         
         .nav-tab.active {
-            color: #2a5298;
+            color: #1B1B1B;
             background: #f8f9fa;
         }
         
@@ -136,7 +136,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            background: linear-gradient(90deg, #1B1B1B, #1B1B1B);
         }
         
         /* 컨테이너 */
@@ -172,7 +172,7 @@
         
         .form-header h2 {
             font-size: 28px;
-            color: #1e3c72;
+            color: #1B1B1B;
             margin-bottom: 10px;
         }
         
@@ -222,17 +222,17 @@
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #2a5298;
+            border-color: #1B1B1B;
         }
         
         /* 섹션 타이틀 */
         .section-title {
             font-size: 20px;
             font-weight: bold;
-            color: #1e3c72;
+            color: #1B1B1B;
             margin: 30px 0 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #2a5298;
+            border-bottom: 2px solid #1B1B1B;
         }
         
         /* 체크박스 그룹 */
@@ -303,13 +303,13 @@
         }
         
         .image-option:hover {
-            border-color: #2a5298;
+            border-color: #1B1B1B;
             background: #f0f5ff;
         }
         
         .image-option.selected {
-            border-color: #2a5298;
-            background: #e6f0ff;
+            border-color: #1B1B1B;
+            background: #F6F6F4;
         }
         
         .image-option img {
@@ -343,14 +343,14 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            background: linear-gradient(135deg, #1B1B1B, #1B1B1B);
             color: white;
         }
         
         .btn-primary:hover {
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #1B1B1B, #1B1B1B);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.4);
+            box-shadow: 0 5px 15px rgba(27, 27, 27, 0.4);
         }
         
         .btn-secondary {
@@ -378,18 +378,18 @@
         
         /* 공지사항 */
         .notice {
-            background: #d1ecf1;
+            background: #F6F6F4;
             border: 1px solid #bee5eb;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 30px;
-            color: #0c5460;
+            color: #1B1B1B;
             text-align: center;
         }
         
         .notice h3 {
             margin-bottom: 10px;
-            color: #0c5460;
+            color: #1B1B1B;
         }
         
         /* 푸터 */
@@ -413,12 +413,12 @@
         }
         
         .footer a {
-            color: #4a90e2;
+            color: #1B1B1B;
             text-decoration: none;
         }
         
         .footer a:hover {
-            color: #6ba3e5;
+            color: #1B1B1B;
             text-decoration: underline;
         }
         
@@ -441,7 +441,7 @@
                 right: 10px;
             }
             
-            .gp-logo {
+            .gp-oldlogo {
                 width: 40px;
                 height: 40px;
                 font-size: 18px;
@@ -490,15 +490,30 @@
             }
         }
     </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="gp-common.css">
+<style id="gp-page">
+
+body{background:#F6F6F4 !important;color:#2B2B2B !important}
+.calculate-button,.button-primary,.toggle-price-btn,.price-action-btn{background:#F2B705 !important;color:#1B1B1B !important}
+.calculate-button:hover,.button-primary:hover,.toggle-price-btn:hover,.price-action-btn:hover{background:#D9A300 !important}
+.structure-type-card.active{background:#F2B705 !important;border-color:#F2B705 !important;color:#1B1B1B !important}
+.structure-type-card.active h3,.structure-type-card.active h4,.structure-type-card.active p{color:#1B1B1B !important}
+input:focus,select:focus,textarea:focus{border-color:#F2B705 !important;outline:none;box-shadow:0 0 0 3px rgba(242,183,5,.25)}
+
+.section-title{border-bottom-color:#F2B705 !important}
+.nav-tab.active::after{background:#F2B705 !important}
+
+</style>
 </head>
 <body>
+<div class="gp-topbar"><div class="gp-topbar-inner"><a href="https://gaseolpartner.com"><span class="dot"></span>가설파트너 홈페이지 ↗</a><nav><a href="https://gaseolpartner.com/pages/introduction">가설 설계 프로그램</a><a href="https://gaseolpartner.com/pages/precio">가설재 견적 비교</a><a href="https://gaseolpartner.com/pages/structureatuntroduction">구조검토</a><a href="https://gaseolpartner.com/pages/calculators">지원 서비스</a><a href="https://gaseolpartner.com/pages/support">고객지원</a></nav></div></div><header class="gp-brandbar"><div class="gp-brandbar-inner"><a class="gp-logo" href="index.html" aria-label="가설파트너"><span class="gp-li"></span><span class="gp-lt"><b>가설파트너</b><small>GASEOL PARTNER</small></span></a><div class="gp-brand-links"><a href="index.html">← 목록으로</a><a href="https://pf.kakao.com/_xovuVG/chat" class="gp-cta" target="_blank" rel="noopener">카카오톡 문의</a></div></div></header>
+
     <!-- 헤더 -->
     <div class="header">
         <h1>가설파트너 설치 협의록 시스템</h1>
         <p>시스템 비계 및 동바리 설치 협의록 작성</p>
-        <div class="header-logo">
-            <div class="gp-logo">GP</div>
-        </div>
+        
     </div>
     
     <!-- 공지사항 -->
@@ -528,7 +543,7 @@
                     <div class="company-info">
                         가설파트너<br>
                         가설재 프로그램 및 구조 검토 전문<br>
-                        TEL: 010-7970-2108 | 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0b6d683a3a394b656a7d6e7925686466">[email&#160;protected]</a>
+                        TEL: 010-7970-2108 | 이메일: <a href="mailto:fc112@naver.com" style="color:inherit">fc112@naver.com</a>
                     </div>
                 </div>
                 
@@ -758,7 +773,7 @@
                     <div class="company-info">
                         가설파트너<br>
                         가설재 프로그램 및 구조 검토 전문<br>
-                        TEL: 010-7970-2108 | 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="294f4a18181b6947485f4c5b074a4644">[email&#160;protected]</a>
+                        TEL: 010-7970-2108 | 이메일: <a href="mailto:fc112@naver.com" style="color:inherit">fc112@naver.com</a>
                     </div>
                 </div>
                 
@@ -973,19 +988,19 @@
         <h3>가설파트너</h3>
         <p>
             가설재 프로그램 및 구조 검토 전문<br>
-            📞 문의: 010-7970-2108 | ✉️ 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c6a0a5f7f7f486a8a7b0a3b4e8a5a9ab">[email&#160;protected]</a><br>
+            📞 문의: 010-7970-2108 | ✉️ 이메일: <a href="mailto:fc112@naver.com" style="color:inherit">fc112@naver.com</a><br>
             🌐 웹사이트: <a href="https://gaseolpartner.com" target="_blank">gaseolpartner.com</a>
         </p>
         <div class="copyright">
             <p>
-                © 2025 가설파트너. All rights reserved.<br>
+                © <span class="gp-year">2026</span> 가설파트너. All rights reserved.<br>
                 본 프로그램의 모든 저작권은 가설파트너에 있습니다.<br>
                 무단 복제 및 배포를 금지합니다.
             </p>
         </div>
     </div>
     
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // 오늘 날짜 설정
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
@@ -1126,4 +1141,10 @@
         });
         
         document.getElementById('scaffold-lift').addEventListener('change', function() {
-            document.getElementById('scaffold-lift-c
+            document.getElementById('scaffold-lift-count').disabled = !this.checked;
+            if (!this.checked) document.getElementById('scaffold-lift-count').value = '';
+        });
+    </script>
+<footer class="gp-footer"><div class="gp-footer-inner"><div>회사명 : 가설파트너<span class="gp-sep">|</span>주소 : 서울 강남구 가로수길 5<span class="gp-sep">|</span>이메일 : <a href="mailto:fc112@naver.com">fc112@naver.com</a><span class="gp-sep">|</span>전화 : <a href="tel:01079702108">010-7970-2108</a><span class="gp-sep">|</span>사업자등록번호 : 549-20-01841</div><div class="gp-copyline">ⓒ <span class="gp-year">2026</span> 가설파트너 · <a href="https://gaseolpartner.com" target="_blank" rel="noopener">gaseolpartner.com</a></div></div></footer><script>(function(){var y=new Date().getFullYear();document.querySelectorAll('.gp-year').forEach(function(e){e.textContent=y});})();</script>
+</body>
+</html>

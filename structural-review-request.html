@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HJ구조사무실 구조검토 의뢰서</title>
+    <title>HJ구조기술사사무소 구조검토 의뢰서 | 가설파트너</title>
     <style>
         * {
             margin: 0;
@@ -28,7 +28,7 @@
         
         h1 {
             text-align: center;
-            color: #2c3e50;
+            color: #1B1B1B;
             margin-bottom: 30px;
             font-size: 28px;
             padding: 15px;
@@ -46,10 +46,10 @@
         .section-title {
             font-size: 18px;
             font-weight: bold;
-            color: #34495e;
+            color: #1B1B1B;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid #F2B705;
         }
         
         .form-group {
@@ -85,8 +85,8 @@
         .form-group input[type="number"]:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+            border-color: #F2B705;
+            box-shadow: 0 0 5px rgba(242, 183, 5, 0.3);
         }
         
         .inline-group {
@@ -107,7 +107,7 @@
         }
         
         table th {
-            background-color: #34495e;
+            background-color: #1B1B1B;
             color: white;
             padding: 10px;
             text-align: center;
@@ -148,8 +148,8 @@
         }
         
         .add-row-btn {
-            background-color: #3498db;
-            color: white;
+            background-color: #F2B705;
+            color: #1B1B1B;
             border: none;
             padding: 8px 16px;
             border-radius: 4px;
@@ -159,7 +159,7 @@
         }
         
         .add-row-btn:hover {
-            background-color: #2980b9;
+            background-color: #F2B705;
         }
         
         .submit-section {
@@ -215,10 +215,30 @@
             }
         }
     </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="gp-common.css">
+<style id="gp-page">
+
+body{background:#F6F6F4 !important;color:#2B2B2B !important}
+.calculate-button,.button-primary,.toggle-price-btn,.price-action-btn{background:#F2B705 !important;color:#1B1B1B !important}
+.calculate-button:hover,.button-primary:hover,.toggle-price-btn:hover,.price-action-btn:hover{background:#D9A300 !important}
+.structure-type-card.active{background:#F2B705 !important;border-color:#F2B705 !important;color:#1B1B1B !important}
+.structure-type-card.active h3,.structure-type-card.active h4,.structure-type-card.active p{color:#1B1B1B !important}
+input:focus,select:focus,textarea:focus{border-color:#F2B705 !important;outline:none;box-shadow:0 0 0 3px rgba(242,183,5,.25)}
+
+.submit-btn{background:#F2B705 !important;color:#1B1B1B !important}
+.submit-btn:hover{background:#D9A300 !important}
+
+.section-title{border-bottom-color:#F2B705 !important}
+.nav-tab.active::after{background:#F2B705 !important}
+
+</style>
 </head>
 <body>
+<div class="gp-topbar"><div class="gp-topbar-inner"><a href="https://gaseolpartner.com"><span class="dot"></span>가설파트너 홈페이지 ↗</a><nav><a href="https://gaseolpartner.com/pages/introduction">가설 설계 프로그램</a><a href="https://gaseolpartner.com/pages/precio">가설재 견적 비교</a><a href="https://gaseolpartner.com/pages/structureatuntroduction">구조검토</a><a href="https://gaseolpartner.com/pages/calculators">지원 서비스</a><a href="https://gaseolpartner.com/pages/support">고객지원</a></nav></div></div><header class="gp-brandbar"><div class="gp-brandbar-inner"><a class="gp-logo" href="index.html" aria-label="가설파트너"><span class="gp-li"></span><span class="gp-lt"><b>가설파트너</b><small>GASEOL PARTNER</small></span></a><div class="gp-brand-links"><a href="index.html">← 목록으로</a><a href="https://pf.kakao.com/_xovuVG/chat" class="gp-cta" target="_blank" rel="noopener">카카오톡 문의</a></div></div></header>
+
     <div class="container">
-        <h1>HJ구조사무실 구조검토 의뢰서</h1>
+        <h1>HJ구조기술사사무소 구조검토 의뢰서</h1>
         
         <!-- 수신/발신 정보 -->
         <div class="section">
@@ -226,7 +246,7 @@
             <div class="inline-group">
                 <div class="form-group">
                     <label>수신처:</label>
-                    <input type="text" name="recipient" value="HJ구조사무실" readonly style="background-color: #f0f0f0;">
+                    <input type="text" name="recipient" value="HJ구조기술사사무소" readonly style="background-color: #f0f0f0;">
                 </div>
                 <div class="form-group">
                     <label>메일:</label>
@@ -297,7 +317,7 @@
             
             <!-- 슬라브 -->
             <div style="margin-bottom: 20px;">
-                <h4 style="margin-bottom: 10px; color: #34495e;">슬라브</h4>
+                <h4 style="margin-bottom: 10px; color: #1B1B1B;">슬라브</h4>
                 <table id="slabTable">
                     <thead>
                         <tr>
@@ -321,7 +341,7 @@
             
             <!-- 보 -->
             <div>
-                <h4 style="margin-bottom: 10px; color: #34495e;">보 (멍에 단방향)</h4>
+                <h4 style="margin-bottom: 10px; color: #1B1B1B;">보 (멍에 단방향)</h4>
                 <table id="beamTable">
                     <thead>
                         <tr>
@@ -387,7 +407,7 @@
             </div>
             
             <div>
-                <h4 style="margin-bottom: 10px; color: #34495e;">비계 상세내역</h4>
+                <h4 style="margin-bottom: 10px; color: #1B1B1B;">비계 상세내역</h4>
                 <table id="scaffoldTable">
                     <thead>
                         <tr>
@@ -421,7 +441,7 @@
                 <strong>💡 다른 가설재 검토 의뢰 안내</strong><br>
                 잭서포트, 브라켓, 작업대, 안전발판, 낙하물방호덕트 등 기타 가설재 검토가 필요하신 경우<br>
                 이 추가요청사항란에 상세 내용을 작성해주시면 검토 가능합니다.<br>
-                <span style="color: #ff8800;">예시: "잭서포트 3.5m 높이, 2m 간격 설치 시 구조검토 요청"</span>
+                <span style="color: #1B1B1B;">예시: "잭서포트 3.5m 높이, 2m 간격 설치 시 구조검토 요청"</span>
             </p>
         </div>
         
@@ -432,7 +452,7 @@
                 <label>파일 선택:</label>
                 <input type="file" id="attachments" name="attachments" multiple accept=".pdf,.dwg,.jpg,.jpeg,.png,.zip,.rar" style="padding: 10px;">
             </div>
-            <p class="info-text" style="color: #ff8800; margin-top: 10px;">
+            <p class="info-text" style="color: #1B1B1B; margin-top: 10px;">
                 ※ 파일 용량이 클 경우(10MB 이상) 이메일로 별도 전송 부탁드립니다.<br>
                 ※ 원도 도면(DWG, PDF 등)은 정확한 검토를 위해 반드시 첨부해주시기 바랍니다.<br>
                 ※ 여러 파일 선택 가능 (Ctrl+클릭 또는 Shift+클릭)
@@ -524,12 +544,12 @@
             
             modal.innerHTML = `
                 <div style="background: white; padding: 40px; border-radius: 10px; text-align: center; max-width: 600px;">
-                    <h2 style="color: #ff8800; margin-bottom: 20px;">HJ구조사무실 의뢰서 제출 방법을 선택하세요</h2>
+                    <h2 style="color: #1B1B1B; margin-bottom: 20px;">HJ구조기술사사무소 의뢰서 제출 방법을 선택하세요</h2>
                     <p style="color: #666; margin-bottom: 30px;">아래 방법 중 편하신 방법으로 의뢰서를 제출해주세요.</p>
                     
                     <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                         <button onclick="sendEmail(${JSON.stringify(formData).replace(/"/g, '&quot;')})" 
-                                style="background: #0066cc; color: white; border: none; padding: 30px 40px; 
+                                style="background: #F2B705; color: #1B1B1B; border: none; padding: 30px 40px; 
                                        border-radius: 10px; cursor: pointer; font-size: 18px; transition: all 0.3s;">
                             <div style="font-size: 30px; margin-bottom: 10px;">✉️</div>
                             이메일로 발송
@@ -674,7 +694,7 @@
             const message = generateKakaoMessage(formData);
             
             // 카카오톡 오픈채팅 링크
-            const kakaoLink = 'https://open.kakao.com/o/sq6cfvBh';
+            const kakaoLink = 'https://pf.kakao.com/_xovuVG/chat';
             
             // 클립보드에 복사
             navigator.clipboard.writeText(message).then(() => {
@@ -712,12 +732,12 @@
             const modal = document.querySelector('div[style*="position: fixed"]');
             if (modal) modal.remove();
             
-            alert('의뢰서가 다운로드되었습니다.\n\n다운로드한 파일을 아래 방법으로 전송해주세요:\n\n1. 이메일: hj_str@naver.com\n2. 오픈카카오톡: https://open.kakao.com/o/sq6cfvBh');
+            alert('의뢰서가 다운로드되었습니다.\n\n다운로드한 파일을 아래 방법으로 전송해주세요:\n\n1. 이메일: hj_str@naver.com\n2. 카카오톡 채널: https://pf.kakao.com/_xovuVG/chat');
         }
         
                     // 이메일 본문 생성
         function generateEmailBody(formData) {
-            let body = 'HJ구조사무실 구조검토 의뢰서\n\n';
+            let body = 'HJ구조기술사사무소 구조검토 의뢰서\n\n';
             body += '=== 발신 정보 ===\n';
             body += `회사: ${formData.발신정보.회사}\n`;
             body += `담당자: ${formData.발신정보.담당자}\n`;
@@ -783,7 +803,7 @@
         
                     // 카카오톡 메시지 생성
         function generateKakaoMessage(formData) {
-            let message = '[HJ구조사무실 구조검토 의뢰서]\n\n';
+            let message = '[HJ구조기술사사무소 구조검토 의뢰서]\n\n';
             message += `📋 현장명: ${formData.프로젝트정보.현장명}\n`;
             message += `🏢 업체명: ${formData.프로젝트정보.업체명}\n`;
             message += `📞 담당자: ${formData.발신정보.담당자} (${formData.발신정보.연락처})\n`;
@@ -820,17 +840,17 @@
         
         // 파일 내용 생성
         function generateFileContent(formData) {
-            let content = 'HJ구조사무실\n';
+            let content = 'HJ구조기술사사무소\n';
             content += '구조검토 의뢰서\n';
             content += '=' .repeat(50) + '\n\n';
             
             content += generateEmailBody(formData);
             
             content += '\n' + '=' .repeat(50) + '\n';
-            content += '수신: HJ구조사무실\n';
+            content += '수신: HJ구조기술사사무소\n';
             content += '연락처: 010-7970-2108\n';
             content += '이메일: hj_str@naver.com\n';
-            content += '오픈카카오톡: https://open.kakao.com/o/sq6cfvBh\n';
+            content += '카카오톡 채널: https://pf.kakao.com/_xovuVG/chat\n';
             content += '\n발송일시: ' + new Date().toLocaleString() + '\n';
             
             return content;
@@ -873,5 +893,6 @@
             });
         };
     </script>
+<footer class="gp-footer"><div class="gp-footer-inner"><div>회사명 : 가설파트너<span class="gp-sep">|</span>주소 : 서울 강남구 가로수길 5<span class="gp-sep">|</span>이메일 : <a href="mailto:fc112@naver.com">fc112@naver.com</a><span class="gp-sep">|</span>전화 : <a href="tel:01079702108">010-7970-2108</a><span class="gp-sep">|</span>사업자등록번호 : 549-20-01841</div><div class="gp-copyline">ⓒ <span class="gp-year">2026</span> 가설파트너 · <a href="https://gaseolpartner.com" target="_blank" rel="noopener">gaseolpartner.com</a></div></div></footer><script>(function(){var y=new Date().getFullYear();document.querySelectorAll('.gp-year').forEach(function(e){e.textContent=y});})();</script>
 </body>
 </html>
