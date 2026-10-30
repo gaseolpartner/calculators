@@ -48,6 +48,8 @@
     box.innerHTML = '<div><b>이 물량으로 견적 받아 보기</b><span>계산 결과가 견적 요청서에 자동으로 들어가요. 여러 업체 견적을 무료로 비교하세요.</span></div>' +
       '<a href="' + APP + '" target="_blank" rel="noopener">견적 요청하기 →</a>';
     box.querySelector('a').addEventListener('click', function (e) {
+      // 클릭 수 기록 (구글 애널리틱스가 있는 페이지에서만)
+      try { if (typeof window.gtag === 'function') window.gtag('event', '견적요청클릭', { event_category: '견적연결', item: cfg.item, page_title: cfg.title }); } catch (err) {}
       try {
         var url = APP + '?from=calculators&item=' + encodeURIComponent(cfg.item) + '&memo=' + encodeURIComponent(summary(cfg, sec));
         this.href = url;

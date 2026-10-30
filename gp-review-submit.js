@@ -7,9 +7,12 @@
   if (typeof window.showSubmitModal !== 'function' || typeof window.generateEmailBody !== 'function') return;
   var orig = window.showSubmitModal;
 
+  function track(name) { try { if (typeof window.gtag === 'function') window.gtag('event', name, { event_category: '구조검토' }); } catch (e) {} }
+
   function send(fd, btn) {
     var phone = (fd && fd.발신정보 && fd.발신정보.연락처) || '';
     if (!String(phone).trim()) { alert('H.P(연락처)를 입력해 주세요. 접수 후 이 번호로 연락드립니다.'); return; }
+    track('구조검토바로접수');
     btn.disabled = true; var old = btn.innerHTML;
     btn.innerHTML = '<div style="font-size:30px;margin-bottom:10px">⏳</div>보내는 중…';
     fetch(API, {
@@ -20,9 +23,15 @@
         site: (fd.프로젝트정보 && fd.프로젝트정보.현장명) || '',
         phone: phone, website: ''
       })
-    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok, j: j }; }); })
+    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok, j: j, status: r.status }; }); })
       .then(function (res) {
+        if (res.status === 429) {
+          btn.disabled = false; btn.innerHTML = old;
+          alert('짧은 시간에 여러 번 보내셨어요.\n10분쯤 뒤에 다시 시도하시거나, 다른 방법(이메일·카카오톡·파일 저장)으로 보내 주세요.');
+          return;
+        }
         if (res.ok) {
+          track('구조검토바로접수완료');
           var m = document.querySelector('div[style*="position: fixed"]'); if (m) m.remove();
           alert('의뢰서가 접수되었습니다.\n확인 후 입력하신 연락처(' + phone + ')로 연락드리겠습니다.');
         } else { throw new Error((res.j && res.j.error) || '접수 실패'); }
