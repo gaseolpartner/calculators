@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="비계·동바리 작업 전 점검표. 휴대폰으로 체크하고 사진·서명을 붙여 PDF로 저장하세요. 산업안전보건기준에 관한 규칙 조항 기준, 무료.">
+<meta name="theme-color" content="#1B1B1B">
+<title>작업 전 점검표 (비계·동바리) | 가설파트너</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K8NMSLZ841"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K8NMSLZ841');</script>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="가설파트너">
+<meta property="og:title" content="작업 전 점검표 (비계·동바리) | 가설파트너">
+<meta property="og:description" content="휴대폰으로 체크하고 사진·서명을 붙여 PDF로 저장하는 무료 점검표">
+<meta property="og:image" content="https://gaseolpartner.github.io/calculators/icons/og.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="gp-common.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F6F6F4;color:#2B2B2B;-webkit-tap-highlight-color:transparent}
+.si-wrap{max-width:760px;margin:0 auto;padding:0 16px 120px}
+.si-card{background:#fff;border:1px solid #E3E3E3;border-radius:16px;padding:20px;margin-top:16px}
+.si-card:first-child{margin-top:-34px;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.si-h{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:17px;font-weight:800;color:#1B1B1B}
+.si-h i{font-style:normal;width:26px;height:26px;border-radius:50%;background:#1B1B1B;color:#F2B705;font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.si-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.si-grid .full{grid-column:1/-1}
+.si-in label{display:block;font-size:13px;font-weight:700;color:#444;margin-bottom:6px}
+.si-in input,.si-in select,.si-in textarea{width:100%;font:inherit;font-size:16px;padding:11px 12px;border:1.5px solid #D5D5D5;border-radius:10px;background:#fff;color:#1B1B1B}
+.si-in input:focus,.si-in select:focus,.si-in textarea:focus{outline:none;border-color:#1B1B1B;box-shadow:0 0 0 3px rgba(242,183,5,.35)}
+.si-types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.si-type{font:inherit;text-align:left;border:1.5px solid #D5D5D5;background:#fff;border-radius:12px;padding:12px;cursor:pointer;color:#1B1B1B;min-height:64px}
+.si-type b{display:block;font-size:15px}
+.si-type span{font-size:12px;color:#777}
+.si-type[aria-pressed="true"]{border-color:#1B1B1B;background:#1B1B1B;color:#fff}
+.si-type[aria-pressed="true"] span{color:#F2B705}
+.si-reasons{display:flex;flex-wrap:wrap;gap:6px}
+.si-chip{font:inherit;font-size:14px;font-weight:700;border:1.5px solid #D5D5D5;background:#fff;border-radius:999px;padding:8px 13px;cursor:pointer;color:#444}
+.si-chip[aria-pressed="true"]{background:#F2B705;border-color:#1B1B1B;color:#1B1B1B}
+.si-group{margin-top:18px}
+.si-group h3{margin:0 0 8px;font-size:14px;color:#777;font-weight:800;letter-spacing:.3px}
+.si-item{border:1px solid #E8E8E8;border-radius:12px;padding:13px;margin-bottom:8px;background:#fff;transition:border-color .15s}
+.si-item.ng{border-color:#E74C3C;background:#FFF7F6}
+.si-item.ok{border-color:#CFE8D6}
+.si-q{font-size:15.5px;line-height:1.5;color:#1B1B1B;font-weight:600}
+.si-q small{display:inline-block;margin-left:6px;font-size:11.5px;font-weight:700;color:#888;background:#F2F2F0;border-radius:6px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.si-ans{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
+.si-ans button{font:inherit;font-size:14.5px;font-weight:800;padding:10px 4px;border-radius:9px;border:1.5px solid #D5D5D5;background:#fff;color:#555;cursor:pointer}
+.si-ans button[data-v="ok"][aria-pressed="true"]{background:#1E8E3E;border-color:#1E8E3E;color:#fff}
+.si-ans button[data-v="ng"][aria-pressed="true"]{background:#D93025;border-color:#D93025;color:#fff}
+.si-ans button[data-v="na"][aria-pressed="true"]{background:#777;border-color:#777;color:#fff}
+.si-more{display:none;margin-top:10px;gap:8px}
+.si-item.ng .si-more,.si-item.open .si-more{display:flex;flex-wrap:wrap}
+.si-more input[type=text]{flex:1 1 200px;font:inherit;font-size:15px;padding:9px 11px;border:1.5px solid #D5D5D5;border-radius:9px}
+.si-photo{font:inherit;font-size:14px;font-weight:700;border:1.5px dashed #999;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;color:#333}
+.si-thumbs{display:flex;gap:6px;flex-wrap:wrap;width:100%}
+.si-thumbs figure{margin:0;position:relative}
+.si-thumbs img{width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid #ddd;display:block}
+.si-thumbs button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;border:none;background:#1B1B1B;color:#fff;font-size:13px;line-height:22px;cursor:pointer;padding:0}
+.si-addnote{font:inherit;font-size:13px;color:#666;background:none;border:none;padding:6px 0 0;cursor:pointer;text-decoration:underline}
+.si-sum{display:flex;gap:8px;flex-wrap:wrap}
+.si-sum div{flex:1 1 90px;text-align:center;border-radius:12px;padding:12px 6px;background:#F6F6F4}
+.si-sum b{display:block;font-size:24px;font-weight:900}
+.si-sum span{font-size:12.5px;color:#666}
+.si-verdict{margin-top:12px;border-radius:12px;padding:14px 16px;font-weight:800;font-size:15.5px;line-height:1.5}
+.si-verdict.ok{background:#E8F5EC;color:#1E6B34}
+.si-verdict.ng{background:#FDECEA;color:#A52714}
+.si-verdict.wait{background:#FFF7DB;color:#7A5B00}
+.si-sign{border:1.5px dashed #999;border-radius:12px;background:#fff;touch-action:none;width:100%;height:140px;display:block}
+.si-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.si-btn{font:inherit;font-size:15px;font-weight:800;border-radius:10px;padding:12px 16px;cursor:pointer;border:1.5px solid #1B1B1B;background:#fff;color:#1B1B1B;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.si-btn.y{background:#F2B705}
+.si-btn.k{background:#1B1B1B;color:#fff}
+.si-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-top:1px solid #E3E3E3;padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:50}
+.si-bar-in{max-width:760px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.si-prog{flex:1;min-width:0}
+.si-prog small{display:block;font-size:12.5px;color:#666;font-weight:700}
+.si-prog div{height:8px;border-radius:99px;background:#EEE;margin-top:5px;overflow:hidden}
+.si-prog div i{display:block;height:100%;background:#1B1B1B;width:0;transition:width .2s}
+.si-note{font-size:12.5px;color:#777;line-height:1.6;margin-top:12px}
+.si-cta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.si-cta a{display:block;background:#fff;border:1px solid #E3E3E3;border-radius:14px;padding:16px;text-decoration:none;color:#1B1B1B}
+.si-cta b{display:block;font-size:15.5px}
+.si-cta span{font-size:13px;color:#666}
+.si-qr{display:none;text-align:center;margin-top:12px}
+.si-qr.on{display:block}
+.si-qr #qrBox{display:inline-block;padding:12px;background:#fff;border:1px solid #E3E3E3;border-radius:12px}
+#report{display:none}
+@media(max-width:560px){.si-types{grid-template-columns:1fr 1fr}.si-grid{grid-template-columns:1fr}.si-cta{grid-template-columns:1fr}}
+/* ---------- 인쇄(PDF) ---------- */
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  body>*:not(#report){display:none!important}
+  #report{display:block;font-family:Pretendard,'Malgun Gothic',sans-serif;color:#000;font-size:10.5pt}
+  .rp-top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #000;padding-bottom:6px}
+  .rp-top h1{margin:0;font-size:18pt}
+  .rp-top small{font-size:9pt;color:#444}
+  .rp-info{width:100%;border-collapse:collapse;margin:8px 0 10px}
+  .rp-info td{border:1px solid #999;padding:5px 7px;font-size:10pt}
+  .rp-info td.k{background:#F2F2F2;font-weight:700;width:16%}
+  .rp-tbl{width:100%;border-collapse:collapse}
+  .rp-tbl th,.rp-tbl td{border:1px solid #999;padding:4px 6px;vertical-align:top;font-size:9.5pt}
+  .rp-tbl th{background:#F2F2F2}
+  .rp-tbl td.c{text-align:center;white-space:nowrap;width:12%}
+  .rp-tbl tr.g td{background:#FAFAFA;font-weight:800}
+  .rp-tbl tr{page-break-inside:avoid}
+  .rp-ng{color:#B00020;font-weight:800}
+  .rp-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+  .rp-photos figure{margin:0;page-break-inside:avoid;border:1px solid #ccc;padding:4px}
+  .rp-photos img{width:100%;height:46mm;object-fit:cover;display:block}
+  .rp-photos figcaption{font-size:8.5pt;margin-top:3px}
+  .rp-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:12px;page-break-inside:avoid}
+  .rp-foot .sg{border:1px solid #999;width:62mm;height:26mm;display:flex;align-items:center;justify-content:center}
+  .rp-foot .sg img{max-width:100%;max-height:100%}
+  .rp-src{font-size:8pt;color:#555;margin-top:8px;line-height:1.5}
+  .rp-verdict{margin:8px 0;padding:6px 8px;border:2px solid #000;font-weight:800}
+}
+</style>
+</head>
+<body>
+<div class="gp-topbar"><div class="gp-topbar-inner"><a href="https://gaseolpartner.com"><span class="dot"></span>가설파트너 홈페이지 ↗</a><nav><a href="https://gaseolpartner.com/pages/introduction">가설 설계 프로그램</a><a href="https://gaseolpartner.com/pages/precio">가설재 견적 비교</a><a href="https://gaseolpartner.com/pages/structureatuntroduction">구조검토</a><a href="https://gaseolpartner.com/pages/calculators">무료 도구</a><a href="https://gaseolpartner.com/pages/support">고객지원</a></nav></div></div>
+<header class="gp-brandbar"><div class="gp-brandbar-inner"><a class="gp-logo" href="https://gaseolpartner.com" aria-label="가설파트너"><span class="gp-li"></span><span class="gp-lt"><b>가설파트너</b><small>GASEOL PARTNER</small></span></a><div class="gp-brand-links"><a class="gp-hide-m" href="index.html">물량·견적 계산기</a><a class="gp-cta" href="structural-review-request.html">구조검토 의뢰</a></div></div></header>
+
+<section class="gp-hero dark">
+  <div class="gp-hero-inner" style="padding-bottom:64px">
+    <span class="gp-label">무료 도구 · 현장 점검</span>
+    <h1>비계·동바리 <em>작업 전 점검표</em></h1>
+    <p>휴대폰으로 체크하고 사진·서명을 붙여 바로 PDF로 저장하세요.<br>항목은 산업안전보건기준에 관한 규칙 조항을 그대로 옮겼어요.</p>
+  </div>
+</section>
+
+<main class="si-wrap" id="app">
+  <section class="si-card" aria-labelledby="h1">
+    <h2 class="si-h" id="h1"><i>1</i>무엇을 점검하나요?</h2>
+    <div class="si-types" role="group" aria-label="점검 대상" id="types"></div>
+    <div class="si-group" style="margin-top:16px">
+      <h3>점검하는 이유</h3>
+      <div class="si-reasons" role="group" aria-label="점검 사유" id="reasons"></div>
+    </div>
+  </section>
+
+  <section class="si-card" aria-labelledby="h2">
+    <h2 class="si-h" id="h2"><i>2</i>현장 정보</h2>
+    <div class="si-grid">
+      <div class="si-in full"><label for="fSite">현장명</label><input id="fSite" maxlength="60" placeholder="예: OO아파트 신축공사"></div>
+      <div class="si-in"><label for="fZone">위치·구간</label><input id="fZone" maxlength="60" placeholder="예: 101동 북측 외부비계"></div>
+      <div class="si-in"><label for="fWho">점검자</label><input id="fWho" maxlength="30" placeholder="이름 (직책)"></div>
+      <div class="si-in"><label for="fDate">점검 일시</label><input id="fDate" type="datetime-local"></div>
+      <div class="si-in"><label for="fWeather">날씨</label><select id="fWeather"><option value="">선택</option><option>맑음</option><option>흐림</option><option>비</option><option>눈</option><option>강풍</option></select></div>
+    </div>
+  </section>
+
+  <section class="si-card" aria-labelledby="h3">
+    <h2 class="si-h" id="h3"><i>3</i>점검 항목 <span id="typeName" style="font-size:14px;color:#777;font-weight:700"></span></h2>
+    <div class="si-row" style="margin-top:0">
+      <button type="button" class="si-btn" id="allOk">남은 항목 모두 적합</button>
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <section class="si-card" aria-labelledby="h4">
+    <h2 class="si-h" id="h4"><i>4</i>결과 · 서명</h2>
+    <div class="si-sum" id="sum"></div>
+    <div class="si-verdict wait" id="verdict" role="status"></div>
+    <div class="si-in" style="margin-top:14px"><label for="fAct">조치 내용 (부적합이 있으면 적어 주세요)</label><textarea id="fAct" rows="3" maxlength="400" placeholder="예: 3층 발판 1장 교체, 벽이음 2개소 재체결 후 재점검"></textarea></div>
+    <div class="si-in" style="margin-top:14px"><label>점검자 서명</label><canvas class="si-sign" id="sign" aria-label="서명 칸 — 손가락이나 마우스로 서명"></canvas></div>
+    <div class="si-row"><button type="button" class="si-btn" id="signClear">서명 지우기</button></div>
+    <div class="si-row" style="margin-top:16px">
+      <button type="button" class="si-btn y" id="pdf">📄 PDF로 저장 · 인쇄</button>
+      <button type="button" class="si-btn" id="qrMake">📱 이 현장 QR 만들기</button>
+      <button type="button" class="si-btn" id="reset">새로 쓰기</button>
+    </div>
+    <div class="si-qr" id="qr">
+      <div id="qrBox"></div>
+      <p style="font-size:13px;color:#666;margin:8px 0 0">현장 게시판에 붙여 두면 스캔 한 번으로 이 현장·종류가 채워진 점검표가 열려요.</p>
+      <div class="si-row" style="justify-content:center"><button type="button" class="si-btn" id="qrPrint">QR 인쇄</button></div>
+    </div>
+    <p class="si-note">· 작성 내용(사진 제외)은 이 기기에 자동 저장돼요. 다른 사람에게 전달되지 않아요.<br>· PDF는 인쇄 창에서 '대상: PDF로 저장'을 고르면 돼요.<br>· 이 점검표는 법정 점검을 돕는 참고 양식이에요. 현장의 작업계획서·조립도·제조사 기준이 우선합니다.</p>
+  </section>
+
+  <div class="si-cta">
+    <a href="https://gaseolpartner.vercel.app/weather"><b>🌬️ 강풍·폭우 현장 알림</b><span>센 바람·큰비 예보 전날 휴대폰으로 알려 드려요</span></a>
+    <a href="structural-review-request.html"><b>📐 구조검토 의뢰</b><span>HJ구조기술사사무소 · 영업일 하루 안에 견적</span></a>
+  </div>
+</main>
+
+<div class="si-bar" id="bar"><div class="si-bar-in">
+  <div class="si-prog"><small id="progTxt">0 / 0 항목 확인</small><div><i id="progBar"></i></div></div>
+  <button type="button" class="si-btn y" id="pdf2">PDF 저장</button>
+</div></div>
+
+<footer class="gp-footer"><div class="gp-footer-inner"><div>회사명 : 가설파트너<span class="gp-sep">|</span>주소 : 서울 강남구 가로수길 5<span class="gp-sep">|</span>이메일 : <a href="mailto:fc112@naver.com">fc112@naver.com</a><span class="gp-sep">|</span>전화 : <a href="tel:01079702108">010-7970-2108</a><span class="gp-sep">|</span>사업자등록번호 : 549-20-01841</div><div class="gp-copyline">ⓒ Gaseolpartner. all right reserved. · <a href="https://gaseolpartner.com" target="_blank" rel="noopener">gaseolpartner.com</a></div></div></footer>
+
+<div id="report" aria-hidden="true"></div>
+<input type="file" id="fileIn" accept="image/*" capture="environment" hidden>
+
+<script>
+(function () {
+  'use strict';
+  // ------------------------------------------------------------------
+  // 점검 항목: 산업안전보건기준에 관한 규칙 조문을 현장 말투로 옮김 (조문 번호 표시)
+  //  제56조 작업발판의 구조 / 제58조 비계의 점검 및 보수 / 제59조 강관비계 조립
+  //  제68조 이동식비계 / 제69조 시스템 비계의 구조 / 제70조 시스템비계 조립 작업
+  //  제332조 동바리 조립 시의 안전조치 / 제332조의2 동바리 유형별 / 제334조 콘크리트 타설작업
+  // ------------------------------------------------------------------
+  var R58 = {
+    plank: ['발판 재료에 손상이 없고, 제자리에 걸림·고정돼 있다', '제58조 1호'],
+    loose: ['연결부·접속부에 풀린 곳이 없다', '제58조 2호'],
+    rust: ['연결 재료·연결 철물에 손상이나 부식이 없다', '제58조 3호'],
+    rail: ['손잡이(안전난간)가 빠지거나 떨어진 곳이 없다', '제58조 4호'],
+    post: ['기둥이 가라앉거나, 휘거나, 밀리거나, 흔들리지 않는다', '제58조 5호']
+  };
+  var PLANK = ['작업발판 폭은 40cm 이상, 발판 사이 틈은 3cm 이하다', '제56조 2호'];
+  var GUARD = ['떨어질 위험이 있는 곳에 안전난간이 설치돼 있다', '제56조 4호'];
+  var WIRE = ['가까이 전선(가공전로)이 있으면 옮기거나 절연 방호구를 씌웠다', '제70조 3호'];
+
+  var TYPES = {
+    sys: { name: '시스템 비계', sub: '외부·내부 시스템비계', groups: [
+      ['기초·받침', [
+        ['기둥 밑에 밑받침 철물을 썼고, 높이 차이는 조절형 받침으로 수평·수직을 맞췄다', '제70조 1호'],
+        ['경사진 바닥은 피벗형 받침철물이나 쐐기로 받침 바닥을 수평으로 맞췄다', '제70조 2호'],
+        ['맨 아래 수직재와 받침철물이 밀착돼 있고, 겹침길이가 받침철물 길이의 1/3 이상이다', '제69조 2호'],
+        R58.post]],
+      ['구조·연결', [
+        ['수직재·수평재·가새재가 견고하게 연결돼 있다', '제69조 1호'],
+        ['수평재가 수직재와 직각이고, 체결 후 흔들리지 않는다', '제69조 3호'],
+        ['수직재끼리 잇는 연결철물이 빠지지 않게 체결돼 있다', '제69조 4호'],
+        ['벽 연결재(벽이음)가 제조사 기준 간격대로 설치돼 있고 빠진 곳이 없다', '제69조 5호'],
+        R58.loose, R58.rust]],
+      ['발판·난간', [R58.plank, PLANK, GUARD, R58.rail,
+        ['최대적재하중 표지판이 붙어 있고, 그보다 많이 쌓은 자재가 없다', '제70조 6호']]],
+      ['작업 방법', [
+        ['오르내릴 때 쓰는 지정 통로(계단·사다리)가 확보돼 있다', '제70조 4호'],
+        ['같은 수직면에서 위·아래 동시 작업을 하지 않는다', '제70조 5호'],
+        WIRE]]
+    ]},
+    pipe: { name: '강관 비계', sub: '단관·쌍줄 비계', groups: [
+      ['기초·받침', [
+        ['기둥 밑에 밑받침철물을 쓰거나 깔판·받침목으로 밑둥잡이를 했다', '제59조 1호'],
+        R58.post]],
+      ['구조·연결', [
+        ['강관 접속부·교차부를 맞는 부속철물(클램프 등)로 단단히 접속했다', '제59조 2호'],
+        ['교차 가새로 보강했다', '제59조 3호'],
+        ['벽이음·버팀을 기준 간격대로 설치했다 (빠진 곳은 사재 등 넘어짐 방지 조치)', '제59조 4호'],
+        R58.loose, R58.rust]],
+      ['발판·난간', [R58.plank, PLANK, GUARD, R58.rail]],
+      ['주변', [['가까이 전선(가공전로)이 있으면 옮기거나 절연 방호구를 씌웠다', '제59조 5호']]]
+    ]},
+    mobile: { name: '이동식 비계', sub: '틀비계·조립식 이동비계', groups: [
+      ['고정', [
+        ['바퀴를 브레이크·쐐기로 고정했다', '제68조 1호'],
+        ['아웃트리거를 설치했거나, 비계 일부를 튼튼한 시설물에 고정했다', '제68조 1호'],
+        ['높이가 밑변 최소폭의 4배 이하다', '가설공사 표준안전 작업지침']]],
+      ['승강·발판', [
+        ['오르내리는 사다리가 견고하게 설치돼 있다', '제68조 2호'],
+        ['맨 위에서 작업하면 안전난간을 설치했다', '제68조 3호'],
+        ['작업발판이 수평이고, 난간을 딛거나 받침대·사다리를 올려 작업하지 않는다', '제68조 4호'],
+        ['발판 위 사람·자재 합계가 250kg을 넘지 않는다', '제68조 5호']]],
+      ['상태', [R58.plank, R58.loose, R58.rust]]
+    ]},
+    sysShore: { name: '시스템 동바리', sub: '수직재·수평재 조립형', groups: [
+      ['기초·받침', [
+        ['받침목·깔판 등으로 동바리가 가라앉지 않게 했다', '제332조 1호'],
+        ['깔판·받침목을 2단 이상 끼우지 않았다 (이어 쓸 땐 단단히 연결)', '제332조 8·9호'],
+        ['최상단·최하단 수직재와 받침철물이 밀착돼 있고, 겹침길이가 받침철물 길이의 1/3 이상이다', '제332조의2 4호 라목']]],
+      ['구조·연결', [
+        ['동바리 위·아래를 고정하고 미끄러짐 방지 조치를 했다', '제332조 2호'],
+        ['위·아래층 동바리가 같은 수직선에 있다', '제332조 3호'],
+        ['수평재가 수직재와 직각이고 흔들리지 않게 설치돼 있다', '제332조의2 4호 가목'],
+        ['연결철물로 수직재를 견고하게 이었고, 빠지거나 꺾인 곳이 없다', '제332조의2 4호 나목'],
+        ['조립도대로 가새재를 견고하게 설치했다', '제332조의2 4호 다목'],
+        ['강재 접속부·교차부를 볼트·클램프 등 전용철물로 단단히 연결했다', '제332조 7호']]],
+      ['상부·개구부', [
+        ['U헤드 등 단판이 있고, 멍에가 넘어지거나 빠지지 않게 고정했다', '제332조 5호'],
+        ['개구부 위 동바리는 상부 하중을 견디는 받침대를 설치했다', '제332조 4호']]]
+    ]},
+    pipeShore: { name: '파이프 서포트', sub: '동바리용 파이프서포트', groups: [
+      ['기초·받침', [
+        ['받침목·깔판 등으로 동바리가 가라앉지 않게 했다', '제332조 1호'],
+        ['깔판·받침목을 2단 이상 끼우지 않았다 (이어 쓸 땐 단단히 연결)', '제332조 8·9호']]],
+      ['이음·연결', [
+        ['파이프 서포트를 3개 이상 이어서 쓰지 않았다', '제332조의2 1호 가목'],
+        ['이어 쓴 곳은 볼트 4개 이상 또는 전용철물로 이었다', '제332조의2 1호 나목'],
+        ['높이 3.5m를 넘으면 2m 이내마다 두 방향 수평연결재를 설치했다', '제332조의2 1호 다목'],
+        ['같은 품질의 재료로 이었다', '제332조 6호'],
+        ['동바리 위·아래를 고정하고 미끄러짐 방지 조치를 했다', '제332조 2호'],
+        ['위·아래층 동바리가 같은 수직선에 있다', '제332조 3호']]],
+      ['상부·개구부', [
+        ['U헤드 등 단판이 있고, 멍에가 넘어지거나 빠지지 않게 고정했다', '제332조 5호'],
+        ['개구부 위 동바리는 상부 하중을 견디는 받침대를 설치했다', '제332조 4호']]]
+    ]},
+    pour: { name: '콘크리트 타설', sub: '거푸집·동바리 타설 전·중', groups: [
+      ['타설 전', [
+        ['오늘 작업 전에 거푸집·동바리의 변형·변위와 지반 침하를 점검했다', '제334조 1호'],
+        ['거푸집 붕괴 우려가 있는 곳은 충분히 보강했다', '제334조 3호']]],
+      ['타설 중', [
+        ['감시자를 두고 거푸집·동바리 변형·변위·침하를 계속 확인한다 (이상 시 작업 중지·대피)', '제334조 2호'],
+        ['한곳에 몰지 않고 골고루 나눠서 타설한다 (편심 금지)', '제334조 5호']]],
+      ['해체', [['설계도서의 양생기간을 지킨 뒤 거푸집·동바리를 해체한다', '제334조 4호']]]
+    ]}
+  };
+  var REASONS = ['매일 작업 전', '조립·해체·변경 후', '비·눈·강풍 뒤 (작업 재개 전)', '콘크리트 타설 전', '정기 점검'];
+
+  // ------------------------------------------------------------------
+  var KEY = 'gp_inspect_v1';
+  var $ = function (id) { return document.getElementById(id); };
+  var st = { type: 'sys', reasons: [], ans: {}, notes: {}, info: {} };
+  var photos = {}; // 항목 id → [dataURL] (용량 때문에 저장 안 함)
+  try { var sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv && TYPES[sv.type]) st = Object.assign(st, sv); } catch (e) {}
+  var qs = new URLSearchParams(location.search);
+  if (TYPES[qs.get('type')]) st.type = qs.get('type');
+  if (qs.get('site')) st.info.fSite = qs.get('site').slice(0, 60);
+  if (qs.get('zone')) st.info.fZone = qs.get('zone').slice(0, 60);
+  var save = function () { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
+  var esc = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  function items() { // [{id, q, src, group}]
+    var out = [];
+    TYPES[st.type].groups.forEach(function (g, gi) { g[1].forEach(function (it, ii) { out.push({ id: st.type + '-' + gi + '-' + ii, q: it[0], src: it[1], group: g[0] }); }); });
+    return out;
+  }
+
+  function renderTypes() {
+    $('types').innerHTML = Object.keys(TYPES).map(function (k) {
+      return '<button type="button" class="si-type" data-k="' + k + '" aria-pressed="' + (k === st.type) + '"><b>' + TYPES[k].name + '</b><span>' + TYPES[k].sub + '</span></button>';
+    }).join('');
+    $('reasons').innerHTML = REASONS.map(function (r) {
+      return '<button type="button" class="si-chip" aria-pressed="' + (st.reasons.indexOf(r) >= 0) + '">' + r + '</button>';
+    }).join('');
+  }
+
+  function renderList() {
+    $('typeName').textContent = '· ' + TYPES[st.type].name;
+    var html = '', cur = '';
+    items().forEach(function (it) {
+      if (it.group !== cur) { if (cur) html += '</div>'; cur = it.group; html += '<div class="si-group"><h3>' + esc(it.group) + '</h3>'; }
+      var a = st.ans[it.id] || '';
+      html += '<div class="si-item ' + (a === 'ng' ? 'ng' : a === 'ok' ? 'ok' : '') + (st.notes[it.id] ? ' open' : '') + '" data-id="' + it.id + '">' +
+        '<div class="si-q">' + esc(it.q) + '<small>' + esc(it.src) + '</small></div>' +
+        '<div class="si-ans" role="group" aria-label="판정">' +
+        ['ok', 'ng', 'na'].map(function (v) { return '<button type="button" data-v="' + v + '" aria-pressed="' + (a === v) + '">' + { ok: '적합', ng: '부적합', na: '해당없음' }[v] + '</button>'; }).join('') +
+        '</div>' +
+        '<button type="button" class="si-addnote" data-act="open">메모·사진 추가</button>' +
+        '<div class="si-more"><input type="text" maxlength="120" placeholder="' + (a === 'ng' ? '어디가 어떻게 문제인지 (예: 3층 발판 파손)' : '메모') + '" value="' + esc(st.notes[it.id] || '') + '">' +
+        '<button type="button" class="si-photo" data-act="photo">📷 사진</button><div class="si-thumbs"></div></div></div>';
+    });
+    if (cur) html += '</div>';
+    $('list').innerHTML = html;
+    Object.keys(photos).forEach(drawThumbs);
+    summary();
+  }
+
+  function drawThumbs(id) {
+    var box = document.querySelector('.si-item[data-id="' + id + '"] .si-thumbs'); if (!box) return;
+    box.innerHTML = (photos[id] || []).map(function (src, i) { return '<figure><img src="' + src + '" alt="점검 사진 ' + (i + 1) + '"><button type="button" data-del="' + i + '" aria-label="사진 삭제">×</button></figure>'; }).join('');
+  }
+
+  function summary() {
+    var list = items(), n = { ok: 0, ng: 0, na: 0 }, left = 0;
+    list.forEach(function (it) { var a = st.ans[it.id]; if (a) n[a]++; else left++; });
+    $('sum').innerHTML = '<div><b style="color:#1E8E3E">' + n.ok + '</b><span>적합</span></div><div><b style="color:#D93025">' + n.ng + '</b><span>부적합</span></div><div><b style="color:#777">' + n.na + '</b><span>해당없음</span></div><div><b>' + left + '</b><span>남음</span></div>';
+    var v = $('verdict');
+    if (n.ng) { v.className = 'si-verdict ng'; v.textContent = '⚠ 부적합 ' + n.ng + '건 — 보수한 뒤 다시 확인하고 작업하세요.'; }
+    else if (left) { v.className = 'si-verdict wait'; v.textContent = '아직 ' + left + '개 항목이 남았어요.'; }
+    else { v.className = 'si-verdict ok'; v.textContent = '✓ 모든 항목 이상 없음 — 작업을 시작해도 좋아요.'; }
+    var done = list.length - left;
+    $('progTxt').textContent = done + ' / ' + list.length + ' 항목 확인' + (n.ng ? ' · 부적합 ' + n.ng : '');
+    $('progBar').style.width = (list.length ? done / list.length * 100 : 0) + '%';
+  }
+
+  // ---------------- 이벤트 ----------------
+  $('types').addEventListener('click', function (e) {
+    var b = e.target.closest('.si-type'); if (!b) return;
+    st.type = b.dataset.k; save(); renderTypes(); renderList();
+    try { gtag('event', '점검표종류', { event_category: '점검표', event_label: TYPES[st.type].name }); } catch (x) {}
+  });
+  $('reasons').addEventListener('click', function (e) {
+    var b = e.target.closest('.si-chip'); if (!b) return;
+    var r = b.textContent, i = st.reasons.indexOf(r);
+    if (i >= 0) st.reasons.splice(i, 1); else st.reasons.push(r);
+    b.setAttribute('aria-pressed', i < 0); save();
+  });
+  $('list').addEventListener('click', function (e) {
+    var item = e.target.closest('.si-item'); if (!item) return;
+    var id = item.dataset.id;
+    var ab = e.target.closest('.si-ans button');
+    if (ab) {
+      var v = ab.dataset.v;
+      st.ans[id] = st.ans[id] === v ? '' : v; if (!st.ans[id]) delete st.ans[id];
+      item.classList.toggle('ng', st.ans[id] === 'ng'); item.classList.toggle('ok', st.ans[id] === 'ok');
+      item.querySelectorAll('.si-ans button').forEach(function (x) { x.setAttribute('aria-pressed', x.dataset.v === st.ans[id]); });
+      if (st.ans[id] === 'ng') { var inp = item.querySelector('.si-more input'); inp.placeholder = '어디가 어떻게 문제인지 (예: 3층 발판 파손)'; setTimeout(function () { inp.focus(); }, 30); }
+      save(); summary(); return;
+    }
+    if (e.target.dataset.act === 'open') { item.classList.add('open'); item.querySelector('.si-more input').focus(); return; }
+    if (e.target.dataset.act === 'photo') { pickPhoto(id); return; }
+    if (e.target.dataset.del != null) { photos[id].splice(+e.target.dataset.del, 1); drawThumbs(id); }
+  });
+  $('list').addEventListener('input', function (e) {
+    var item = e.target.closest('.si-item'); if (!item || e.target.tagName !== 'INPUT') return;
+    var v = e.target.value.trim(); if (v) st.notes[item.dataset.id] = v; else delete st.notes[item.dataset.id]; save();
+  });
+  $('allOk').addEventListener('click', function () {
+    items().forEach(function (it) { if (!st.ans[it.id]) st.ans[it.id] = 'ok'; }); save(); renderList();
+  });
+  ['fSite', 'fZone', 'fWho', 'fDate', 'fWeather', 'fAct'].forEach(function (k) {
+    var el = $(k);
+    if (st.info[k] != null) el.value = st.info[k];
+    el.addEventListener('input', function () { st.info[k] = el.value; save(); });
+  });
+  if (!$('fDate').value) { var d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000); $('fDate').value = d.toISOString().slice(0, 16); }
+  st.info.fDate = $('fDate').value; save();
+
+  // ---------------- 사진 (긴 변 1280px · JPEG로 줄여서 메모리에만) ----------------
+  var photoFor = null;
+  function pickPhoto(id) { photoFor = id; $('fileIn').value = ''; $('fileIn').click(); }
+  $('fileIn').addEventListener('change', function () {
+    var f = this.files && this.files[0]; if (!f || !photoFor) return;
+    var id = photoFor, img = new Image(), url = URL.createObjectURL(f);
+    img.onload = function () {
+      var s = Math.min(1, 1280 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      (photos[id] = photos[id] || []).push(c.toDataURL('image/jpeg', 0.72));
+      URL.revokeObjectURL(url); drawThumbs(id);
+    };
+    img.src = url;
+  });
+
+  // ---------------- 서명 ----------------
+  var cv = $('sign'), cx = cv.getContext('2d'), drawing = false, signed = false;
+  function fitSign() { var r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1, old = signed ? cv.toDataURL() : null; cv.width = r.width * dpr; cv.height = r.height * dpr; cx.scale(dpr, dpr); cx.lineWidth = 2.4; cx.lineCap = 'round'; cx.strokeStyle = '#111'; if (old) { var im = new Image(); im.onload = function () { cx.drawImage(im, 0, 0, r.width, r.height); }; im.src = old; } }
+  fitSign(); window.addEventListener('resize', fitSign);
+  function pt(e) { var r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+  cv.addEventListener('pointerdown', function (e) { drawing = true; signed = true; cv.setPointerCapture(e.pointerId); var p = pt(e); cx.beginPath(); cx.moveTo(p[0], p[1]); });
+  cv.addEventListener('pointermove', function (e) { if (!drawing) return; var p = pt(e); cx.lineTo(p[0], p[1]); cx.stroke(); });
+  ['pointerup', 'pointercancel'].forEach(function (t) { cv.addEventListener(t, function () { drawing = false; }); });
+  $('signClear').addEventListener('click', function () { signed = false; cx.clearRect(0, 0, cv.width, cv.height); });
+
+  // ---------------- PDF(인쇄) ----------------
+  function buildReport() {
+    var list = items(), info = st.info, n = { ok: 0, ng: 0, na: 0 }, left = 0;
+    list.forEach(function (it) { var a = st.ans[it.id]; if (a) n[a]++; else left++; });
+    var when = (info.fDate || '').replace('T', ' ');
+    var rows = '', cur = '', pics = '';
+    list.forEach(function (it, i) {
+      if (it.group !== cur) { cur = it.group; rows += '<tr class="g"><td colspan="4">' + esc(cur) + '</td></tr>'; }
+      var a = st.ans[it.id], lbl = a === 'ok' ? '적합' : a === 'ng' ? '<span class="rp-ng">부적합</span>' : a === 'na' ? '해당없음' : '미확인';
+      rows += '<tr><td>' + esc(it.q) + '</td><td class="c">' + esc(it.src) + '</td><td class="c">' + lbl + '</td><td>' + esc(st.notes[it.id] || '') + '</td></tr>';
+      (photos[it.id] || []).forEach(function (src, k) { pics += '<figure><img src="' + src + '"><figcaption>' + (i + 1) + '. ' + esc(it.q.slice(0, 40)) + (it.q.length > 40 ? '…' : '') + '</figcaption></figure>'; });
+    });
+    var verdict = n.ng ? '부적합 ' + n.ng + '건 — 보수 후 재점검 필요' : left ? '미확인 ' + left + '건 있음' : '모든 항목 이상 없음';
+    $('report').innerHTML =
+      '<div class="rp-top"><h1>' + esc(TYPES[st.type].name) + ' 작업 전 점검표</h1><small>가설파트너 · 산업안전보건기준에 관한 규칙 기준</small></div>' +
+      '<table class="rp-info"><tr><td class="k">현장명</td><td>' + esc(info.fSite) + '</td><td class="k">위치·구간</td><td>' + esc(info.fZone) + '</td></tr>' +
+      '<tr><td class="k">점검 일시</td><td>' + esc(when) + '</td><td class="k">날씨</td><td>' + esc(info.fWeather) + '</td></tr>' +
+      '<tr><td class="k">점검 사유</td><td colspan="3">' + esc(st.reasons.join(', ')) + '</td></tr></table>' +
+      '<div class="rp-verdict">결과: 적합 ' + n.ok + ' · 부적합 ' + n.ng + ' · 해당없음 ' + n.na + (left ? ' · 미확인 ' + left : '') + ' — ' + verdict + '</div>' +
+      '<table class="rp-tbl"><thead><tr><th>점검 항목</th><th>근거</th><th>판정</th><th>메모</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      (info.fAct ? '<p style="margin:8px 0 0"><b>조치 내용</b> ' + esc(info.fAct) + '</p>' : '') +
+      (pics ? '<div class="rp-photos">' + pics + '</div>' : '') +
+      '<div class="rp-foot"><div class="rp-src">근거: 산업안전보건기준에 관한 규칙 제56·58·59·68·69·70·332·332조의2·334조 (이동식 비계 높이 기준은 가설공사 표준안전 작업지침)<br>현장의 작업계획서·조립도·제조사 기준이 우선합니다. · gaseolpartner.github.io/calculators/site-inspection.html</div>' +
+      '<div><div style="font-size:9pt;margin-bottom:3px">점검자: ' + esc(info.fWho) + '</div><div class="sg">' + (signed ? '<img src="' + cv.toDataURL('image/png') + '">' : '(서명)') + '</div></div></div>';
+  }
+  function doPrint() {
+    buildReport();
+    var t = document.title; document.title = (st.info.fSite || '현장') + '_' + TYPES[st.type].name + '_점검표_' + (st.info.fDate || '').slice(0, 10);
+    try { gtag('event', '점검표PDF', { event_category: '점검표', event_label: TYPES[st.type].name }); } catch (x) {}
+    setTimeout(function () { window.print(); document.title = t; }, 60);
+  }
+  $('pdf').addEventListener('click', doPrint); $('pdf2').addEventListener('click', doPrint);
+
+  $('reset').addEventListener('click', function () {
+    if (!confirm('체크한 내용을 모두 지우고 새로 쓸까요? (현장 정보는 남겨요)')) return;
+    st.ans = {}; st.notes = {}; st.info.fAct = ''; $('fAct').value = ''; photos = {}; signed = false; cx.clearRect(0, 0, cv.width, cv.height);
+    var d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000); $('fDate').value = st.info.fDate = d.toISOString().slice(0, 16);
+    save(); renderList(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ---------------- 현장 QR ----------------
+  function qrUrl() {
+    var u = new URL(location.href.split('?')[0]);
+    u.searchParams.set('type', st.type);
+    if (st.info.fSite) u.searchParams.set('site', st.info.fSite);
+    if (st.info.fZone) u.searchParams.set('zone', st.info.fZone);
+    return u.toString();
+  }
+  function loadQR(cb) {
+    if (window.QRCode) return cb();
+    var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    s.onload = cb; s.onerror = function () { alert('QR을 만들지 못했어요. 인터넷 연결을 확인해 주세요.'); }; document.head.appendChild(s);
+  }
+  $('qrMake').addEventListener('click', function () {
+    loadQR(function () {
+      $('qrBox').innerHTML = ''; new window.QRCode($('qrBox'), { text: qrUrl(), width: 180, height: 180, correctLevel: window.QRCode.CorrectLevel.M });
+      $('qr').classList.add('on'); $('qr').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+  $('qrPrint').addEventListener('click', function () {
+    var img = $('qrBox').querySelector('img') || $('qrBox').querySelector('canvas'); if (!img) return;
+    var src = img.tagName === 'CANVAS' ? img.toDataURL() : img.src;
+    $('report').innerHTML = '<div style="text-align:center;border:3px solid #000;padding:14mm;width:120mm;margin:10mm auto">' +
+      '<div style="font-size:22pt;font-weight:900">작업 전 점검</div><div style="font-size:13pt;margin:4px 0 10px">' + esc(TYPES[st.type].name) + (st.info.fSite ? ' · ' + esc(st.info.fSite) : '') + (st.info.fZone ? '<br>' + esc(st.info.fZone) : '') + '</div>' +
+      '<img src="' + src + '" style="width:70mm;height:70mm"><div style="margin-top:8px;font-size:11pt">휴대폰 카메라로 찍으면 점검표가 열려요</div><div style="font-size:9pt;color:#555;margin-top:6px">가설파트너 · 산업안전보건기준에 관한 규칙 제58조 작업 전 점검</div></div>';
+    setTimeout(function () { window.print(); }, 60);
+  });
+
+  renderTypes(); renderList();
+})();
+</script>
+</body>
+</html>

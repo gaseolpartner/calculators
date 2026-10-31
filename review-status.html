@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HJ구조 구조검토 의뢰의 진행 상황을 접수번호로 확인하세요. 접수 → 견적 안내 → 검토 진행 → 검토서 발송.">
+<meta name="theme-color" content="#1B1B1B">
+<title>구조검토 진행 조회 | 가설파트너</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K8NMSLZ841"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K8NMSLZ841');</script>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="가설파트너">
+<meta property="og:title" content="구조검토 진행 조회 | 가설파트너">
+<meta property="og:description" content="접수번호로 구조검토 진행 상황을 확인하세요.">
+<meta property="og:image" content="https://gaseolpartner.github.io/calculators/icons/og.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="gp-common.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F6F6F4;color:#2B2B2B}
+.rs-wrap{max-width:560px;margin:0 auto;padding:0 16px 56px}
+.rs-card{background:#fff;border:1px solid #E3E3E3;border-radius:16px;padding:24px;margin-top:-34px;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.rs-card h2{margin:0 0 4px;font-size:19px;color:#1B1B1B}
+.rs-card .sub{margin:0 0 18px;font-size:14px;color:#666;line-height:1.55}
+.rs-f{display:grid;grid-template-columns:1fr 132px;gap:10px}
+.rs-f label{display:block;font-size:13px;font-weight:700;color:#444;margin-bottom:6px}
+.rs-f input{width:100%;font:inherit;font-size:17px;font-weight:700;padding:13px 14px;border:1.5px solid #D5D5D5;border-radius:10px;color:#1B1B1B;background:#fff}
+.rs-f input:focus{outline:none;border-color:#1B1B1B;box-shadow:0 0 0 3px rgba(242,183,5,.35)}
+.rs-go{margin-top:14px;width:100%;font:inherit;font-size:17px;font-weight:800;padding:14px;border:none;border-radius:10px;background:#F2B705;color:#1B1B1B;cursor:pointer}
+.rs-go:disabled{opacity:.6;cursor:wait}
+.rs-msg{margin-top:12px;font-size:14px;color:#C0392B;min-height:1em}
+.rs-res{margin-top:22px;display:none}
+.rs-res.on{display:block}
+.rs-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;border-top:1px solid #EEE;padding-top:18px}
+.rs-head b{font-size:18px;color:#1B1B1B}
+.rs-head span{font-size:13px;color:#777}
+.rs-now{margin:14px 0 4px;background:#1B1B1B;color:#fff;border-radius:12px;padding:16px 18px}
+.rs-now small{display:block;color:#F2B705;font-weight:800;font-size:12.5px;letter-spacing:.3px}
+.rs-now strong{display:block;font-size:22px;margin-top:4px}
+.rs-now p{margin:8px 0 0;font-size:14px;color:#ddd;line-height:1.55}
+.rs-steps{list-style:none;margin:18px 0 0;padding:0}
+.rs-steps li{position:relative;padding:0 0 18px 34px;color:#999;font-size:15px}
+.rs-steps li:before{content:'';position:absolute;left:8px;top:4px;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #CFCFCF}
+.rs-steps li:after{content:'';position:absolute;left:15px;top:20px;bottom:0;width:2px;background:#E3E3E3}
+.rs-steps li:last-child:after{display:none}
+.rs-steps li.done{color:#1B1B1B}
+.rs-steps li.done:before{background:#1B1B1B;border-color:#1B1B1B}
+.rs-steps li.cur{color:#1B1B1B;font-weight:800}
+.rs-steps li.cur:before{background:#F2B705;border-color:#1B1B1B;box-shadow:0 0 0 4px rgba(242,183,5,.35)}
+.rs-steps em{display:block;font-style:normal;font-size:12.5px;color:#888;font-weight:500;margin-top:2px}
+.rs-help{margin-top:18px;font-size:13.5px;color:#666;line-height:1.65;background:#F6F6F4;border-radius:10px;padding:12px 14px}
+.rs-help a{color:#1B1B1B;font-weight:700}
+.rs-promise{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.rs-promise div{flex:1 1 150px;background:#fff;border:1px solid #E3E3E3;border-radius:12px;padding:14px}
+.rs-promise b{display:block;font-size:15px;color:#1B1B1B}
+.rs-promise span{font-size:13px;color:#666}
+@media(max-width:480px){.rs-f{grid-template-columns:1fr}.rs-card{padding:20px}}
+</style>
+</head>
+<body>
+<div class="gp-topbar"><div class="gp-topbar-inner"><a href="https://gaseolpartner.com"><span class="dot"></span>가설파트너 홈페이지 ↗</a><nav><a href="https://gaseolpartner.com/pages/introduction">가설 설계 프로그램</a><a href="https://gaseolpartner.com/pages/precio">가설재 견적 비교</a><a href="https://gaseolpartner.com/pages/structureatuntroduction">구조검토</a><a href="https://gaseolpartner.com/pages/calculators">무료 도구</a><a href="https://gaseolpartner.com/pages/support">고객지원</a></nav></div></div>
+<header class="gp-brandbar"><div class="gp-brandbar-inner"><a class="gp-logo" href="https://gaseolpartner.com" aria-label="가설파트너"><span class="gp-li"></span><span class="gp-lt"><b>가설파트너</b><small>GASEOL PARTNER</small></span></a><div class="gp-brand-links"><a class="gp-cta" href="structural-review-request.html">구조검토 의뢰서</a></div></div></header>
+
+<section class="gp-hero dark">
+  <div class="gp-hero-inner" style="padding-bottom:64px">
+    <span class="gp-label">HJ구조기술사사무소 · 구조검토</span>
+    <h1>구조검토 <em>진행 조회</em></h1>
+    <p>접수번호와 연락처 끝 4자리만 넣으면 지금 어느 단계인지 바로 보여 드려요.</p>
+  </div>
+</section>
+
+<main class="rs-wrap">
+  <div class="rs-card">
+    <h2>진행 상황 확인</h2>
+    <p class="sub">접수번호는 의뢰서를 '바로 접수'로 보낸 뒤 나온 번호예요 (예: R-261101-0001).</p>
+    <form id="rsForm" novalidate>
+      <div class="rs-f">
+        <div><label for="rsNo">접수번호</label><input id="rsNo" autocomplete="off" inputmode="text" placeholder="R-261101-0001" maxlength="20" required></div>
+        <div><label for="rsPh">연락처 끝 4자리</label><input id="rsPh" inputmode="numeric" autocomplete="off" placeholder="1234" maxlength="4" required></div>
+      </div>
+      <button class="rs-go" id="rsGo" type="submit">조회하기</button>
+      <div class="rs-msg" id="rsMsg" role="alert" aria-live="assertive"></div>
+    </form>
+
+    <section class="rs-res" id="rsRes" aria-live="polite">
+      <div class="rs-head"><b id="rsSite">-</b><span id="rsMeta">-</span></div>
+      <div class="rs-now"><small>지금 단계</small><strong id="rsStage">-</strong><p id="rsNote"></p></div>
+      <ol class="rs-steps" id="rsSteps"></ol>
+      <div class="rs-help">궁금한 점은 <a href="tel:01079702108">010-7970-2108</a> 또는 <a href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener">카카오톡 상담</a>으로 접수번호를 알려 주시면 바로 확인해 드려요.</div>
+    </section>
+  </div>
+
+  <div class="rs-promise">
+    <div><b>⏱ 영업일 하루 안에</b><span>접수 후 견적을 먼저 안내해 드려요</span></div>
+    <div><b>📄 구조기술사 직접 검토</b><span>HJ구조기술사사무소가 검토서를 작성해요</span></div>
+    <div><b>🔔 단계마다 갱신</b><span>진행되면 이 화면에 바로 반영돼요</span></div>
+  </div>
+  <p style="text-align:center;margin-top:24px;font-size:14px;color:#666">아직 의뢰 전이신가요? <a href="structural-review-request.html" style="color:#1B1B1B;font-weight:800">구조검토 의뢰서 쓰기 →</a></p>
+</main>
+
+<footer class="gp-footer"><div class="gp-footer-inner"><div>회사명 : 가설파트너<span class="gp-sep">|</span>주소 : 서울 강남구 가로수길 5<span class="gp-sep">|</span>이메일 : <a href="mailto:fc112@naver.com">fc112@naver.com</a><span class="gp-sep">|</span>전화 : <a href="tel:01079702108">010-7970-2108</a><span class="gp-sep">|</span>사업자등록번호 : 549-20-01841</div><div class="gp-copyline">ⓒ Gaseolpartner. all right reserved. · <a href="https://gaseolpartner.com" target="_blank" rel="noopener">gaseolpartner.com</a></div></div></footer>
+
+<script>
+(function () {
+  'use strict';
+  var API = 'https://gaseolpartner.vercel.app/api/review-status';
+  var STEPS = [
+    { k: 'new', t: '접수 완료', d: '의뢰서를 받았어요' },
+    { k: 'quoted', t: '견적 안내', d: '검토 비용·일정을 안내해 드려요' },
+    { k: 'reviewing', t: '구조검토 진행', d: '구조기술사가 검토하고 있어요' },
+    { k: 'done', t: '검토서 발송 완료', d: '검토서를 보내 드렸어요' }
+  ];
+  var $ = function (id) { return document.getElementById(id); };
+  var no = $('rsNo'), ph = $('rsPh'), go = $('rsGo'), msg = $('rsMsg');
+
+  // 주소의 ?r= 또는 이 기기에서 마지막으로 접수한 번호를 미리 채움
+  try {
+    var q = new URLSearchParams(location.search).get('r');
+    var last = JSON.parse(localStorage.getItem('gp_review_last') || 'null');
+    no.value = q || (last && last.r) || '';
+  } catch (e) {}
+  (no.value ? ph : no).focus();
+
+  no.addEventListener('input', function () { no.value = no.value.toUpperCase().replace(/\s+/g, ''); });
+  ph.addEventListener('input', function () { ph.value = ph.value.replace(/[^0-9]/g, '').slice(0, 4); });
+
+  function fmt(iso) {
+    try { return new Date(iso).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; }
+  }
+  function show(j) {
+    $('rsSite').textContent = j.site || '구조검토 의뢰';
+    $('rsMeta').textContent = j.receipt + ' · 접수 ' + fmt(j.createdAt);
+    $('rsStage').textContent = j.stage;
+    var note = j.note || (j.status === 'new' ? '영업일 기준 하루 안에 견적을 안내해 드려요.' : '');
+    $('rsNote').textContent = note; $('rsNote').style.display = note ? '' : 'none';
+    var idx = STEPS.findIndex(function (s) { return s.k === j.status; });
+    var ol = $('rsSteps'); ol.innerHTML = '';
+    STEPS.forEach(function (s, i) {
+      var li = document.createElement('li');
+      if (j.status === 'canceled') li.className = '';
+      else if (i < idx) li.className = 'done';
+      else if (i === idx) li.className = 'cur';
+      li.textContent = s.t;
+      var em = document.createElement('em');
+      em.textContent = (i === idx && i > 0) ? s.d + ' · ' + fmt(j.updatedAt) : s.d;
+      li.appendChild(em);
+      if (i === idx) li.setAttribute('aria-current', 'step');
+      ol.appendChild(li);
+    });
+    $('rsRes').classList.add('on');
+  }
+
+  $('rsForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    msg.textContent = '';
+    if (!/^R-\d{6}-\d{4,}$/.test(no.value)) { msg.textContent = '접수번호 형식을 확인해 주세요 (예: R-261101-0001)'; no.focus(); return; }
+    if (ph.value.length !== 4) { msg.textContent = '연락처 끝 4자리를 넣어 주세요'; ph.focus(); return; }
+    go.disabled = true; go.textContent = '조회 중…';
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ receipt: no.value, phone4: ph.value }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok, j: j }; }); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.j.error || '조회하지 못했어요');
+        show(res.j);
+        try { gtag('event', '구조검토진행조회', { event_category: '구조검토' }); } catch (e) {}
+      })
+      .catch(function (err) { $('rsRes').classList.remove('on'); msg.textContent = err.message || '조회하지 못했어요. 잠시 후 다시 시도해 주세요.'; })
+      .then(function () { go.disabled = false; go.textContent = '조회하기'; });
+  });
+})();
+</script>
+</body>
+</html>
