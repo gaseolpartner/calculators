@@ -7,7 +7,9 @@
 'use strict';
 var P=location.pathname.replace(/\/+$/,'');
 function wait(test,fn,n){n=n||0;var el=test();if(el)return fn(el);if(n<60)setTimeout(function(){wait(test,fn,n+1)},250);}
-function css(id,t){if(document.getElementById(id))return;var s=document.createElement('style');s.id=id;s.textContent=t;document.head.appendChild(s);}
+var CSS={};function css(id,t){CSS[id]=t;}
+/* 스타일은 넣는 구역 안에 같이 넣는다 (휴대폰 화면에서 head에 넣은 style이 지워지는 경우가 있어서) */
+function st(id){var e=document.createElement('style');e.className=id;e.textContent=CSS[id];return e;}
 function ga(n,p){try{if(typeof window.gtag==='function')window.gtag('event',n,p||{});}catch(e){}}
 
 /* ---------- 1. 구조검토 대상 자가진단 ---------- */
@@ -50,6 +52,7 @@ if(P==='/pages/structureatuntroduction'){
       '</div><div class="gpck-r" id="gpck-r"><span class="tg">결과</span><b>종류를 고르면 결과가 나와요</b><p>높이 기준이 있는 구조물은 높이도 넣어 주세요.</p></div></div>'+
       '<p class="gpck-src">기준: 「건설기술 진흥법 시행령」 제101조의2 제1항 (가설구조물의 구조적 안전성 확인 대상). 참고용 안내이며, 공사 조건·발주처 기준에 따라 달라질 수 있으니 최종 판단은 발주처·감리와 확인하세요. '+
       '<a href="https://www.law.go.kr/법령/건설기술진흥법시행령" target="_blank" rel="noopener">법령 원문 보기 ↗</a></p></div>';
+    s.appendChild(st('gpck-css'));
     sec.parentNode.insertBefore(s,sec.nextSibling);
     var REQ='https://gaseolpartner.github.io/calculators/structural-review-request.html',KK='https://pf.kakao.com/_xovuVG/chat';
     var btns='<div class="bt"><a class="b b1" href="'+REQ+'" target="_blank" rel="noopener">구조검토 의뢰하기 →</a><a class="b b2" href="'+KK+'" target="_blank" rel="noopener">💬 카톡으로 상담</a></div>';
@@ -88,6 +91,7 @@ if(P==='/pages/simulater'){
       '<div class="gpyt-b"><a class="y1" href="https://www.youtube.com/playlist?list=PLMHEFU3HSMfk" target="_blank" rel="noopener">▶ 직접 해보는 가설 안전 전체 보기</a>'+
       '<a class="y2" href="https://www.youtube.com/@%EA%B0%80%EC%84%A4%ED%8C%8C%ED%8A%B8%EB%84%88?sub_confirmation=1" target="_blank" rel="noopener">유튜브 구독</a></div>';
     var rn=sh.nextElementSibling&&/gx-rn/.test(sh.nextElementSibling.className)?sh.nextElementSibling:sh;
+    d.appendChild(st('gpyt-css'));
     rn.parentNode.insertBefore(d,rn.nextSibling);
   });
 }
