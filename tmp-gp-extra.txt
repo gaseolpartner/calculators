@@ -12,6 +12,17 @@ var CSS={};function css(id,t){CSS[id]=t;}
 function st(id){var e=document.createElement('style');e.className=id;e.textContent=CSS[id];return e;}
 function ga(n,p){try{if(typeof window.gtag==='function')window.gtag('event',n,p||{});}catch(e){}}
 
+/* ---------- 0. 모든 페이지: 마지막 내용이 푸터에 붙으면 띄우기 (10-31, 견적 비교·고객지원 영상/그림이 푸터에 붙어 있었음) ---------- */
+(function(){
+  function fix(){var ft=document.getElementById('skinFooterSection');if(!ft)return;
+    var top=ft.getBoundingClientRect().top,maxB=0;
+    var els=document.querySelectorAll('img,iframe,video,p,h1,h2,h3,h4,a,li,button,table');
+    for(var i=0;i<els.length;i++){var e=els[i];if(ft.contains(e)||!e.offsetParent)continue;var b=e.getBoundingClientRect();if(b.height<2||b.width<2)continue;if(b.bottom<=top+1&&b.bottom>maxB)maxB=b.bottom;}
+    if(!maxB)return;var gap=top-maxB,cur=parseFloat(ft.style.marginTop)||0;
+    if(gap<40)ft.style.marginTop=(cur+56-Math.max(gap,0))+'px';}
+  if(document.readyState==='complete')setTimeout(fix,1500);else window.addEventListener('load',function(){setTimeout(fix,1500)});
+})();
+
 /* ---------- 1. 구조검토 대상 자가진단 ---------- */
 if(P==='/pages/structureatuntroduction'){
   var T=[
@@ -29,7 +40,10 @@ if(P==='/pages/structureatuntroduction'){
   css('gpck-css',
   '.gpck-box{background:#1B1B1B;color:#fff;border-radius:18px;padding:30px;display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:26px}'+
   '.gpck-box label{display:block;font-size:14px;font-weight:700;color:#cfcfcf;margin:0 0 8px}'+
-  '.gpck-box select,.gpck-box input[type=number]{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:12px 14px;border-radius:10px;border:1px solid #444;background:#262626;color:#fff}'+
+  '#gpck .gpck-box select,#gpck .gpck-box input[type=number]{display:block;width:100%!important;box-sizing:border-box!important;height:54px!important;min-height:54px!important;line-height:1.4!important;font:inherit;font-size:16.5px!important;font-weight:600;padding:0 16px!important;margin:0!important;border-radius:10px!important;border:1px solid #4a4a4a!important;box-shadow:none!important;outline:0;background-color:#262626!important;color:#fff!important}'+
+  '#gpck .gpck-box select{-webkit-appearance:none;appearance:none;padding-right:44px!important;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2714%27 height=%279%27%3E%3Cpath d=%27M1 1l6 6 6-6%27 fill=%27none%27 stroke=%27%23F2B705%27 stroke-width=%272.2%27/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 16px center!important;background-size:14px 9px!important}'+
+  '#gpck .gpck-box select option{background:#262626;color:#fff;font-weight:500}'+
+  '#gpck .gpck-box select:focus,#gpck .gpck-box input:focus{border-color:#F2B705!important}'+
   '.gpck-box select:focus,.gpck-box input:focus{outline:none;border-color:#F2B705}'+
   '.gpck-f{margin:0 0 16px}.gpck-chk{display:flex!important;gap:10px;align-items:flex-start;font-weight:600!important;color:#e6e6e6!important;line-height:1.5;cursor:pointer}'+
   '.gpck-chk input{accent-color:#F2B705;width:18px;height:18px;margin-top:2px;flex:none}'+
