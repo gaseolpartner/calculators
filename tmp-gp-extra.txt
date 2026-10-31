@@ -111,5 +111,70 @@ if(P==='/pages/simulater'){
     rn.parentNode.insertBefore(d,rn.nextSibling);
   });
 }
+
+/* ---------- 3. 3D 페이지 정리 (10-31 사용자 결정) ----------
+ * V3d = CATS 안의 기능 → CATS 소개 페이지로 옮김.
+ * 3D 자동화 설계 페이지 = 스케치업 3D (CATS 연계, 시험 중, 판매 안 함)만.
+ * footer gp-str3d-js가 만든 위쪽 묶음(.sx: V3d 첫 화면·속도 비교·V3d·구분선)은 지우지 않고 숨기기만 한다. */
+var IMG='/storage/common_attachfiles/';
+if(P==='/pages/temporarysoftware3d'){
+  css('gpsk-css',
+  '#gpsk{background:#1B1B1B;color:#fff;padding:64px 0;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
+  '#gpsk .gpsk-in{max-width:1140px;margin:0 auto;padding:0 20px;box-sizing:border-box}'+
+  '#gpsk .gpsk-lb{display:inline-block;background:#F2B705;color:#1B1B1B;font-weight:800;font-size:13px;border-radius:8px;padding:5px 11px;margin:0 0 16px}'+
+  '#gpsk h1{font-size:40px;line-height:1.3;font-weight:800;margin:0 0 14px;color:#fff}#gpsk h1 em{font-style:normal;color:#F2B705}'+
+  '#gpsk p{font-size:17px;line-height:1.7;color:#cfcfcf;margin:0 0 26px}'+
+  '#gpsk .gpsk-note{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;background:#262626;border-left:5px solid #F2B705;border-radius:12px;padding:18px 20px}'+
+  '#gpsk .gpsk-note b{flex:1 1 100%;font-size:16px}#gpsk .gpsk-note span{flex:1 1 420px;color:#cfcfcf;font-size:14.5px;line-height:1.6}'+
+  '#gpsk .gpsk-note a{flex:none;background:#F2B705;color:#1B1B1B;font-weight:800;font-size:15px;padding:11px 18px;border-radius:10px;text-decoration:none}'+
+  '@media(max-width:700px){#gpsk{padding:44px 0}#gpsk .gpsk-in{padding:0 16px}#gpsk h1{font-size:28px}#gpsk p{font-size:15.5px}#gpsk .gpsk-note a{flex:1 1 100%;text-align:center}}');
+  wait(function(){return document.querySelector('.sx .hero')&&document.querySelector('.sx')},function(sx){
+    if(document.getElementById('gpsk'))return;
+    sx.style.display='none';
+    var d=document.createElement('section');d.id='gpsk';
+    d.innerHTML='<div class="gpsk-in"><span class="gpsk-lb">CATS 연계 · 시험 중</span>'+
+      '<h1>스케치업 3D 모델<br><em>발주처·현장 설명용</em></h1>'+
+      '<p>CATS와 연계해서 쓰도록 시험하고 있는 스케치업 3D 모델링이에요. 지금은 따로 판매하지 않아요.</p>'+
+      '<div class="gpsk-note"><b>CAD 안에서 바로 보는 3D 검토(V3d)는 CATS에 들어 있어요.</b><span>평면에 그린 동바리를 3D로 세워 보고, 경사 구간을 고치고, 수량까지 — CATS 소개 페이지에서 볼 수 있어요.</span>'+
+      '<a href="/pages/introduction#gpv">V3d 3D 검토 보기 →</a></div></div>';
+    d.appendChild(st('gpsk-css'));
+    sx.parentNode.insertBefore(d,sx);
+  });
+}
+if(P==='/pages/introduction'){
+  css('gpv-css',
+  '#gpv{background:#F6F6F4;padding:72px 0;font-family:Pretendard,"Malgun Gothic",sans-serif;color:#2B2B2B;scroll-margin-top:80px}'+
+  '#gpv .gpv-in{max-width:1180px;margin:0 auto;padding:0 20px;box-sizing:border-box}'+
+  '#gpv .gpv-lb{display:inline-block;background:#1B1B1B;color:#F2B705;font-weight:800;font-size:13px;border-radius:8px;padding:5px 11px;margin:0 0 14px}'+
+  '#gpv h2{font-size:32px;line-height:1.35;font-weight:800;margin:0 0 12px;color:#1F1F1F}'+
+  '#gpv .gpv-sub{font-size:16.5px;line-height:1.7;color:#555;margin:0 0 28px;max-width:860px}'+
+  '#gpv figure{margin:0}#gpv .gpv-main img{display:block;width:100%;max-width:1100px;height:auto;border-radius:14px;border:1px solid #E3E3E3}'+
+  '#gpv figcaption{font-size:13.5px;color:#777;margin:10px 0 0}'+
+  '#gpv .gpv-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:30px 0 0}'+
+  '#gpv .gpv-c{background:#fff;border:1px solid #E3E3E3;border-radius:14px;padding:20px;display:flex;flex-direction:column}'+
+  '#gpv .gpv-c img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid #EEE;margin:0 0 14px}'+
+  '#gpv .gpv-n{font-weight:800;color:#F2B705;background:#1B1B1B;border-radius:6px;padding:2px 8px;font-size:12.5px;align-self:flex-start;margin:0 0 8px}'+
+  '#gpv h3{font-size:19px;margin:0 0 8px;color:#1B1B1B}#gpv .gpv-c p{font-size:14.5px;line-height:1.7;color:#555;margin:0 0 10px}'+
+  '#gpv ul{margin:0;padding:0 0 0 18px;font-size:14px;line-height:1.75;color:#444}'+
+  '#gpv .gpv-more{margin:24px 0 0;font-size:14px;color:#666}#gpv .gpv-more a{color:#1B1B1B;font-weight:700}'+
+  '@media(max-width:900px){#gpv{padding:52px 0}#gpv .gpv-in{padding:0 16px}#gpv h2{font-size:25px}#gpv .gpv-cards{grid-template-columns:1fr}}');
+  wait(function(){var h=[].slice.call(document.querySelectorAll('h3')).filter(function(x){return x.textContent.trim()==='3D 확인'})[0];return h&&h.closest('section');},function(sec){
+    if(document.getElementById('gpv'))return;
+    var C=[
+      {n:'01',t:'그린 평면 그대로 3D로',img:'xLBYgDL0PNeannkRgpHMGpze3Zr1jfPfhv10ySzy.jpg',alt:'일반 동바리 3D',p:'층고, 슬래브 두께, 보 깊이만 넣으면 평면의 수직재·수평재·멍에·자키·헤드가 높이에 맞게 세워집니다.',li:['등각·평면·정면·측면 시점 전환','부재별로 켜고 끄며 확인','문제가 없으면 "문제를 찾지 못했습니다"로 바로 확인']},
+      {n:'02',t:'경사 구간, 찾고 고치는 것까지',img:'DUEsDCz1FsBldvumfE74aVIY4Z3ZHCgSmFO4OreS.jpg',alt:'경사 동바리 3D 문제 표시',p:'상부 경사를 넣으면 부재 조합이 바뀌는 구간을 찾아 3D 위에 표시합니다. 체크한 항목은 버튼 하나로 도면에 반영됩니다.',li:['주의·참고로 나눠 이유까지 설명','항목을 누르면 3D에서 강조, 두 번 누르면 도면에서 위치 표시','"체크한 항목 수정" 한 번, 되돌리기도 한 번']},
+      {n:'03',t:'수량은 3D 기준으로 바로',img:'7hZTjJLrRIhjI8SIyTYMHg77cLJzZKmsTrF0s8Bc.jpg',alt:'3D 기준 수량',p:'경사 때문에 높이가 달라져도 규격별 수량이 자동으로 다시 계산됩니다. 수직재 규격별, 자키, 수평재, 멍에까지 한 번에 복사됩니다.',li:['행에 마우스를 올리면 계산 근거 표시','"수량 복사"로 엑셀에 바로 붙여넣기']}
+    ];
+    var s=document.createElement('section');s.id='gpv';
+    s.innerHTML='<div class="gpv-in"><span class="gpv-lb">CATS 기능 · V3d</span><h2>가설재 3D, CAD 안에서 바로 봅니다</h2>'+
+      '<p class="gpv-sub">CAD 프로그램을 바꾸지 않습니다. 평면에서 부재를 선택하면 바로 3D 창이 열립니다. 평면에 그린 시스템 동바리를 층고 기준으로 세워 보고, 경사 슬래브 문제 구간을 찾아 고치고, 수량까지 한 화면에서 끝납니다.</p>'+
+      '<figure class="gpv-main"><img src="'+IMG+'PRSgefHk2OhcE6Q75ZOKQZkXxztNPUQMggOetnly.jpg" alt="V3d 실행 화면" loading="lazy"><figcaption>실제 V3d 화면 · 상부 경사 20%를 넣은 시스템 동바리</figcaption></figure>'+
+      '<div class="gpv-cards">'+C.map(function(c){return '<div class="gpv-c"><img src="'+IMG+c.img+'" alt="'+c.alt+'" loading="lazy"><span class="gpv-n">'+c.n+'</span><h3>'+c.t+'</h3><p>'+c.p+'</p><ul><li>'+c.li.join('</li><li>')+'</li></ul></div>'}).join('')+'</div>'+
+      '<p class="gpv-more">발주처·현장 설명용 스케치업 3D 모델은 CATS와 연계해 시험 중이에요 → <a href="/pages/temporarysoftware3d">3D 자동화 설계</a></p></div>';
+    s.appendChild(st('gpv-css'));
+    sec.parentNode.insertBefore(s,sec.nextSibling);
+    if(location.hash==='#gpv')setTimeout(function(){s.scrollIntoView()},300);
+  });
+}
 })();
 </script>
