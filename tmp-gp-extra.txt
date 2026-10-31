@@ -12,14 +12,16 @@ var CSS={};function css(id,t){CSS[id]=t;}
 function st(id){var e=document.createElement('style');e.className=id;e.textContent=CSS[id];return e;}
 function ga(n,p){try{if(typeof window.gtag==='function')window.gtag('event',n,p||{});}catch(e){}}
 
-/* ---------- 0. 모든 페이지: 마지막 내용이 푸터에 붙으면 띄우기 (10-31, 견적 비교·고객지원 영상/그림이 푸터에 붙어 있었음) ---------- */
+/* ---------- 0. 모든 페이지: 마지막 내용이 푸터에 붙으면 띄우기 (10-31, 견적 비교·S/W 지원 영상/그림이 푸터에 붙어 있었음) ---------- */
 (function(){
   function fix(){var ft=document.getElementById('skinFooterSection');if(!ft)return;
-    var top=ft.getBoundingClientRect().top,maxB=0;
+    /* 푸터는 table-cell이라 margin이 안 먹음 → 마지막 내용 묶음(module_wrap)의 아래 여백을 늘린다 */
+    var top=ft.getBoundingClientRect().top,maxB=0,last=null;
     var els=document.querySelectorAll('img,iframe,video,p,h1,h2,h3,h4,a,li,button,table');
-    for(var i=0;i<els.length;i++){var e=els[i];if(ft.contains(e)||!e.offsetParent)continue;var b=e.getBoundingClientRect();if(b.height<2||b.width<2)continue;if(b.bottom<=top+1&&b.bottom>maxB)maxB=b.bottom;}
-    if(!maxB)return;var gap=top-maxB,cur=parseFloat(ft.style.marginTop)||0;
-    if(gap<40)ft.style.marginTop=(cur+56-Math.max(gap,0))+'px';}
+    for(var i=0;i<els.length;i++){var e=els[i];if(ft.contains(e)||!e.offsetParent)continue;var b=e.getBoundingClientRect();if(b.height<2||b.width<2)continue;if(b.bottom<=top+1&&b.bottom>maxB){maxB=b.bottom;last=e;}}
+    if(!last)return;var gap=top-maxB;if(gap>=40)return;
+    var box=last.closest('.module_wrap')||last.parentElement;if(box.getAttribute('data-gp-gap'))return;
+    var pb=parseFloat(getComputedStyle(box).paddingBottom)||0;box.style.paddingBottom=(pb+56-Math.max(gap,0))+'px';box.setAttribute('data-gp-gap','1');}
   if(document.readyState==='complete')setTimeout(fix,1500);else window.addEventListener('load',function(){setTimeout(fix,1500)});
 })();
 
