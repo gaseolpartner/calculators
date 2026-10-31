@@ -1,0 +1,95 @@
+<script id="gp-extra-js">
+/* 가설파트너 추가 기능 (2026-10-31) — body 입력란. head/footer 입력란은 용량이 차서 여기에 둔다.
+ * 1) 구조검토 페이지: 구조검토 대상 자가진단 (건설기술 진흥법 시행령 제101조의2 제1항)
+ * 2) 안전교육 시뮬레이터 페이지: 유튜브 재생목록 '직접 해보는 가설 안전' + 채널 구독 버튼
+ * 클래스 이름은 gpck- / gpyt- 만 쓴다 (다른 스크립트와 겹치지 않게). */
+(function(){
+'use strict';
+var P=location.pathname.replace(/\/+$/,'');
+function wait(test,fn,n){n=n||0;var el=test();if(el)return fn(el);if(n<60)setTimeout(function(){wait(test,fn,n+1)},250);}
+function css(id,t){if(document.getElementById(id))return;var s=document.createElement('style');s.id=id;s.textContent=t;document.head.appendChild(s);}
+function ga(n,p){try{if(typeof window.gtag==='function')window.gtag('event',n,p||{});}catch(e){}}
+
+/* ---------- 1. 구조검토 대상 자가진단 ---------- */
+if(P==='/pages/structureatuntroduction'){
+  var T=[
+    {v:'sc',t:'비계 (시스템·강관 비계 등)',h:31,no:1,law:'높이가 31미터 이상인 비계'},
+    {v:'br',t:'브라켓(bracket) 비계',no:2,law:'브라켓(bracket) 비계'},
+    {v:'fs',t:'거푸집 · 동바리',h:5,no:3,law:'높이가 5미터 이상인 거푸집 및 동바리'},
+    {v:'gf',t:'작업발판 일체형 거푸집 (갱폼 등)',no:3,law:'작업발판 일체형 거푸집'},
+    {v:'tn',t:'터널 지보공',no:4,law:'터널의 지보공'},
+    {v:'em',t:'흙막이 지보공',h:2,no:4,law:'높이가 2미터 이상인 흙막이 지보공'},
+    {v:'pw',t:'동력으로 움직이는 가설구조물 (자동상승 거푸집 등)',no:5,law:'동력을 이용하여 움직이는 가설구조물'},
+    {v:'ex',t:'외부 작업용 작업발판·안전시설물 일체형 가설구조물',h:10,hl:'작업 높이',no:6,law:'높이 10미터 이상에서 외부작업을 하기 위하여 작업발판 및 안전시설물을 일체화하여 설치하는 가설구조물'},
+    {v:'cx',t:'현장에서 제작해 조립·설치하는 복합형 가설구조물',no:7,law:'공사현장에서 제작하여 조립·설치하는 복합형 가설구조물'},
+    {v:'et',t:'그 밖의 가설구조물',no:0}
+  ];
+  css('gpck-css',
+  '.gpck-box{background:#1B1B1B;color:#fff;border-radius:18px;padding:30px;display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:26px}'+
+  '.gpck-box label{display:block;font-size:14px;font-weight:700;color:#cfcfcf;margin:0 0 8px}'+
+  '.gpck-box select,.gpck-box input[type=number]{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:12px 14px;border-radius:10px;border:1px solid #444;background:#262626;color:#fff}'+
+  '.gpck-box select:focus,.gpck-box input:focus{outline:none;border-color:#F2B705}'+
+  '.gpck-f{margin:0 0 16px}.gpck-chk{display:flex!important;gap:10px;align-items:flex-start;font-weight:600!important;color:#e6e6e6!important;line-height:1.5;cursor:pointer}'+
+  '.gpck-chk input{accent-color:#F2B705;width:18px;height:18px;margin-top:2px;flex:none}'+
+  '.gpck-r{background:#262626;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center;min-height:200px}'+
+  '.gpck-r .tg{display:inline-block;align-self:flex-start;font-size:13px;font-weight:800;border-radius:8px;padding:4px 10px;margin:0 0 10px;background:#444;color:#fff}'+
+  '.gpck-r.yes .tg{background:#F2B705;color:#1B1B1B}.gpck-r.no .tg{background:#3a3a3a;color:#F2B705}'+
+  '.gpck-r b{display:block;font-size:21px;line-height:1.45;margin:0 0 8px}.gpck-r p{margin:0 0 6px;color:#cfcfcf;font-size:14.5px;line-height:1.7}'+
+  '.gpck-r .bt{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}'+
+  '.gpck-src{font-size:12.5px;color:#888;margin:14px 0 0;line-height:1.7}.gpck-src a{color:#888}'+
+  '@media(max-width:900px){.gpck-box{grid-template-columns:1fr;padding:20px;gap:18px}.gpck-r{min-height:0}.gpck-r b{font-size:19px}}');
+  wait(function(){var h=[].slice.call(document.querySelectorAll('.sx h2')).filter(function(x){return x.textContent.indexOf('이런 구조물을 검토')>-1})[0];return h&&h.closest('section');},function(sec){
+    if(document.getElementById('gpck'))return;
+    var o=T.map(function(x){return '<option value="'+x.v+'">'+x.t+'</option>'}).join('');
+    var s=document.createElement('section');s.className='s';s.id='gpck';
+    s.innerHTML='<div class="w"><h2>우리 현장, 구조검토 대상일까요?</h2><p class="sub">가설 구조물 종류와 높이를 넣으면 법정 구조검토(구조적 안전성 확인) 대상인지 바로 알려 드려요.</p>'+
+      '<div class="gpck-box"><div>'+
+      '<div class="gpck-f"><label for="gpck-t">가설 구조물 종류</label><select id="gpck-t"><option value="">선택하세요</option>'+o+'</select></div>'+
+      '<div class="gpck-f" id="gpck-hw" style="display:none"><label for="gpck-h" id="gpck-hl">높이 (m)</label><input id="gpck-h" type="number" inputmode="decimal" min="0" step="0.1" placeholder="예: 6.5"></div>'+
+      '<div class="gpck-f"><label class="gpck-chk"><input type="checkbox" id="gpck-o">발주자 또는 인·허가기관이 구조검토를 요구했어요</label></div>'+
+      '</div><div class="gpck-r" id="gpck-r"><span class="tg">결과</span><b>종류를 고르면 결과가 나와요</b><p>높이 기준이 있는 구조물은 높이도 넣어 주세요.</p></div></div>'+
+      '<p class="gpck-src">기준: 「건설기술 진흥법 시행령」 제101조의2 제1항 (가설구조물의 구조적 안전성 확인 대상). 참고용 안내이며, 공사 조건·발주처 기준에 따라 달라질 수 있으니 최종 판단은 발주처·감리와 확인하세요. '+
+      '<a href="https://www.law.go.kr/법령/건설기술진흥법시행령" target="_blank" rel="noopener">법령 원문 보기 ↗</a></p></div>';
+    sec.parentNode.insertBefore(s,sec.nextSibling);
+    var REQ='https://gaseolpartner.github.io/calculators/structural-review-request.html',KK='https://pf.kakao.com/_xovuVG/chat';
+    var btns='<div class="bt"><a class="b b1" href="'+REQ+'" target="_blank" rel="noopener">구조검토 의뢰하기 →</a><a class="b b2" href="'+KK+'" target="_blank" rel="noopener">💬 카톡으로 상담</a></div>';
+    var $=function(id){return document.getElementById(id)};
+    function run(){
+      var v=$('gpck-t').value,x=T.filter(function(i){return i.v===v})[0],r=$('gpck-r'),o=$('gpck-o').checked;
+      $('gpck-hw').style.display=x&&x.h?'block':'none';
+      if(x&&x.h)$('gpck-hl').textContent=(x.hl||'높이')+' (m) · 기준 '+x.h+'m 이상';
+      if(!x){r.className='gpck-r';r.innerHTML='<span class="tg">결과</span><b>종류를 고르면 결과가 나와요</b><p>높이 기준이 있는 구조물은 높이도 넣어 주세요.</p>';return;}
+      var hv=parseFloat($('gpck-h').value),need=null,why='';
+      if(x.no&&!x.h){need=true;why='제'+x.no+'호 — '+x.law;}
+      else if(x.h){ if(isNaN(hv)){ if(!o){r.className='gpck-r';r.innerHTML='<span class="tg">높이 필요</span><b>'+(x.hl||'높이')+'를 넣어 주세요</b><p>'+x.law+'이면 법정 대상이에요.</p>';return;} }
+        else if(hv>=x.h){need=true;why='제'+x.no+'호 — '+x.law+' (입력 '+hv+'m)';} else need=false; }
+      else need=false;
+      if(o){need=true;why=(why?why+'<br>':'')+'제8호 — 발주자 또는 인·허가기관의 장이 필요하다고 인정하는 가설구조물';}
+      if(need){r.className='gpck-r yes';r.innerHTML='<span class="tg">법정 대상</span><b>구조검토(구조적 안전성 확인) 대상입니다</b><p>'+why+'</p><p>설치 전에 관계전문가의 구조 안전성 확인을 받아야 해요. HJ구조기술사사무소가 구조기술사 직접 검토로 평균 2~3일 안에 처리합니다.</p>'+btns;}
+      else{r.className='gpck-r no';r.innerHTML='<span class="tg">법정 대상 아님</span><b>법정 구조검토 대상에는 해당하지 않아요</b><p>단, 발주자·인허가기관이 요구하면 대상이 됩니다(제8호). 하중이 크거나 특수한 조건이면 법정 대상이 아니어도 검토를 권해요.</p>'+btns;}
+      ga('selfcheck_result',{result:need?'need':'no',type:x.v});
+    }
+    $('gpck-t').addEventListener('change',function(){$('gpck-h').value='';run();});$('gpck-h').addEventListener('input',run);$('gpck-o').addEventListener('change',run);
+  });
+}
+
+/* ---------- 2. 안전교육 페이지: 유튜브 재생목록·구독 ---------- */
+if(P==='/pages/simulater'){
+  css('gpyt-css',
+  '.gpyt{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:#1B1B1B;color:#fff;border-radius:14px;padding:18px 22px;margin:18px 0 6px;border-left:6px solid #F2B705;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
+  '.gpyt b{display:block;font-size:17px;font-weight:800}.gpyt span{display:block;color:#cfcfcf;font-size:14px;margin-top:3px;line-height:1.5}'+
+  '.gpyt .gpyt-b{display:flex;gap:8px;flex-wrap:wrap}.gpyt a{display:inline-block;font-weight:800;font-size:14.5px;padding:11px 16px;border-radius:10px;text-decoration:none;white-space:nowrap}'+
+  '.gpyt a.y1{background:#F2B705;color:#1B1B1B}.gpyt a.y1:hover{background:#D9A300}.gpyt a.y2{border:1px solid #555;color:#fff}.gpyt a.y2:hover{border-color:#F2B705;color:#F2B705}'+
+  '@media(max-width:700px){.gpyt{padding:16px}.gpyt .gpyt-b,.gpyt a{width:100%;text-align:center;box-sizing:border-box}}');
+  wait(function(){return document.querySelector('.gx-shv')},function(sh){
+    if(document.querySelector('.gpyt'))return;
+    var d=document.createElement('div');d.className='gpyt';
+    d.innerHTML='<div><b>가설 안전 쇼츠, 유튜브에서 더 보기</b><span>시뮬레이터로 만든 위험 체험 영상을 재생목록으로 모아 두었어요. 새 영상이 나오면 여기에 추가됩니다.</span></div>'+
+      '<div class="gpyt-b"><a class="y1" href="https://www.youtube.com/playlist?list=PLMHEFU3HSMfk" target="_blank" rel="noopener">▶ 직접 해보는 가설 안전 전체 보기</a>'+
+      '<a class="y2" href="https://www.youtube.com/@%EA%B0%80%EC%84%A4%ED%8C%8C%ED%8A%B8%EB%84%88?sub_confirmation=1" target="_blank" rel="noopener">유튜브 구독</a></div>';
+    var rn=sh.nextElementSibling&&/gx-rn/.test(sh.nextElementSibling.className)?sh.nextElementSibling:sh;
+    rn.parentNode.insertBefore(d,rn.nextSibling);
+  });
+}
+})();
+</script>
