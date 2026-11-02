@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="비계 외부 안전망(수직보호망·멀티망) 롤 수 계산기. 구간 길이와 발판 단수만 넣으면 할증·최하단 제외·롤 여유까지 반영해 필요한 롤 수를 알려 드려요. 무료.">
+<meta name="theme-color" content="#1B1B1B">
+<title>안전망 롤 수 계산기 | 가설파트너</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K8NMSLZ841"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K8NMSLZ841');</script>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="가설파트너">
+<meta property="og:title" content="안전망 롤 수 계산기 | 가설파트너">
+<meta property="og:description" content="구간 길이와 발판 단수만 넣으면 필요한 안전망 롤 수가 바로 나와요">
+<meta property="og:image" content="https://gaseolpartner.github.io/calculators/icons/og.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="gp-common.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F6F6F4;color:#2B2B2B;-webkit-tap-highlight-color:transparent;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+.nc-wrap{max-width:760px;margin:0 auto;padding:0 16px 130px}
+.nc-card{background:#fff;border:1px solid #E3E3E3;border-radius:16px;padding:20px;margin-top:16px}
+.nc-card:first-child{margin-top:-34px;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.nc-h{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:17px;font-weight:800;color:#1B1B1B}
+.nc-h i{font-style:normal;width:26px;height:26px;border-radius:50%;background:#1B1B1B;color:#F2B705;font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.nc-sub{margin:16px 0 8px;font-size:14px;color:#777;font-weight:800}
+.nc-types{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nc-type{font:inherit;text-align:left;border:1.5px solid #D5D5D5;background:#fff;border-radius:12px;padding:12px;cursor:pointer;color:#1B1B1B;min-height:64px}
+.nc-type b{display:block;font-size:15px}
+.nc-type span{font-size:12.5px;color:#777}
+.nc-type[aria-pressed="true"]{border-color:#1B1B1B;background:#1B1B1B;color:#fff}
+.nc-type[aria-pressed="true"] span{color:#F2B705}
+.nc-chips{display:flex;flex-wrap:wrap;gap:6px}
+.nc-chip{font:inherit;font-size:14px;font-weight:700;border:1.5px solid #D5D5D5;background:#fff;border-radius:999px;padding:8px 13px;cursor:pointer;color:#444}
+.nc-chip[aria-pressed="true"]{background:#F2B705;border-color:#1B1B1B;color:#1B1B1B}
+.nc-chip.add{border-style:dashed;color:#777}
+.nc-addin{display:none;gap:6px;align-items:center;margin-top:8px}
+.nc-addin.on{display:flex}
+.nc-in{font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid #D5D5D5;border-radius:10px;background:#fff;color:#1B1B1B;width:100%;min-width:0}
+.nc-in:focus{outline:none;border-color:#1B1B1B;box-shadow:0 0 0 3px rgba(242,183,5,.35)}
+.nc-in.s{width:110px}
+.nc-roll{margin-top:12px;background:#F6F6F4;border-radius:12px;padding:12px 14px;font-size:14.5px;font-weight:700;color:#1B1B1B}
+.nc-roll small{display:block;font-weight:600;color:#777;font-size:12.5px;margin-top:2px}
+.nc-mode{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#F2F2F0;border-radius:12px;padding:4px}
+.nc-mode button{font:inherit;font-size:14.5px;font-weight:800;border:none;border-radius:9px;padding:10px 6px;background:transparent;color:#666;cursor:pointer}
+.nc-mode button[aria-pressed="true"]{background:#1B1B1B;color:#fff}
+.nc-sec{border:1px solid #E8E8E8;border-radius:12px;padding:12px;margin-top:10px}
+.nc-sec-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.nc-sec-top input{font:inherit;font-weight:800;font-size:15px;border:none;border-bottom:1.5px dashed #ccc;padding:2px 2px;width:120px;background:transparent;color:#1B1B1B}
+.nc-sec-top input:focus{outline:none;border-bottom-color:#1B1B1B}
+.nc-del{margin-left:auto;font:inherit;font-size:13px;font-weight:700;border:none;background:none;color:#B00020;cursor:pointer;padding:4px}
+.nc-sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nc-lab{display:block;font-size:13px;font-weight:700;color:#444;margin-bottom:5px}
+.nc-unit{position:relative}
+.nc-unit .nc-in{padding-right:40px}
+.nc-unit em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-style:normal;font-size:13px;color:#888;font-weight:700;pointer-events:none}
+.nc-hint{font-size:12.5px;color:#777;margin-top:6px;line-height:1.5}
+.nc-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.nc-check{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:#1B1B1B;cursor:pointer;padding:10px 0}
+.nc-check input{width:20px;height:20px;accent-color:#1B1B1B}
+.nc-btn{font:inherit;font-size:15px;font-weight:800;border-radius:10px;padding:12px 16px;cursor:pointer;border:1.5px solid #1B1B1B;background:#fff;color:#1B1B1B;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.nc-btn.y{background:#F2B705}
+.nc-btn.k{background:#1B1B1B;color:#fff}
+.nc-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.nc-big{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+.nc-big div{border-radius:14px;padding:16px;background:#F6F6F4}
+.nc-big div.main{background:#1B1B1B;color:#fff}
+.nc-big b{display:block;font-size:34px;font-weight:900;line-height:1.1}
+.nc-big div.main b{color:#F2B705}
+.nc-big span{font-size:13px;color:#777;font-weight:700}
+.nc-big div.main span{color:#cfcfcf}
+.nc-tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+.nc-tbl th{font-size:12.5px;color:#777;font-weight:800;text-align:right;padding:8px 6px;border-bottom:1.5px solid #1B1B1B;white-space:nowrap}
+.nc-tbl th:first-child,.nc-tbl td:first-child{text-align:left}
+.nc-tbl td{padding:9px 6px;border-bottom:1px solid #EEE;text-align:right;white-space:nowrap}
+.nc-tbl td.r{font-weight:900;color:#1B1B1B}
+.nc-tbl tfoot td{font-weight:900;border-bottom:none;border-top:1.5px solid #1B1B1B}
+.nc-tag{display:inline-block;font-size:11.5px;font-weight:800;background:#FFF2C2;color:#7A5B00;border-radius:6px;padding:1px 6px;margin-left:4px}
+.nc-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nc-price{margin-top:16px;border:1.5px solid #E3E3E3;border-radius:14px;padding:14px 16px}
+.nc-price-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.nc-price-top b{font-size:15.5px}
+.nc-price-top .ask{margin-left:auto}
+.nc-price-in{display:none;margin-top:12px;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.nc-price-in.on{display:flex}
+.nc-money{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:14.5px}
+.nc-money b{font-size:20px;font-weight:900;color:#1B1B1B}
+.nc-note{font-size:12.5px;color:#777;line-height:1.65;margin-top:14px}
+.nc-empty{background:#FFF7DB;color:#7A5B00;border-radius:12px;padding:14px 16px;font-weight:700;font-size:14.5px}
+.nc-q{margin-top:16px;background:#1B1B1B;color:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-left:6px solid #F2B705}
+.nc-q b{display:block;font-size:17px}
+.nc-q span{display:block;color:#cfcfcf;font-size:13.5px;margin-top:3px;line-height:1.5}
+.nc-q a{background:#F2B705;color:#1B1B1B;font-weight:800;padding:12px 18px;border-radius:10px;text-decoration:none;white-space:nowrap}
+.nc-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-top:1px solid #E3E3E3;padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:50}
+.nc-bar-in{max-width:760px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nc-bar-in div{flex:1;min-width:0}
+.nc-bar-in small{display:block;font-size:12.5px;color:#666;font-weight:700}
+.nc-bar-in strong{font-size:20px;font-weight:900;color:#1B1B1B}
+#report{display:none}
+@media(max-width:560px){
+  .nc-sec-grid{grid-template-columns:1fr 1fr}
+  .nc-opts{grid-template-columns:1fr 1fr}
+  .nc-big{grid-template-columns:1fr 1fr}
+  .nc-big b{font-size:28px}
+  .nc-tbl{font-size:13px}
+  .nc-tbl th,.nc-tbl td{padding:8px 4px}
+}
+/* ---------- 인쇄(PDF) ---------- */
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  body>*:not(#report){display:none!important}
+  #report{display:block;font-family:Pretendard,'Malgun Gothic',sans-serif;color:#000;font-size:10.5pt}
+  .rp-top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #000;padding-bottom:6px}
+  .rp-top h1{margin:0;font-size:18pt}
+  .rp-top small{font-size:9pt;color:#444}
+  .rp-info{width:100%;border-collapse:collapse;margin:8px 0 10px}
+  .rp-info td{border:1px solid #999;padding:5px 7px;font-size:10pt}
+  .rp-info td.k{background:#F2F2F2;font-weight:700;width:16%}
+  .rp-tbl{width:100%;border-collapse:collapse}
+  .rp-tbl th,.rp-tbl td{border:1px solid #999;padding:5px 6px;font-size:9.5pt;text-align:right}
+  .rp-tbl th{background:#F2F2F2;text-align:center}
+  .rp-tbl td:first-child{text-align:left}
+  .rp-tbl tfoot td{font-weight:800;background:#FAFAFA}
+  .rp-sum{margin:10px 0;padding:8px 10px;border:2px solid #000;font-weight:800;font-size:12pt}
+  .rp-src{font-size:8.5pt;color:#555;margin-top:10px;line-height:1.6}
+}
+</style>
+</head>
+<body>
+<div class="gp-topbar"><div class="gp-topbar-inner"><a href="https://gaseolpartner.com"><span class="dot"></span>가설파트너 홈페이지 ↗</a><nav><a href="https://gaseolpartner.com/pages/introduction">가설 설계 프로그램</a><a href="https://gaseolpartner.com/pages/precio">가설재 견적 비교</a><a href="https://gaseolpartner.com/pages/structureatuntroduction">구조검토</a><a href="https://gaseolpartner.com/pages/calculators">무료 도구</a><a href="https://gaseolpartner.com/pages/support">고객지원</a></nav></div></div>
+<header class="gp-brandbar"><div class="gp-brandbar-inner"><a class="gp-logo" href="https://gaseolpartner.com" aria-label="가설파트너"><span class="gp-li"></span><span class="gp-lt"><b>가설파트너</b><small>GASEOL PARTNER</small></span></a><div class="gp-brand-links"><a class="gp-hide-m" href="index.html">물량·견적 계산기</a><a class="gp-cta" href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener">카카오톡 문의</a></div></div></header>
+
+<section class="gp-hero dark">
+  <div class="gp-hero-inner" style="padding-bottom:64px">
+    <span class="gp-label">무료 도구 · 안전망</span>
+    <h1>외부 비계 <em>안전망 롤 수 계산기</em></h1>
+    <p>구간 길이와 발판 단수만 넣으면 필요한 롤 수가 바로 나와요.<br>할증, 맨 아래 단 제외, 롤 끝 여유까지 반영해서 모자라지 않게 계산해요.</p>
+  </div>
+</section>
+
+<main class="nc-wrap">
+  <section class="nc-card" aria-labelledby="h1">
+    <h2 class="nc-h" id="h1"><i>1</i>어떤 망을 치나요?</h2>
+    <div class="nc-types" role="group" aria-label="망 종류" id="types"></div>
+    <h3 class="nc-sub" id="gradeH">등급</h3>
+    <div class="nc-chips" role="group" aria-labelledby="gradeH" id="grades"></div>
+    <h3 class="nc-sub" id="colorH">색상</h3>
+    <div class="nc-chips" role="group" aria-labelledby="colorH" id="colors"></div>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h2">
+    <h2 class="nc-h" id="h2"><i>2</i>롤 규격</h2>
+    <h3 class="nc-sub" id="hH">망 높이 (= 발판 1단에 치는 폭)</h3>
+    <div class="nc-chips" role="group" aria-labelledby="hH" id="heights"></div>
+    <div class="nc-addin" id="addHBox"><div class="nc-unit" style="width:140px"><input class="nc-in" id="addH" type="number" inputmode="decimal" step="0.01" min="0.5" max="5" placeholder="예: 1.87" aria-label="망 높이 직접 입력"><em>m</em></div><button type="button" class="nc-btn" id="addHOk">추가</button></div>
+    <h3 class="nc-sub" id="lH">롤 길이</h3>
+    <div class="nc-chips" role="group" aria-labelledby="lH" id="lengths"></div>
+    <div class="nc-addin" id="addLBox"><div class="nc-unit" style="width:140px"><input class="nc-in" id="addL" type="number" inputmode="decimal" step="1" min="1" max="500" placeholder="예: 70" aria-label="롤 길이 직접 입력"><em>m</em></div><button type="button" class="nc-btn" id="addLOk">추가</button></div>
+    <div class="nc-roll" id="rollInfo"></div>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h3">
+    <h2 class="nc-h" id="h3"><i>3</i>설치 구간</h2>
+    <div class="nc-mode" role="group" aria-label="높이 입력 방식" id="mode">
+      <button type="button" data-m="stage">발판 단수로 입력</button>
+      <button type="button" data-m="height">높이(m)로 입력</button>
+    </div>
+    <p class="nc-hint" id="modeHint"></p>
+    <div id="secs"></div>
+    <div class="nc-row"><button type="button" class="nc-btn" id="addSec">＋ 구간 추가</button></div>
+
+    <h3 class="nc-sub" style="margin-top:20px">계산 옵션</h3>
+    <div class="nc-opts">
+      <div><label class="nc-lab" for="surch">길이 할증</label><div class="nc-unit"><input class="nc-in" id="surch" type="number" inputmode="decimal" step="1" min="0" max="50"><em>%</em></div></div>
+      <div><label class="nc-lab" for="margin">롤 끝 최소 여유</label><div class="nc-unit"><input class="nc-in" id="margin" type="number" inputmode="decimal" step="0.5" min="0" max="30"><em>m</em></div></div>
+      <div><span class="nc-lab">맨 아래</span><label class="nc-check"><input type="checkbox" id="exBot">1단(1줄) 제외</label></div>
+    </div>
+    <p class="nc-hint">· <b>할증</b>: 겹침·모서리·묶음 손실만큼 길이를 늘려 계산해요.<br>· <b>롤 끝 최소 여유</b>: 계산상 롤이 딱 맞아떨어지면 실제로는 모자라요. 마지막 롤에 남는 길이가 이 값보다 짧으면 1롤을 더 잡아요.<br>· <b>맨 아래 1단 제외</b>: 맨 아래 단에는 망을 치지 않는 경우에 켜요.</p>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h4" id="result">
+    <h2 class="nc-h" id="h4"><i>4</i>산출 결과</h2>
+    <div id="resBody"></div>
+
+    <div class="nc-price">
+      <div class="nc-price-top">
+        <div><b>롤 단가</b><div class="nc-hint" style="margin-top:2px" id="priceState">단가는 업체·수량·시기에 따라 달라서 문의로 안내해 드려요.</div></div>
+        <a class="nc-btn y ask" href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener" id="askPrice">단가 문의하기</a>
+      </div>
+      <label class="nc-check" style="padding-bottom:0"><input type="checkbox" id="usePrice">알고 있는 단가로 금액 계산하기</label>
+      <div class="nc-price-in" id="priceBox">
+        <div style="width:180px"><label class="nc-lab" for="price">롤당 단가</label><div class="nc-unit"><input class="nc-in" id="price" type="number" inputmode="numeric" step="100" min="0" placeholder="직접 입력"><em>원</em></div></div>
+      </div>
+      <div class="nc-money" id="money"></div>
+    </div>
+
+    <div class="nc-row">
+      <button type="button" class="nc-btn y" id="pdf">📄 산출서 PDF 저장 · 인쇄</button>
+      <button type="button" class="nc-btn" id="reset">새로 쓰기</button>
+    </div>
+
+    <div class="nc-q">
+      <div><b>이 물량으로 견적 받아 보기</b><span>계산 결과가 견적 요청서에 자동으로 들어가요. 여러 업체 견적을 무료로 비교하세요.</span></div>
+      <a href="https://gaseolpartner.vercel.app/new-request" target="_blank" rel="noopener" id="quote">견적 요청하기 →</a>
+    </div>
+
+    <p class="nc-note">· 입력한 내용은 이 기기에만 저장돼요. 다른 사람에게 전달되지 않아요.<br>· PDF는 인쇄 창에서 '대상: PDF로 저장'을 고르면 돼요.<br>· 이 계산은 발주 수량을 잡기 위한 참고값이에요. 개구부·코너·돌출부는 현장 조건에 맞게 구간을 나눠 넣어 주세요.</p>
+  </section>
+</main>
+
+<div class="nc-bar"><div class="nc-bar-in">
+  <div><small id="barTxt">필요 롤 수</small><strong id="barRolls">0롤</strong></div>
+  <button type="button" class="nc-btn y" id="pdf2">PDF 저장</button>
+</div></div>
+
+<footer class="gp-footer"><div class="gp-footer-inner"><div>회사명 : 가설파트너<span class="gp-sep">|</span>주소 : 서울 강남구 가로수길 5<span class="gp-sep">|</span>이메일 : <a href="mailto:fc112@naver.com">fc112@naver.com</a><span class="gp-sep">|</span>전화 : <a href="tel:01079702108">010-7970-2108</a><span class="gp-sep">|</span>사업자등록번호 : 549-20-01841</div><div class="gp-copyline">ⓒ Gaseolpartner. all right reserved. · <a href="https://gaseolpartner.com" target="_blank" rel="noopener">gaseolpartner.com</a></div></div></footer>
+
+<div id="report" aria-hidden="true"></div>
+
+<script>
+(function () {
+  'use strict';
+  // ------------------------------------------------------------------
+  // 기본값: 망 발주 시스템(mesh-order.html)의 값을 그대로 사용
+  //  - 롤 수 = 올림(면적 ÷ 롤 면적), 길이 할증·최하단 1줄 제외 동일
+  //  - 추가: 발판 단수 입력, 롤 끝 최소 여유(딱 맞으면 1롤 추가)
+  // ------------------------------------------------------------------
+  var TYPES = {
+    pvc:   { label: 'PVC 수직보호망', desc: '외부 비계 수직 보호용', grades: ['1500D', '1000D'],
+             heights: [1.8, 1.85, 1.9], lengths: [20, 50, 60],
+             colors: ['청색', '녹색', '진녹색', '회색', '연회색', '백색', '오렌지', '노란색', '하늘색', '진하늘색'] },
+    multi: { label: '멀티망', desc: '러셀망 등 그물형', grades: [],
+             heights: [1.2, 1.5, 1.8, 2.0], lengths: [60],
+             colors: ['청색', '녹색', '진녹색', '회색', '연회색', '백색', '오렌지', '노란색', '하늘색', '진하늘색', '검정', '갈색', '분홍', '보라'] }
+  };
+  var DEF = { type: 'pvc', grade: '1500D', color: '청색', h: 1.85, l: 20, surch: 5, margin: 3, exBot: true, mode: 'stage', price: '', usePrice: false };
+  var KEY = 'gp_safety_net_v1';
+  var NAMES = ['A면', 'B면', 'C면', 'D면', 'E면', 'F면', 'G면', 'H면'];
+
+  var S = load() || fresh();
+  function fresh() {
+    var s = JSON.parse(JSON.stringify(DEF));
+    s.extraH = { pvc: [], multi: [] }; s.extraL = { pvc: [], multi: [] };
+    s.secs = [{ name: 'A면', len: '', stage: '', height: '' }];
+    return s;
+  }
+  function load() { try { var d = JSON.parse(localStorage.getItem(KEY) || 'null'); if (d && d.secs) return d; } catch (e) {} return null; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+  var $ = function (id) { return document.getElementById(id); };
+  function num(v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; }
+  function fN(n, d) { return (Math.round(n * 100) / 100).toLocaleString('ko-KR', { maximumFractionDigits: d == null ? 2 : d }); }
+  function fW(n) { return Math.round(n).toLocaleString('ko-KR') + '원'; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function heights() { return TYPES[S.type].heights.concat(S.extraH[S.type] || []).filter(function (v, i, a) { return a.indexOf(v) === i; }).sort(function (a, b) { return a - b; }); }
+  function lengths() { return TYPES[S.type].lengths.concat(S.extraL[S.type] || []).filter(function (v, i, a) { return a.indexOf(v) === i; }).sort(function (a, b) { return a - b; }); }
+
+  // ---------- 계산 ----------
+  function calc() {
+    var H = S.h, L = S.l, rA = H * L, sur = Math.max(num(S.surch), 0), mg = Math.max(parseFloat(S.margin) || 0, 0);
+    var rows = S.secs.map(function (s) {
+      var len = num(s.len), sl = len * (1 + sur / 100), r = { name: s.name, len: len, sl: sl, ok: false, plus: false };
+      if (S.mode === 'stage') {
+        var st = Math.floor(num(s.stage)); r.stage = st;
+        r.useStage = S.exBot ? Math.max(st - 1, 0) : st;      // 맨 아래 1단 제외
+        r.eh = r.useStage * H;
+        r.total = sl * r.useStage;                             // 망을 치는 총 길이
+      } else {
+        var h = num(s.height); r.height = h;
+        r.eh = S.exBot ? Math.max(h - H, 0) : h;               // 원본과 동일: 망 높이 1단 차감
+        r.total = r.eh > 0 ? sl * r.eh / H : 0;                // 롤 길이로 환산
+      }
+      r.area = sl * r.eh;
+      if (rA > 0 && r.area > 0) {
+        r.base = Math.ceil(r.area / rA - 1e-9);                // 원본 계산: 올림(면적 ÷ 롤 면적)
+        r.left = r.base * L - r.total;                         // 마지막 롤에 남는 길이
+        r.rolls = r.base;
+        if (r.left < mg - 1e-9) { r.rolls += 1; r.plus = true; r.left += L; }
+        r.ok = len > 0;
+      } else { r.base = 0; r.rolls = 0; r.left = 0; }
+      return r;
+    });
+    var t = rows.reduce(function (a, r) { a.area += r.area; a.rolls += r.rolls; a.total += r.total; return a; }, { area: 0, rolls: 0, total: 0 });
+    var price = S.usePrice ? num(S.price) : 0;
+    t.amount = price * t.rolls; t.pm2 = t.area > 0 && price ? Math.round(t.amount / t.area) : 0; t.price = price;
+    return { rows: rows, t: t, H: H, L: L, rA: rA, sur: sur, mg: mg };
+  }
+
+  // ---------- 화면 ----------
+  function chip(label, on, attrs) { return '<button type="button" class="nc-chip" aria-pressed="' + on + '" ' + (attrs || '') + '>' + esc(label) + '</button>'; }
+  function renderTop() {
+    $('types').innerHTML = Object.keys(TYPES).map(function (k) {
+      return '<button type="button" class="nc-type" data-t="' + k + '" aria-pressed="' + (S.type === k) + '"><b>' + TYPES[k].label + '</b><span>' + TYPES[k].desc + '</span></button>';
+    }).join('');
+    var g = TYPES[S.type].grades;
+    $('gradeH').style.display = $('grades').style.display = g.length ? '' : 'none';
+    $('grades').innerHTML = g.map(function (v) { return chip(v, S.grade === v, 'data-g="' + v + '"'); }).join('');
+    $('colors').innerHTML = TYPES[S.type].colors.map(function (v) { return chip(v, S.color === v, 'data-c="' + v + '"'); }).join('');
+    $('heights').innerHTML = heights().map(function (v) { return chip(v + 'm', S.h === v, 'data-h="' + v + '"'); }).join('') + '<button type="button" class="nc-chip add" id="addHBtn">＋ 직접 입력</button>';
+    $('lengths').innerHTML = lengths().map(function (v) { return chip(v + 'm', S.l === v, 'data-l="' + v + '"'); }).join('') + '<button type="button" class="nc-chip add" id="addLBtn">＋ 직접 입력</button>';
+    $('rollInfo').innerHTML = '1롤 = ' + fN(S.h) + 'm × ' + fN(S.l) + 'm = ' + fN(S.h * S.l) + '㎡<small>발판 1단마다 높이 ' + fN(S.h) + 'm 망을 한 줄씩 친다고 보고 계산해요.</small>';
+    [].forEach.call($('mode').children, function (b) { b.setAttribute('aria-pressed', S.mode === b.dataset.m); });
+    $('modeHint').textContent = S.mode === 'stage'
+      ? '발판 단수 = 망을 치는 줄 수예요. 예) 10단이면 ' + fN(S.h) + 'm 망을 구간 길이만큼 10줄 쳐요.'
+      : '높이를 m로 넣으면 면적 ÷ 롤 면적으로 계산해요 (기존 망 발주 시스템과 같은 방식).';
+    $('surch').value = S.surch; $('margin').value = S.margin; $('exBot').checked = !!S.exBot;
+    $('usePrice').checked = !!S.usePrice; $('price').value = S.price;
+    $('priceBox').classList.toggle('on', !!S.usePrice);
+  }
+  function renderSecs() {
+    $('secs').innerHTML = S.secs.map(function (s, i) {
+      var second = S.mode === 'stage'
+        ? '<div><label class="nc-lab" for="st' + i + '">발판 단수</label><div class="nc-unit"><input class="nc-in" id="st' + i + '" data-i="' + i + '" data-f="stage" type="number" inputmode="numeric" step="1" min="0" max="200" placeholder="예: 10" value="' + esc(s.stage) + '"><em>단</em></div></div>'
+        : '<div><label class="nc-lab" for="ht' + i + '">설치 높이</label><div class="nc-unit"><input class="nc-in" id="ht' + i + '" data-i="' + i + '" data-f="height" type="number" inputmode="decimal" step="0.1" min="0" max="300" placeholder="예: 18" value="' + esc(s.height) + '"><em>m</em></div></div>';
+      return '<div class="nc-sec"><div class="nc-sec-top"><input aria-label="구간 이름" maxlength="20" data-i="' + i + '" data-f="name" value="' + esc(s.name) + '">' +
+        (S.secs.length > 1 ? '<button type="button" class="nc-del" data-del="' + i + '">삭제</button>' : '') + '</div>' +
+        '<div class="nc-sec-grid"><div><label class="nc-lab" for="ln' + i + '">구간 길이 (둘레)</label><div class="nc-unit"><input class="nc-in" id="ln' + i + '" data-i="' + i + '" data-f="len" type="number" inputmode="decimal" step="0.1" min="0" max="5000" placeholder="예: 85" value="' + esc(s.len) + '"><em>m</em></div></div>' + second + '</div></div>';
+    }).join('');
+  }
+  function renderRes() {
+    var c = calc(), t = c.t, ok = c.rows.some(function (r) { return r.ok && r.rolls > 0; });
+    if (!ok) {
+      $('resBody').innerHTML = '<div class="nc-empty">구간 길이와 ' + (S.mode === 'stage' ? '발판 단수' : '설치 높이') + '를 넣으면 롤 수가 나와요.</div>';
+    } else {
+      var head = S.mode === 'stage'
+        ? '<th>구간</th><th>길이(할증)</th><th>망 치는 단</th><th>총 길이</th><th>롤 수</th>'
+        : '<th>구간</th><th>길이(할증)</th><th>유효 높이</th><th>면적</th><th>롤 수</th>';
+      var body = c.rows.map(function (r) {
+        var mid = S.mode === 'stage'
+          ? '<td>' + r.useStage + '단' + (S.exBot && r.stage ? ' <span style="color:#999">/ ' + r.stage + '</span>' : '') + '</td><td>' + fN(r.total, 1) + 'm</td>'
+          : '<td>' + fN(r.eh) + 'm</td><td>' + fN(r.area, 1) + '㎡</td>';
+        return '<tr><td>' + esc(r.name) + '</td><td>' + fN(r.sl, 1) + 'm</td>' + mid + '<td class="r">' + r.rolls + '롤' + (r.plus ? '<span class="nc-tag">+1 여유</span>' : '') + '</td></tr>';
+      }).join('');
+      var foot = '<tr><td>합계</td><td></td><td></td><td>' + (S.mode === 'stage' ? fN(t.total, 1) + 'm' : fN(t.area, 1) + '㎡') + '</td><td class="r">' + t.rolls + '롤</td></tr>';
+      var plusN = c.rows.filter(function (r) { return r.plus; }).length;
+      $('resBody').innerHTML =
+        '<div class="nc-big"><div class="main"><span>필요 롤 수</span><b>' + t.rolls + '롤</b></div><div><span>총 면적</span><b>' + fN(t.area, 1) + '<small style="font-size:16px">㎡</small></b></div></div>' +
+        '<div class="nc-tblwrap"><table class="nc-tbl"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody><tfoot>' + foot + '</tfoot></table></div>' +
+        '<p class="nc-hint">' + TYPES[S.type].label + (S.type === 'pvc' ? ' ' + esc(S.grade) : '') + ' · ' + esc(S.color) + ' · 1롤 ' + fN(c.H) + '×' + fN(c.L) + 'm · 할증 ' + fN(c.sur) + '% · ' + (S.exBot ? '맨 아래 1단 제외' : '맨 아래 포함') + ' · 롤 끝 여유 ' + fN(c.mg) + 'm' +
+        (plusN ? '<br><span class="nc-tag" style="margin-left:0">+1 여유</span> 계산상 딱 맞아서 모자랄 수 있는 구간에 1롤을 더 잡았어요.' : '') + '</p>';
+    }
+    if (S.usePrice && t.price) {
+      $('money').innerHTML = '<div>합계 금액<br><b>' + fW(t.amount) + '</b></div><div>㎡당<br><b>' + fW(t.pm2) + '</b></div><div style="align-self:flex-end;color:#777;font-size:12.5px">부가세 별도 여부는 업체 견적 기준</div>';
+      $('priceState').textContent = '입력한 단가 ' + fW(t.price) + '/롤로 계산했어요.';
+    } else {
+      $('money').innerHTML = '';
+      $('priceState').textContent = '단가는 업체·수량·시기에 따라 달라서 문의로 안내해 드려요.';
+    }
+    $('barRolls').textContent = t.rolls + '롤';
+    $('barTxt').textContent = '필요 롤 수 · ' + fN(t.area, 1) + '㎡';
+    return c;
+  }
+  function all() { renderTop(); renderSecs(); renderRes(); save(); }
+
+  // ---------- 이벤트 ----------
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.t) { S.type = b.dataset.t; var T = TYPES[S.type]; S.grade = T.grades[0] || ''; if (T.colors.indexOf(S.color) < 0) S.color = T.colors[0]; var hs = heights(), ls = lengths(); S.h = hs[0]; S.l = ls[0]; return all(); } // 원본과 동일: 종류를 바꾸면 첫 규격
+    if (b.dataset.g) { S.grade = b.dataset.g; return all(); }
+    if (b.dataset.c) { S.color = b.dataset.c; return all(); }
+    if (b.dataset.h) { S.h = parseFloat(b.dataset.h); return all(); }
+    if (b.dataset.l) { S.l = parseFloat(b.dataset.l); return all(); }
+    if (b.dataset.m) { S.mode = b.dataset.m; return all(); }
+    if (b.dataset.del != null) { S.secs.splice(+b.dataset.del, 1); return all(); }
+    if (b.id === 'addHBtn') { $('addHBox').classList.add('on'); $('addH').focus(); return; }
+    if (b.id === 'addLBtn') { $('addLBox').classList.add('on'); $('addL').focus(); return; }
+    if (b.id === 'addHOk') { var v = Math.round(num($('addH').value) * 100) / 100; if (v >= 0.5 && v <= 5) { if (heights().indexOf(v) < 0) S.extraH[S.type].push(v); S.h = v; $('addH').value = ''; $('addHBox').classList.remove('on'); all(); } return; }
+    if (b.id === 'addLOk') { var w = Math.round(num($('addL').value) * 10) / 10; if (w >= 1 && w <= 500) { if (lengths().indexOf(w) < 0) S.extraL[S.type].push(w); S.l = w; $('addL').value = ''; $('addLBox').classList.remove('on'); all(); } return; }
+    if (b.id === 'addSec') { S.secs.push({ name: NAMES[S.secs.length] || (S.secs.length + 1) + '면', len: '', stage: '', height: '' }); return all(); }
+    if (b.id === 'reset') { S = fresh(); return all(); }
+    if (b.id === 'pdf' || b.id === 'pdf2') { printReport(); }
+  });
+  document.addEventListener('input', function (e) {
+    var el = e.target;
+    if (el.dataset && el.dataset.f != null && el.dataset.i != null) { S.secs[+el.dataset.i][el.dataset.f] = el.value; renderRes(); save(); return; }
+    if (el.id === 'surch') S.surch = el.value; else if (el.id === 'margin') S.margin = el.value; else if (el.id === 'price') S.price = el.value; else return;
+    renderRes(); save();
+  });
+  document.addEventListener('change', function (e) {
+    if (e.target.id === 'exBot') { S.exBot = e.target.checked; renderRes(); save(); }
+    if (e.target.id === 'usePrice') { S.usePrice = e.target.checked; $('priceBox').classList.toggle('on', S.usePrice); if (S.usePrice) $('price').focus(); renderRes(); save(); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    if (e.target.id === 'addH') { e.preventDefault(); $('addHOk').click(); }
+    if (e.target.id === 'addL') { e.preventDefault(); $('addLOk').click(); }
+  });
+
+  // ---------- 견적 요청 연결 (비교견적 간편 요청서) ----------
+  $('quote').addEventListener('click', function () {
+    var c = calc(), t = c.t;
+    var lines = ['[안전망 롤 수 계산 결과]', TYPES[S.type].label + (S.type === 'pvc' ? ' ' + S.grade : '') + ' / ' + S.color + ' / 1롤 ' + fN(c.H) + '×' + fN(c.L) + 'm'];
+    c.rows.forEach(function (r) { if (r.rolls) lines.push('- ' + r.name + ': ' + fN(r.len, 1) + 'm × ' + (S.mode === 'stage' ? r.useStage + '단' : fN(r.eh) + 'm') + ' → ' + r.rolls + '롤'); });
+    lines.push('합계: ' + t.rolls + '롤 (' + fN(t.area, 1) + '㎡)', '(가설파트너 안전망 계산기 참고 수량)');
+    try { if (typeof window.gtag === 'function') window.gtag('event', '견적요청클릭', { event_category: '견적연결', item: '안전망', page_title: '안전망 롤 수 계산기' }); } catch (err) {}
+    this.href = 'https://gaseolpartner.vercel.app/new-request?from=calculators&item=' + encodeURIComponent('일반가설재') + '&memo=' + encodeURIComponent(lines.join('\n').slice(0, 1400));
+  });
+
+  // ---------- PDF ----------
+  function printReport() {
+    var c = calc(), t = c.t, d = new Date();
+    var ds = d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.';
+    var head = S.mode === 'stage' ? '<th>구간</th><th>구간 길이</th><th>길이(할증)</th><th>망 치는 단</th><th>총 길이</th><th>면적</th><th>롤 수</th>'
+                                  : '<th>구간</th><th>구간 길이</th><th>길이(할증)</th><th>유효 높이</th><th>면적</th><th>롤 수</th>';
+    var rows = c.rows.map(function (r) {
+      return '<tr><td>' + esc(r.name) + '</td><td>' + fN(r.len, 1) + 'm</td><td>' + fN(r.sl, 1) + 'm</td>' +
+        (S.mode === 'stage' ? '<td>' + r.useStage + '단</td><td>' + fN(r.total, 1) + 'm</td>' : '<td>' + fN(r.eh) + 'm</td>') +
+        '<td>' + fN(r.area, 1) + '㎡</td><td>' + r.rolls + '롤' + (r.plus ? ' (+1 여유)' : '') + '</td></tr>';
+    }).join('');
+    var span = S.mode === 'stage' ? 5 : 4;
+    $('report').innerHTML =
+      '<div class="rp-top"><h1>안전망 롤 수 산출서</h1><small>가설파트너 · gaseolpartner.com · ' + ds + '</small></div>' +
+      '<table class="rp-info"><tr><td class="k">망 종류</td><td>' + TYPES[S.type].label + (S.type === 'pvc' ? ' ' + esc(S.grade) : '') + '</td><td class="k">색상</td><td>' + esc(S.color) + '</td></tr>' +
+      '<tr><td class="k">롤 규격</td><td>' + fN(c.H) + 'm × ' + fN(c.L) + 'm = ' + fN(c.rA) + '㎡/롤</td><td class="k">입력 방식</td><td>' + (S.mode === 'stage' ? '발판 단수' : '설치 높이(m)') + '</td></tr>' +
+      '<tr><td class="k">계산 옵션</td><td colspan="3">길이 할증 ' + fN(c.sur) + '% · ' + (S.exBot ? '맨 아래 1단 제외' : '맨 아래 포함') + ' · 롤 끝 최소 여유 ' + fN(c.mg) + 'm</td></tr></table>' +
+      '<table class="rp-tbl"><thead><tr>' + head + '</tr></thead><tbody>' + rows + '</tbody><tfoot><tr><td colspan="' + span + '">합계</td><td>' + fN(t.area, 1) + '㎡</td><td>' + t.rolls + '롤</td></tr></tfoot></table>' +
+      '<div class="rp-sum">필요 롤 수 ' + t.rolls + '롤 · 총 면적 ' + fN(t.area, 1) + '㎡' + (S.usePrice && t.price ? ' · 롤당 ' + fW(t.price) + ' → 합계 ' + fW(t.amount) + ' (㎡당 ' + fW(t.pm2) + ')' : ' · 단가 별도 문의') + '</div>' +
+      '<div class="rp-src">· 롤 수 = 올림(면적 ÷ 롤 면적). 마지막 롤에 남는 길이가 롤 끝 최소 여유보다 짧으면 1롤을 더했습니다.<br>· 발주 수량을 잡기 위한 참고값입니다. 개구부·코너·돌출부 등 현장 조건을 확인해 주세요.<br>· 단가 문의: 카카오톡 채널 가설파트너 · 010-7970-2108 · fc112@naver.com</div>';
+    var ti = document.title; document.title = '안전망_롤수_산출서_' + d.toISOString().slice(0, 10);
+    setTimeout(function () { window.print(); document.title = ti; }, 60);
+  }
+
+  if (!S.extraH) S.extraH = { pvc: [], multi: [] };
+  if (!S.extraL) S.extraL = { pvc: [], multi: [] };
+  all();
+})();
+</script>
+</body>
+</html>
