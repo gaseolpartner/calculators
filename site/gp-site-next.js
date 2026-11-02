@@ -135,7 +135,7 @@ if(P==='/pages/temporarysoftware3d'){
   '@media(max-width:700px){#gpsk{padding:44px 0}#gpsk .gpsk-in{padding:0 16px}#gpsk h1{font-size:28px}#gpsk p{font-size:15.5px}#gpsk .gpsk-note a{flex:1 1 100%;text-align:center}}');
   wait(function(){return document.querySelector('.sx .hero')&&document.querySelector('.sx')},function(sx){
     if(document.getElementById('gpsk'))return;
-    sx.style.display='none';
+    sx.style.setProperty('display','none','important');
     var d=document.createElement('section');d.id='gpsk';
     d.innerHTML='<div class="gpsk-in"><span class="gpsk-lb">CATS 연계 · 시험 중</span>'+
       '<h1>스케치업 3D 모델<br><em>발주처·현장 설명용</em></h1>'+
@@ -201,7 +201,7 @@ if(P==='/pages/simulater'){
       '<a href="'+href+'" target="_blank" rel="noopener">▶ 시뮬레이터 열기</a></div>';
     d.querySelector('.gpsb-th').style.backgroundImage='url("'+img.src+'")';
     d.appendChild(st('gpsb-css'));
-    blk.parentNode.insertBefore(d,blk);blk.style.display='none';
+    blk.parentNode.insertBefore(d,blk);blk.style.setProperty('display','none','important');
   });
 }
 
@@ -291,7 +291,7 @@ if(P===''){
   });
   wait(function(){return document.querySelector('ul.profile_info_content li.profile_link')&&document.querySelector('ul.profile_info_content')},function(ul){
     if(ul.getAttribute('data-gp-trim'))return;ul.setAttribute('data-gp-trim','1');
-    ul.querySelectorAll('li.profile_link').forEach(function(li){li.style.display='none'});
+    ul.querySelectorAll('li.profile_link').forEach(function(li){li.style.setProperty('display','none','important')});
     if(ul.querySelector('li.profile_youtube')){
       var h=document.createElement('h2');h.textContent='영상으로 먼저 보기';
       h.style.cssText='font-family:Pretendard,"Malgun Gothic",sans-serif;font-size:26px;font-weight:800;color:#1F1F1F;margin:0 0 16px;text-align:left';
@@ -312,7 +312,7 @@ if(P===''){
   function fix(){
     var found=false;
     document.querySelectorAll('ul.navi_depth2').forEach(function(ul){
-      [].slice.call(ul.children).forEach(function(li){if(HIDE.indexOf(txt(li))>-1)li.style.display='none'});
+      [].slice.call(ul.children).forEach(function(li){if(HIDE.indexOf(txt(li))>-1)li.style.setProperty('display','none','important')});
       if(ul.getAttribute('data-gp-grp'))return;
       var lis=[].slice.call(ul.children),by={};
       lis.forEach(function(li){by[txt(li)]=li});
