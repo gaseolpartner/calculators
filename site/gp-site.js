@@ -1,0 +1,271 @@
+/* 가설파트너 홈페이지 추가 기능 (gaseolpartner.com) — 관리자 > 검색엔진최적화 > body 입력란에서 이 파일을 불러온다.
+ * 이 파일이 원본. 고친 뒤 github에 올리면 10분 안에 사이트에 반영(캐시).
+ * 기록: 프로젝트 문서 16번, 17번.
+ */
+
+/* 가설파트너 추가 기능 (2026-10-31) — body 입력란. head/footer 입력란은 용량이 차서 여기에 둔다.
+ * 1) 구조검토 페이지: 구조검토 대상 자가진단 (건설기술 진흥법 시행령 제101조의2 제1항)
+ * 2) 안전교육 시뮬레이터 페이지: 유튜브 재생목록 '직접 해보는 가설 안전' + 채널 구독 버튼
+ * 클래스 이름은 gpck- / gpyt- 만 쓴다 (다른 스크립트와 겹치지 않게). */
+(function(){
+'use strict';
+var P=location.pathname.replace(/\/+$/,'');
+function wait(test,fn,n){n=n||0;var el=test();if(el)return fn(el);if(n<60)setTimeout(function(){wait(test,fn,n+1)},250);}
+var CSS={};function css(id,t){CSS[id]=t;}
+/* 스타일은 넣는 구역 안에 같이 넣는다 (휴대폰 화면에서 head에 넣은 style이 지워지는 경우가 있어서) */
+function st(id){var e=document.createElement('style');e.className=id;e.textContent=CSS[id];return e;}
+function ga(n,p){try{if(typeof window.gtag==='function')window.gtag('event',n,p||{});}catch(e){}}
+
+/* ---------- 0. 모든 페이지: 마지막 내용이 푸터에 붙으면 띄우기 (10-31, 견적 비교·S/W 지원 영상/그림이 푸터에 붙어 있었음) ---------- */
+(function(){
+  function fix(){var ft=document.getElementById('skinFooterSection');if(!ft)return;
+    /* 푸터는 table-cell이라 margin이 안 먹음 → 마지막 내용 묶음(module_wrap)의 아래 여백을 늘린다 */
+    var top=ft.getBoundingClientRect().top,maxB=0,last=null;
+    var els=document.querySelectorAll('img,iframe,video,p,h1,h2,h3,h4,a,li,button,table');
+    for(var i=0;i<els.length;i++){var e=els[i];if(ft.contains(e)||!e.offsetParent)continue;var b=e.getBoundingClientRect();if(b.height<2||b.width<2)continue;if(b.bottom<=top+1&&b.bottom>maxB){maxB=b.bottom;last=e;}}
+    if(!last)return;var gap=top-maxB;if(gap>=40)return;
+    var box=last.closest('.module_wrap')||last.parentElement;if(box.getAttribute('data-gp-gap'))return;
+    var pb=parseFloat(getComputedStyle(box).paddingBottom)||0;box.style.paddingBottom=(pb+56-Math.max(gap,0))+'px';box.setAttribute('data-gp-gap','1');}
+  if(document.readyState==='complete')setTimeout(fix,1500);else window.addEventListener('load',function(){setTimeout(fix,1500)});
+})();
+
+/* ---------- 1. 구조검토 대상 자가진단 ---------- */
+if(P==='/pages/structureatuntroduction'){
+  var T=[
+    {v:'sc',t:'비계 (시스템·강관 비계 등)',h:31,no:1,law:'높이가 31미터 이상인 비계'},
+    {v:'br',t:'브라켓(bracket) 비계',no:2,law:'브라켓(bracket) 비계'},
+    {v:'fs',t:'거푸집 · 동바리',h:5,no:3,law:'높이가 5미터 이상인 거푸집 및 동바리'},
+    {v:'gf',t:'작업발판 일체형 거푸집 (갱폼 등)',no:3,law:'작업발판 일체형 거푸집'},
+    {v:'tn',t:'터널 지보공',no:4,law:'터널의 지보공'},
+    {v:'em',t:'흙막이 지보공',h:2,no:4,law:'높이가 2미터 이상인 흙막이 지보공'},
+    {v:'pw',t:'동력으로 움직이는 가설구조물 (자동상승 거푸집 등)',no:5,law:'동력을 이용하여 움직이는 가설구조물'},
+    {v:'ex',t:'외부 작업용 작업발판·안전시설물 일체형 가설구조물',h:10,hl:'작업 높이',no:6,law:'높이 10미터 이상에서 외부작업을 하기 위하여 작업발판 및 안전시설물을 일체화하여 설치하는 가설구조물'},
+    {v:'cx',t:'현장에서 제작해 조립·설치하는 복합형 가설구조물',no:7,law:'공사현장에서 제작하여 조립·설치하는 복합형 가설구조물'},
+    {v:'et',t:'그 밖의 가설구조물',no:0}
+  ];
+  css('gpck-css',
+  '.gpck-box{background:#1B1B1B;color:#fff;border-radius:18px;padding:30px;display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:26px}'+
+  '.gpck-box label{display:block;font-size:14px;font-weight:700;color:#cfcfcf;margin:0 0 8px}'+
+  '#gpck .gpck-box select,#gpck .gpck-box input[type=number]{display:block;width:100%!important;box-sizing:border-box!important;height:54px!important;min-height:54px!important;line-height:1.4!important;font:inherit;font-size:16.5px!important;font-weight:600;padding:0 16px!important;margin:0!important;border-radius:10px!important;border:1px solid #4a4a4a!important;box-shadow:none!important;outline:0;background-color:#262626!important;color:#fff!important}'+
+  '#gpck .gpck-box select{-webkit-appearance:none;appearance:none;padding-right:44px!important;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2714%27 height=%279%27%3E%3Cpath d=%27M1 1l6 6 6-6%27 fill=%27none%27 stroke=%27%23F2B705%27 stroke-width=%272.2%27/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 16px center!important;background-size:14px 9px!important}'+
+  '#gpck .gpck-box select option{background:#262626;color:#fff;font-weight:500}'+
+  '#gpck .gpck-box select:focus,#gpck .gpck-box input:focus{border-color:#F2B705!important}'+
+  '.gpck-box select:focus,.gpck-box input:focus{outline:none;border-color:#F2B705}'+
+  '.gpck-f{margin:0 0 16px}.gpck-chk{display:flex!important;gap:10px;align-items:flex-start;font-weight:600!important;color:#e6e6e6!important;line-height:1.5;cursor:pointer}'+
+  '.gpck-chk input{accent-color:#F2B705;width:18px;height:18px;margin-top:2px;flex:none}'+
+  '.gpck-r{background:#262626;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center;min-height:200px}'+
+  '.gpck-r .tg{display:inline-block;align-self:flex-start;font-size:13px;font-weight:800;border-radius:8px;padding:4px 10px;margin:0 0 10px;background:#444;color:#fff}'+
+  '.gpck-r.yes .tg{background:#F2B705;color:#1B1B1B}.gpck-r.no .tg{background:#3a3a3a;color:#F2B705}'+
+  '.gpck-r b{display:block;font-size:21px;line-height:1.45;margin:0 0 8px}.gpck-r p{margin:0 0 6px;color:#cfcfcf;font-size:14.5px;line-height:1.7}'+
+  '.gpck-r .bt{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}'+
+  '.gpck-src{font-size:12.5px;color:#888;margin:14px 0 0;line-height:1.7}.gpck-src a{color:#888}'+
+  '@media(max-width:900px){.gpck-box{grid-template-columns:1fr;padding:20px;gap:18px}.gpck-r{min-height:0}.gpck-r b{font-size:19px}}');
+  wait(function(){var h=[].slice.call(document.querySelectorAll('.sx h2')).filter(function(x){return x.textContent.indexOf('이런 구조물을 검토')>-1})[0];return h&&h.closest('section');},function(sec){
+    if(document.getElementById('gpck'))return;
+    var o=T.map(function(x){return '<option value="'+x.v+'">'+x.t+'</option>'}).join('');
+    var s=document.createElement('section');s.className='s';s.id='gpck';
+    s.innerHTML='<div class="w"><h2>우리 현장, 구조검토 대상일까요?</h2><p class="sub">가설 구조물 종류와 높이를 넣으면 법정 구조검토(구조적 안전성 확인) 대상인지 바로 알려 드려요.</p>'+
+      '<div class="gpck-box"><div>'+
+      '<div class="gpck-f"><label for="gpck-t">가설 구조물 종류</label><select id="gpck-t"><option value="">선택하세요</option>'+o+'</select></div>'+
+      '<div class="gpck-f" id="gpck-hw" style="display:none"><label for="gpck-h" id="gpck-hl">높이 (m)</label><input id="gpck-h" type="number" inputmode="decimal" min="0" step="0.1" placeholder="예: 6.5"></div>'+
+      '<div class="gpck-f"><label class="gpck-chk"><input type="checkbox" id="gpck-o">발주자 또는 인·허가기관이 구조검토를 요구했어요</label></div>'+
+      '</div><div class="gpck-r" id="gpck-r"><span class="tg">결과</span><b>종류를 고르면 결과가 나와요</b><p>높이 기준이 있는 구조물은 높이도 넣어 주세요.</p></div></div>'+
+      '<p class="gpck-src">기준: 「건설기술 진흥법 시행령」 제101조의2 제1항 (가설구조물의 구조적 안전성 확인 대상). 참고용 안내이며, 공사 조건·발주처 기준에 따라 달라질 수 있으니 최종 판단은 발주처·감리와 확인하세요. '+
+      '<a href="https://www.law.go.kr/법령/건설기술진흥법시행령" target="_blank" rel="noopener">법령 원문 보기 ↗</a></p></div>';
+    s.appendChild(st('gpck-css'));
+    sec.parentNode.insertBefore(s,sec.nextSibling);
+    if(location.hash==='#gpck')setTimeout(function(){s.scrollIntoView({block:'start'})},300);
+    var REQ='https://gaseolpartner.github.io/calculators/structural-review-request.html',KK='https://pf.kakao.com/_xovuVG/chat';
+    var btns='<div class="bt"><a class="b b1" href="'+REQ+'" target="_blank" rel="noopener">구조검토 의뢰하기 →</a><a class="b b2" href="'+KK+'" target="_blank" rel="noopener">💬 카톡으로 상담</a></div>';
+    var $=function(id){return document.getElementById(id)};
+    function run(){
+      var v=$('gpck-t').value,x=T.filter(function(i){return i.v===v})[0],r=$('gpck-r'),o=$('gpck-o').checked;
+      $('gpck-hw').style.display=x&&x.h?'block':'none';
+      if(x&&x.h)$('gpck-hl').textContent=(x.hl||'높이')+' (m) · 기준 '+x.h+'m 이상';
+      if(!x){r.className='gpck-r';r.innerHTML='<span class="tg">결과</span><b>종류를 고르면 결과가 나와요</b><p>높이 기준이 있는 구조물은 높이도 넣어 주세요.</p>';return;}
+      var hv=parseFloat($('gpck-h').value),need=null,why='';
+      if(x.no&&!x.h){need=true;why='제'+x.no+'호 — '+x.law;}
+      else if(x.h){ if(isNaN(hv)){ if(!o){r.className='gpck-r';r.innerHTML='<span class="tg">높이 필요</span><b>'+(x.hl||'높이')+'를 넣어 주세요</b><p>'+x.law+'이면 법정 대상이에요.</p>';return;} }
+        else if(hv>=x.h){need=true;why='제'+x.no+'호 — '+x.law+' (입력 '+hv+'m)';} else need=false; }
+      else need=false;
+      if(o){need=true;why=(why?why+'<br>':'')+'제8호 — 발주자 또는 인·허가기관의 장이 필요하다고 인정하는 가설구조물';}
+      if(need){r.className='gpck-r yes';r.innerHTML='<span class="tg">법정 대상</span><b>구조검토(구조적 안전성 확인) 대상입니다</b><p>'+why+'</p><p>설치 전에 관계전문가의 구조 안전성 확인을 받아야 해요. HJ구조기술사사무소가 구조기술사 직접 검토로 평균 2~3일 안에 처리합니다.</p>'+btns;}
+      else{r.className='gpck-r no';r.innerHTML='<span class="tg">법정 대상 아님</span><b>법정 구조검토 대상에는 해당하지 않아요</b><p>단, 발주자·인허가기관이 요구하면 대상이 됩니다(제8호). 하중이 크거나 특수한 조건이면 법정 대상이 아니어도 검토를 권해요.</p>'+btns;}
+      ga('selfcheck_result',{result:need?'need':'no',type:x.v});
+    }
+    $('gpck-t').addEventListener('change',function(){$('gpck-h').value='';run();});$('gpck-h').addEventListener('input',run);$('gpck-o').addEventListener('change',run);
+  });
+}
+
+/* ---------- 2. 안전교육 페이지: 유튜브 재생목록·구독 ---------- */
+if(P==='/pages/simulater'){
+  css('gpyt-css',
+  '.gpyt{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:#1B1B1B;color:#fff;border-radius:14px;padding:18px 22px;margin:18px 0 6px;border-left:6px solid #F2B705;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
+  '.gpyt b{display:block;font-size:17px;font-weight:800}.gpyt span{display:block;color:#cfcfcf;font-size:14px;margin-top:3px;line-height:1.5}'+
+  '.gpyt .gpyt-b{display:flex;gap:8px;flex-wrap:wrap}.gpyt a{display:inline-block;font-weight:800;font-size:14.5px;padding:11px 16px;border-radius:10px;text-decoration:none;white-space:nowrap}'+
+  '.gpyt a.y1{background:#F2B705;color:#1B1B1B}.gpyt a.y1:hover{background:#D9A300}.gpyt a.y2{border:1px solid #555;color:#fff}.gpyt a.y2:hover{border-color:#F2B705;color:#F2B705}'+
+  '@media(max-width:700px){.gpyt{padding:16px}.gpyt .gpyt-b,.gpyt a{width:100%;text-align:center;box-sizing:border-box}}');
+  wait(function(){return document.querySelector('.gx-shv')},function(sh){
+    if(document.querySelector('.gpyt'))return;
+    var d=document.createElement('div');d.className='gpyt';
+    d.innerHTML='<div><b>가설 안전 쇼츠, 유튜브에서 더 보기</b><span>시뮬레이터로 만든 위험 체험 영상을 재생목록으로 모아 두었어요. 새 영상이 나오면 여기에 추가됩니다.</span></div>'+
+      '<div class="gpyt-b"><a class="y1" href="https://www.youtube.com/playlist?list=PLMHEFU3HSMfk" target="_blank" rel="noopener">▶ 직접 해보는 가설 안전 전체 보기</a>'+
+      '<a class="y2" href="https://www.youtube.com/@%EA%B0%80%EC%84%A4%ED%8C%8C%ED%8A%B8%EB%84%88?sub_confirmation=1" target="_blank" rel="noopener">유튜브 구독</a></div>';
+    var rn=sh.nextElementSibling&&/gx-rn/.test(sh.nextElementSibling.className)?sh.nextElementSibling:sh;
+    d.appendChild(st('gpyt-css'));
+    rn.parentNode.insertBefore(d,rn.nextSibling);
+  });
+}
+
+/* ---------- 3. 3D 페이지 정리 (10-31 사용자 결정) ----------
+ * V3d = CATS 안의 기능 → CATS 소개 페이지로 옮김.
+ * 3D 자동화 설계 페이지 = 스케치업 3D (CATS 연계, 시험 중, 판매 안 함)만.
+ * footer gp-str3d-js가 만든 위쪽 묶음(.sx: V3d 첫 화면·속도 비교·V3d·구분선)은 지우지 않고 숨기기만 한다. */
+var IMG='/storage/common_attachfiles/';
+if(P==='/pages/temporarysoftware3d'){
+  css('gpsk-css',
+  '#gpsk{background:#1B1B1B;color:#fff;padding:64px 0;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
+  '#gpsk .gpsk-in{max-width:1140px;margin:0 auto;padding:0 20px;box-sizing:border-box}'+
+  '#gpsk .gpsk-lb{display:inline-block;background:#F2B705;color:#1B1B1B;font-weight:800;font-size:13px;border-radius:8px;padding:5px 11px;margin:0 0 16px}'+
+  '#gpsk h1{font-size:40px;line-height:1.3;font-weight:800;margin:0 0 14px;color:#fff}#gpsk h1 em{font-style:normal;color:#F2B705}'+
+  '#gpsk p{font-size:17px;line-height:1.7;color:#cfcfcf;margin:0 0 26px}'+
+  '#gpsk .gpsk-note{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;background:#262626;border-left:5px solid #F2B705;border-radius:12px;padding:18px 20px}'+
+  '#gpsk .gpsk-note b{flex:1 1 100%;font-size:16px}#gpsk .gpsk-note span{flex:1 1 420px;color:#cfcfcf;font-size:14.5px;line-height:1.6}'+
+  '#gpsk .gpsk-note a{flex:none;background:#F2B705;color:#1B1B1B;font-weight:800;font-size:15px;padding:11px 18px;border-radius:10px;text-decoration:none}'+
+  '@media(max-width:700px){#gpsk{padding:44px 0}#gpsk .gpsk-in{padding:0 16px}#gpsk h1{font-size:28px}#gpsk p{font-size:15.5px}#gpsk .gpsk-note a{flex:1 1 100%;text-align:center}}');
+  wait(function(){return document.querySelector('.sx .hero')&&document.querySelector('.sx')},function(sx){
+    if(document.getElementById('gpsk'))return;
+    sx.style.display='none';
+    var d=document.createElement('section');d.id='gpsk';
+    d.innerHTML='<div class="gpsk-in"><span class="gpsk-lb">CATS 연계 · 시험 중</span>'+
+      '<h1>스케치업 3D 모델<br><em>발주처·현장 설명용</em></h1>'+
+      '<p>CATS와 연계해서 쓰도록 시험하고 있는 스케치업 3D 모델링이에요. 지금은 따로 판매하지 않아요.</p>'+
+      '<div class="gpsk-note"><b>CAD 안에서 바로 보는 3D 검토(V3d)는 CATS에 들어 있어요.</b><span>평면에 그린 동바리를 3D로 세워 보고, 경사 구간을 고치고, 수량까지 — CATS 소개 페이지에서 볼 수 있어요.</span>'+
+      '<a href="/pages/introduction#gpv">V3d 3D 검토 보기 →</a></div></div>';
+    d.appendChild(st('gpsk-css'));
+    sx.parentNode.insertBefore(d,sx);
+  });
+}
+if(P==='/pages/introduction'){
+  css('gpv-css',
+  '#gpv{background:#F6F6F4;padding:72px 0;font-family:Pretendard,"Malgun Gothic",sans-serif;color:#2B2B2B;scroll-margin-top:80px}'+
+  '#gpv .gpv-in{max-width:1180px;margin:0 auto;padding:0 20px;box-sizing:border-box}'+
+  '#gpv .gpv-lb{display:inline-block;background:#1B1B1B;color:#F2B705;font-weight:800;font-size:13px;border-radius:8px;padding:5px 11px;margin:0 0 14px}'+
+  '#gpv h2{font-size:32px;line-height:1.35;font-weight:800;margin:0 0 12px;color:#1F1F1F}'+
+  '#gpv .gpv-sub{font-size:16.5px;line-height:1.7;color:#555;margin:0 0 28px;max-width:860px}'+
+  '#gpv figure{margin:0}#gpv .gpv-main img{display:block;width:100%;max-width:1100px;height:auto;border-radius:14px;border:1px solid #E3E3E3}'+
+  '#gpv figcaption{font-size:13.5px;color:#777;margin:10px 0 0}'+
+  '#gpv .gpv-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:30px 0 0}'+
+  '#gpv .gpv-c{background:#fff;border:1px solid #E3E3E3;border-radius:14px;padding:20px;display:flex;flex-direction:column}'+
+  '#gpv .gpv-c img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid #EEE;margin:0 0 14px}'+
+  '#gpv .gpv-n{font-weight:800;color:#F2B705;background:#1B1B1B;border-radius:6px;padding:2px 8px;font-size:12.5px;align-self:flex-start;margin:0 0 8px}'+
+  '#gpv h3{font-size:19px;margin:0 0 8px;color:#1B1B1B}#gpv .gpv-c p{font-size:14.5px;line-height:1.7;color:#555;margin:0 0 10px}'+
+  '#gpv ul{margin:0;padding:0 0 0 18px;font-size:14px;line-height:1.75;color:#444}'+
+  '#gpv .gpv-more{margin:24px 0 0;font-size:14px;color:#666}#gpv .gpv-more a{color:#1B1B1B;font-weight:700}'+
+  '@media(max-width:900px){#gpv{padding:52px 0}#gpv .gpv-in{padding:0 16px}#gpv h2{font-size:25px}#gpv .gpv-cards{grid-template-columns:1fr}}');
+  wait(function(){var h=[].slice.call(document.querySelectorAll('h3')).filter(function(x){return x.textContent.trim()==='3D 확인'})[0];return h&&h.closest('section');},function(sec){
+    if(document.getElementById('gpv'))return;
+    var C=[
+      {n:'01',t:'그린 평면 그대로 3D로',img:'xLBYgDL0PNeannkRgpHMGpze3Zr1jfPfhv10ySzy.jpg',alt:'일반 동바리 3D',p:'층고, 슬래브 두께, 보 깊이만 넣으면 평면의 수직재·수평재·멍에·자키·헤드가 높이에 맞게 세워집니다.',li:['등각·평면·정면·측면 시점 전환','부재별로 켜고 끄며 확인','문제가 없으면 "문제를 찾지 못했습니다"로 바로 확인']},
+      {n:'02',t:'경사 구간, 찾고 고치는 것까지',img:'DUEsDCz1FsBldvumfE74aVIY4Z3ZHCgSmFO4OreS.jpg',alt:'경사 동바리 3D 문제 표시',p:'상부 경사를 넣으면 부재 조합이 바뀌는 구간을 찾아 3D 위에 표시합니다. 체크한 항목은 버튼 하나로 도면에 반영됩니다.',li:['주의·참고로 나눠 이유까지 설명','항목을 누르면 3D에서 강조, 두 번 누르면 도면에서 위치 표시','"체크한 항목 수정" 한 번, 되돌리기도 한 번']},
+      {n:'03',t:'수량은 3D 기준으로 바로',img:'7hZTjJLrRIhjI8SIyTYMHg77cLJzZKmsTrF0s8Bc.jpg',alt:'3D 기준 수량',p:'경사 때문에 높이가 달라져도 규격별 수량이 자동으로 다시 계산됩니다. 수직재 규격별, 자키, 수평재, 멍에까지 한 번에 복사됩니다.',li:['행에 마우스를 올리면 계산 근거 표시','"수량 복사"로 엑셀에 바로 붙여넣기']}
+    ];
+    var s=document.createElement('section');s.id='gpv';
+    s.innerHTML='<div class="gpv-in"><span class="gpv-lb">CATS 기능 · V3d</span><h2>가설재 3D, CAD 안에서 바로 봅니다</h2>'+
+      '<p class="gpv-sub">CAD 프로그램을 바꾸지 않습니다. 평면에서 부재를 선택하면 바로 3D 창이 열립니다. 평면에 그린 시스템 동바리를 층고 기준으로 세워 보고, 경사 슬래브 문제 구간을 찾아 고치고, 수량까지 한 화면에서 끝납니다.</p>'+
+      '<figure class="gpv-main"><img src="'+IMG+'PRSgefHk2OhcE6Q75ZOKQZkXxztNPUQMggOetnly.jpg" alt="V3d 실행 화면" loading="lazy"><figcaption>실제 V3d 화면 · 상부 경사 20%를 넣은 시스템 동바리</figcaption></figure>'+
+      '<div class="gpv-cards">'+C.map(function(c){return '<div class="gpv-c"><img src="'+IMG+c.img+'" alt="'+c.alt+'" loading="lazy"><span class="gpv-n">'+c.n+'</span><h3>'+c.t+'</h3><p>'+c.p+'</p><ul><li>'+c.li.join('</li><li>')+'</li></ul></div>'}).join('')+'</div>'+
+      '<p class="gpv-more">발주처·현장 설명용 스케치업 3D 모델은 CATS와 연계해 시험 중이에요 → <a href="/pages/temporarysoftware3d">3D 자동화 설계</a></p></div>';
+    s.appendChild(st('gpv-css'));
+    sec.parentNode.insertBefore(s,sec.nextSibling);
+    if(location.hash==='#gpv')setTimeout(function(){s.scrollIntoView()},300);
+  });
+}
+
+/* ---------- 4. 안전교육 페이지: 큰 시뮬레이터 그림 구역 → 날씬한 띠 (10-31 사용자 결정) ----------
+ * 빌더 모듈(그림 + "그림을 누르면 시뮬레이터가 열립니다")은 지우지 않고 숨기기만 한다. 그림은 원래 그림을 작게 다시 쓴다. */
+if(P==='/pages/simulater'){
+  css('gpsb-css',
+  '#gpsb{max-width:1140px;margin:28px auto;padding:0 20px;box-sizing:border-box;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
+  '#gpsb .gpsb-in{display:flex;align-items:center;gap:20px;background:#fff;border:1px solid #E3E3E3;border-radius:16px;padding:16px 22px}'+
+  '#gpsb .gpsb-th{flex:none;width:96px;height:80px;border-radius:10px;background:#F6F6F4 center/contain no-repeat;border:1px solid #EEE}'+
+  '#gpsb .gpsb-tx{flex:1;min-width:0}#gpsb b{display:block;font-size:18px;color:#1B1B1B;margin:0 0 4px}'+
+  '#gpsb span{display:block;font-size:14.5px;color:#666;line-height:1.6}'+
+  '#gpsb a{flex:none;background:#F2B705;color:#1B1B1B;font-weight:800;font-size:15px;padding:13px 20px;border-radius:10px;text-decoration:none;white-space:nowrap}#gpsb a:hover{background:#D9A300}'+
+  '@media(max-width:700px){#gpsb{padding:0 16px}#gpsb .gpsb-in{flex-wrap:wrap;gap:12px 14px;padding:16px}#gpsb .gpsb-th{width:72px;height:60px}#gpsb .gpsb-tx{flex:1 1 180px}#gpsb a{flex:1 1 100%;text-align:center}}');
+  wait(function(){var e=[].slice.call(document.querySelectorAll('.module_wrap')).filter(function(m){return /그림을 누르면 시뮬레이터가 열립니다/.test(m.textContent)})[0];return e&&e.querySelector('img')&&e;},function(m){
+    if(document.getElementById('gpsb'))return;
+    var blk=m.closest('.skin_block')||m,img=m.querySelector('img'),a=img.closest('a'),href=(a&&a.href)||'https://gaseolpartner.github.io/gaseol-simulator/';
+    var d=document.createElement('div');d.id='gpsb';
+    d.innerHTML='<div class="gpsb-in"><i class="gpsb-th" role="img" aria-label="시스템비계·동바리·워킹타워 시뮬레이터"></i><div class="gpsb-tx"><b>3D 시뮬레이터 전체 보기</b><span>설치 교육 시뮬레이터와 위험 체험(풍하중·동바리 붕괴 등), 체험 확인 퀴즈까지 한곳에 모았어요.</span></div>'+
+      '<a href="'+href+'" target="_blank" rel="noopener">▶ 시뮬레이터 열기</a></div>';
+    d.querySelector('.gpsb-th').style.backgroundImage='url("'+img.src+'")';
+    d.appendChild(st('gpsb-css'));
+    blk.parentNode.insertBefore(d,blk);blk.style.display='none';
+  });
+}
+
+/* ---------- 5. 모든 페이지: 체험판 받기 클릭 집계 (11-02) ----------
+ * autocats.co.kr 로 가는 링크(체험판 받기·다운로드)를 누르면 GA 이벤트 trial_click.
+ * 기존 head의 gp-ga는 카톡·전화·유튜브만 세고 있었음. */
+document.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('a[href*="autocats.co.kr"]');if(!a)return;
+  ga('trial_click',{link_url:a.href,link_text:(a.textContent||'').trim().slice(0,40),page_path:P||'/'});
+},true);
+
+/* ---------- 6. 첫 화면: '가설재, 궁금했던 이야기' 아래 글 모음 링크 (11-02) ---------- */
+if(P===''){
+  wait(function(){return document.querySelector('section.gp-sh .gp-shl')},function(shl){
+    if(document.getElementById('gpst'))return;
+    var d=document.createElement('p');d.id='gpst';
+    d.style.cssText='text-align:center;margin:18px 0 0;font-family:Pretendard,"Malgun Gothic",sans-serif';
+    d.innerHTML='<a href="https://gaseolpartner.github.io/gaseol-simulator/story/" target="_blank" rel="noopener" style="display:inline-block;border:1px solid #1B1B1B;color:#1B1B1B;font-weight:800;font-size:15px;padding:11px 18px;border-radius:10px;text-decoration:none">📖 글로 읽기 · 지난 이야기 모두 보기 →</a>';
+    shl.parentNode.insertBefore(d,shl.nextSibling);
+  });
+}
+
+/* ---------- 7. CATS 자주 묻는 질문 (11-02) — S/W 지원(support2) 첫 화면 아래 + CATS 소개에서 링크 ----------
+ * 내용은 CATS 소개 페이지·autocats.co.kr/seouldream 에 나온 사실만. 바뀌면 여기 FAQ 배열만 고치면 됨. */
+var FAQ=[
+  ['체험판은 어떻게 받나요? 기간은요?','체험판 받기 버튼(autocats.co.kr/seouldream)에서 사용하는 CAD를 골라 최신 설치 파일을 받으세요. <b>첫 사용일부터 20일</b> 동안 모든 기능을 쓸 수 있고, 그 뒤에는 업체 네트워크별로 CAD 작업 명령을 <b>하루 5회</b>까지 쓸 수 있어요(온라인 확인, 한국 시간 자정에 초기화).'],
+  ['어떤 CAD에서 쓸 수 있나요?','<b>AutoCAD 2013 이상, ZWCAD 2019 이상, BricsCAD V16 이상, GstarCAD 2021 이상, CADian 2020 이상</b>에서 쓸 수 있어요. 라이선스는 CAD 종류와 상관없이 같아요.'],
+  ['가격은 얼마인가요?','<b>월 200,000원</b>, 연간 2,160,000원(10% 할인)이에요. VAT 별도. <a href="/pages/sale01">가격·라이선스 자세히 →</a>'],
+  ['PC 몇 대에 설치할 수 있나요?','라이선스 코드 하나로 <b>PC 2대</b>까지 등록할 수 있어요. 두 대에서 동시에 쓰는 것은 안 돼요. PC를 바꾸거나 등록을 풀 때는 카톡·전화로 연락 주시면 안내해 드려요.'],
+  ['구매 후 코드는 어디에 넣나요?','CAD 명령창에 <b>CATSDR_CODE11</b> (또는 <b>CODE11</b>)을 입력하고 받은 코드를 넣으면 돼요.'],
+  ['처음에는 무엇부터 하면 되나요?','추천 순서는 ① 원도 정리·레이어 확인(PREP, DS11) → ② 도곽·층 문자·높이값 인식(DS13, DS22, DS23) → ③ 써포트/비계 규격·간격 설정(SS11) → ④ 평면·입면 배치(S11, B11, F11, AE31) → ⑤ 물량 산출(CAV)이에요. 처음이면 <a href="https://www.youtube.com/watch?v=WAHK4hAjn0E" target="_blank" rel="noopener">설치 영상(57초)</a>과 연습 #1 영상을 먼저 보세요.'],
+  ['사용 설명서는 어디 있나요?','CAD에서 <b>CATSDR_WEBMANUAL</b> 명령으로 바로 열려요. 웹에서는 <a href="https://www.autocats.co.kr/seouldream/manual" target="_blank" rel="noopener">CATS 매뉴얼</a>에서 명령어를 이름·설명으로 찾을 수 있어요. 도곽 인식 테스트용 기본 도면(SHEET)도 거기서 받을 수 있어요.'],
+  ['업데이트는 어떻게 받나요?','CATS는 매주 새 기능이 추가돼요. <a href="https://autocats.co.kr/seouldream#download" target="_blank" rel="noopener">다운로드 영역</a>에서 패치노트를 보고 최신 설치 파일을 받으면 돼요. 이전 버전 파일도 패치노트에서 고를 수 있어요.'],
+  ['구조계산까지 해 주나요?','CATS는 배치·도면·수량을 만드는 설계 프로그램이에요. 구조검토서는 <b>HJ구조기술사사무소</b>에서 따로 받을 수 있어요(평균 2~3일). <a href="/pages/structureatuntroduction">구조검토 안내 →</a>'],
+  ['설치나 명령이 잘 안 될 때는요?','CAD 종류·버전과 화면(오류 메시지)을 캡처해서 <a href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener">카톡</a>으로 보내 주시면 가장 빨라요. 전화 010-7970-2108.']
+];
+if(P==='/pages/support2'){
+  css('gpfq-css',
+  '#gpfq{max-width:1140px;margin:40px auto 10px;padding:0 20px;box-sizing:border-box;font-family:Pretendard,"Malgun Gothic",sans-serif;color:#2B2B2B;scroll-margin-top:80px}'+
+  '#gpfq h2{font-size:28px;font-weight:800;margin:0 0 6px;color:#1F1F1F}#gpfq .gpfq-s{color:#666;margin:0 0 18px;font-size:15.5px}'+
+  '#gpfq details{background:#fff;border:1px solid #E3E3E3;border-radius:12px;margin:0 0 10px;overflow:hidden}'+
+  '#gpfq summary{cursor:pointer;list-style:none;padding:16px 48px 16px 18px;font-weight:700;font-size:16.5px;position:relative;color:#1B1B1B}'+
+  '#gpfq summary::-webkit-details-marker{display:none}#gpfq summary:after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:22px;color:#B88A00}'+
+  '#gpfq details[open] summary:after{content:"−"}#gpfq details[open]{border-color:#F2B705}'+
+  '#gpfq .gpfq-a{padding:0 18px 16px;font-size:15px;line-height:1.75;color:#444}#gpfq .gpfq-a a{color:#1B1B1B;font-weight:700}'+
+  '#gpfq .gpfq-more{margin:16px 0 0;font-size:14.5px;color:#666}#gpfq .gpfq-more a{color:#1B1B1B;font-weight:800}'+
+  '@media(max-width:700px){#gpfq{padding:0 16px;margin-top:28px}#gpfq h2{font-size:23px}#gpfq summary{font-size:15.5px}}');
+  wait(function(){return document.getElementById('gx-hero')},function(hero){
+    if(document.getElementById('gpfq'))return;
+    var s=document.createElement('section');s.id='gpfq';
+    s.innerHTML='<h2>CATS 자주 묻는 질문</h2><p class="gpfq-s">체험판·설치·라이선스, 많이 물어보시는 것부터 모았어요.</p>'+
+      FAQ.map(function(q,i){return '<details'+(i===0?' open':'')+'><summary>'+q[0]+'</summary><div class="gpfq-a">'+q[1]+'</div></details>'}).join('')+
+      '<p class="gpfq-more">여기 없는 질문은 <a href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener">카톡으로 물어보기 →</a></p>';
+    s.appendChild(st('gpfq-css'));
+    var blk=hero.closest('.skin_block')||hero;blk.parentNode.insertBefore(s,blk.nextSibling);
+    s.querySelectorAll('details').forEach(function(dt){dt.addEventListener('toggle',function(){if(dt.open)ga('faq_open',{q:dt.querySelector('summary').textContent.slice(0,40)})})});
+    if(location.hash==='#gpfq')setTimeout(function(){s.scrollIntoView({block:'start'})},300);
+  });
+}
+if(P==='/pages/introduction'){
+  wait(function(){return document.querySelector('.gpp-stn')},function(stn){
+    if(stn.querySelector('.gpfq-link'))return;
+    var a=document.createElement('a');a.className='gpfq-link';a.href='/pages/support2#gpfq';a.textContent='자주 묻는 질문';
+    stn.appendChild(document.createTextNode(' · '));stn.appendChild(a);
+  });
+}
+})();
