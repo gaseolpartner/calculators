@@ -135,7 +135,7 @@ if(P==='/pages/temporarysoftware3d'){
   '@media(max-width:700px){#gpsk{padding:44px 0}#gpsk .gpsk-in{padding:0 16px}#gpsk h1{font-size:28px}#gpsk p{font-size:15.5px}#gpsk .gpsk-note a{flex:1 1 100%;text-align:center}}');
   wait(function(){return document.querySelector('.sx .hero')&&document.querySelector('.sx')},function(sx){
     if(document.getElementById('gpsk'))return;
-    sx.style.display='none';
+    sx.style.setProperty('display','none','important');
     var d=document.createElement('section');d.id='gpsk';
     d.innerHTML='<div class="gpsk-in"><span class="gpsk-lb">CATS 연계 · 시험 중</span>'+
       '<h1>스케치업 3D 모델<br><em>발주처·현장 설명용</em></h1>'+
@@ -201,7 +201,7 @@ if(P==='/pages/simulater'){
       '<a href="'+href+'" target="_blank" rel="noopener">▶ 시뮬레이터 열기</a></div>';
     d.querySelector('.gpsb-th').style.backgroundImage='url("'+img.src+'")';
     d.appendChild(st('gpsb-css'));
-    blk.parentNode.insertBefore(d,blk);blk.style.display='none';
+    blk.parentNode.insertBefore(d,blk);blk.style.setProperty('display','none','important');
   });
 }
 
@@ -268,4 +268,68 @@ if(P==='/pages/introduction'){
     stn.appendChild(document.createTextNode(' · '));stn.appendChild(a);
   });
 }
+
+/* ---------- 8. 처음 온 방문자 기준 정리 (11-02 사용자 결정) ----------
+ * ① 첫 화면 서비스 카드 아래 신뢰 숫자 띠 (숫자는 사용자가 확인해 준 값만: 정기 구독 13개 업체·상위 5개사 중 3곳·구조기술사 직접·월 약 100건·평균 2~3일)
+ * ② 첫 화면 아래쪽 '바로가기' 6칸(서비스 카드와 중복)만 숨김 — 같은 묶음의 영상 2개는 그대로 + 제목
+ * ③ 메뉴: '구조 문의 게시판'(글 0개) 숨김, 무료 도구 7개는 모두 두고 설계·견적 / 현장 안전 · 작업자용 / 현장 관리로 묶음 + '무료 도구 전체 보기 →'
+ * ④ 휴대폰: 서비스 카드 2칸 */
+var TRUST=[['13개','업체 정기 구독'],['상위 5개사 중 3곳','CATS 사용'],['구조기술사','직접 검토'],['월 약 100건','구조검토 수행'],['평균 2~3일','검토서 회신']];
+if(P===''){
+  css('gptr-css',
+  '#gptr{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:26px 0 0;background:#1B1B1B;border-radius:14px;overflow:hidden;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
+  '#gptr div{padding:16px 10px;text-align:center;border-left:1px solid #333}#gptr div:first-child{border-left:0}'+
+  '#gptr b{display:block;color:#F2B705;font-size:19px;font-weight:800;line-height:1.3;word-break:keep-all}#gptr span{display:block;color:#cfcfcf;font-size:13px;margin-top:3px}'+
+  '@media(max-width:700px){#gptr{grid-template-columns:1fr 1fr;margin-top:16px}#gptr div{border-left:0;border-top:1px solid #333;padding:12px 8px}#gptr div:nth-child(-n+2){border-top:0}#gptr div:last-child{grid-column:1/-1}#gptr b{font-size:16px}#gptr span{font-size:12px}}'+
+  '@media(max-width:700px){#gp-svc{grid-template-columns:1fr 1fr!important;gap:10px!important}#gp-svc .gp-c{padding:14px 12px!important;min-height:0!important}#gp-svc .gp-c p{display:none!important}#gp-svc .gp-c h3{font-size:16px!important;line-height:1.35!important;margin:6px 0 8px!important}#gp-svc .gp-ic{transform:scale(.8);transform-origin:left top}#gp-svc .gp-chips{gap:4px!important}#gp-svc .gp-chips span{font-size:11px!important;padding:3px 6px!important}#gp-svc .gp-go{font-size:13px!important}}');
+  wait(function(){return document.getElementById('gp-svc')},function(svc){
+    if(document.getElementById('gptr'))return;
+    var d=document.createElement('div');d.id='gptr';d.setAttribute('aria-label','가설파트너 실적');
+    d.innerHTML=TRUST.map(function(t){return '<div><b>'+t[0]+'</b><span>'+t[1]+'</span></div>'}).join('');
+    d.appendChild(st('gptr-css'));
+    svc.parentNode.insertBefore(d,svc.nextSibling);
+  });
+  wait(function(){return document.querySelector('ul.profile_info_content li.profile_link')&&document.querySelector('ul.profile_info_content')},function(ul){
+    if(ul.getAttribute('data-gp-trim'))return;ul.setAttribute('data-gp-trim','1');
+    ul.querySelectorAll('li.profile_link').forEach(function(li){li.style.setProperty('display','none','important')});
+    if(ul.querySelector('li.profile_youtube')){
+      var h=document.createElement('h2');h.textContent='영상으로 먼저 보기';
+      h.style.cssText='font-family:Pretendard,"Malgun Gothic",sans-serif;font-size:26px;font-weight:800;color:#1F1F1F;margin:0 0 16px;text-align:left';
+      ul.parentNode.insertBefore(h,ul);
+    }
+  });
+}
+(function(){ // 모든 페이지 메뉴 (PC·휴대폰 메뉴 둘 다) — 11-02 사용자 결정: 무료 도구 7개 모두 두고 쓰는 사람 기준으로 묶기
+  var HIDE=['구조 문의 게시판']; // 글 0개
+  var GROUPS=[['설계·견적',['물량·견적 계산기','안전망 롤 수 계산기','CATS Pro 무료 CAD 애드인']],
+              ['현장 안전 · 작업자용',['작업 전 점검표','강풍·폭우 현장 알림','안전교육 3D 시뮬레이터']],
+              ['현장 관리',['노무 관리 프로그램']]];
+  var css0=document.createElement('style');
+  css0.textContent='ul.navi_depth2 li.gp-mh{pointer-events:none;padding:0!important}ul.navi_depth2 li.gp-mh span{display:block;padding:10px 16px 4px;font-size:12px;font-weight:800;color:#B88A00;letter-spacing:.02em;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
+    'ul.navi_depth2 li.gp-mh:first-child span{padding-top:6px}ul.navi_depth2 li.gp-allfree{border-top:1px solid #eee;margin-top:6px}ul.navi_depth2 li.gp-allfree a{font-weight:800!important}';
+  document.head.appendChild(css0);
+  function txt(li){var a=li.querySelector('a');return a?a.textContent.trim():''}
+  function fix(){
+    var found=false;
+    document.querySelectorAll('ul.navi_depth2').forEach(function(ul){
+      [].slice.call(ul.children).forEach(function(li){if(HIDE.indexOf(txt(li))>-1)li.style.setProperty('display','none','important')});
+      if(ul.getAttribute('data-gp-grp'))return;
+      var lis=[].slice.call(ul.children),by={};
+      lis.forEach(function(li){by[txt(li)]=li});
+      if(!by['물량·견적 계산기']||!by['노무 관리 프로그램'])return; // 무료 도구 메뉴만
+      ul.setAttribute('data-gp-grp','1');found=true;
+      var tpl=by['물량·견적 계산기'];
+      GROUPS.forEach(function(g){
+        var h=tpl.cloneNode(false);h.className=(tpl.className?tpl.className+' ':'')+'gp-mh';h.innerHTML='<span>'+g[0]+'</span>';ul.appendChild(h);
+        g[1].forEach(function(name){if(by[name]){ul.appendChild(by[name]);delete by[name]}});
+      });
+      Object.keys(by).forEach(function(k){if(k)ul.appendChild(by[k])}); // 새로 생긴 메뉴는 맨 아래에 그대로
+      var all=tpl.cloneNode(true);all.classList.add('gp-allfree');var a=all.querySelector('a');
+      a.textContent='무료 도구 전체 보기 →';a.setAttribute('href','/pages/calculators');a.removeAttribute('target');ul.appendChild(all);
+    });
+    return found;
+  }
+  if(!fix())wait(function(){return document.querySelector('ul.navi_depth2')},fix);
+  setTimeout(fix,2500); // 메뉴를 나중에 다시 그리는 경우 대비
+})();
 })();
