@@ -128,6 +128,7 @@ body{margin:0;background:#F6F6F4;color:#2B2B2B;-webkit-tap-highlight-color:trans
   .rp-src{font-size:8.5pt;color:#555;margin-top:10px;line-height:1.6}
 }
 .ar-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.ar-opts{grid-template-columns:1fr 1fr 1fr 1fr}
 .nc-link{font:inherit;font-size:12.5px;font-weight:800;border:none;background:none;color:#1B1B1B;text-decoration:underline;cursor:pointer;padding:0}
 .ar-s{display:block;font-size:11.5px;color:#999;font-weight:700}
 .ar-next{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
@@ -135,7 +136,7 @@ body{margin:0;background:#F6F6F4;color:#2B2B2B;-webkit-tap-highlight-color:trans
 a.ar-go{background:#F2B705}
 .ar-go b{display:block;font-size:15.5px;font-weight:900}
 .ar-go span{display:block;font-size:13px;color:#555;margin-top:4px;line-height:1.5}
-@media(max-width:560px){.ar-grid{grid-template-columns:1fr 1fr}.ar-grid>div:last-child{grid-column:1 / -1}.ar-next{grid-template-columns:1fr}}
+@media(max-width:560px){.ar-opts{grid-template-columns:1fr 1fr}.ar-grid{grid-template-columns:1fr 1fr}.ar-grid>div:last-child{grid-column:1 / -1}.ar-next{grid-template-columns:1fr}}
 @media print{.rp-tbl th{font-size:9pt}}
 </style>
 </head>
@@ -154,17 +155,19 @@ a.ar-go{background:#F2B705}
 <main class="nc-wrap">
   <section class="nc-card" aria-labelledby="h1">
     <h2 class="nc-h" id="h1"><i>1</i>건물 크기와 비계 높이</h2>
-    <p class="nc-hint" style="margin-top:0">층마다 평면 크기가 다르면 기준층·중간층·옥탑처럼 구간을 나눠 넣으세요. 가로·세로는 <b>건물 외곽 치수</b>예요.</p>
+    <p class="nc-hint" style="margin-top:0">층마다 평면 크기가 다르면 기준층·중간층·옥탑처럼 구간을 나눠 넣으세요. 가로·세로는 <b>건물 외곽 치수</b>예요.<br><b>비계 높이</b>는 건물 높이가 아니라 <b>비계 맨 위까지</b>예요. 옥상 난간 위로 올라오는 만큼 건물보다 높게 넣으세요.</p>
     <div id="secs"></div>
     <div class="nc-row"><button type="button" class="nc-btn" id="addSec">＋ 구간 추가</button></div>
 
     <h3 class="nc-sub" style="margin-top:20px">계산 기준</h3>
-    <div class="nc-opts">
+    <div class="nc-opts ar-opts">
       <div><label class="nc-lab" for="off">비계 이격 (양쪽 합)</label><div class="nc-unit"><input class="nc-in" id="off" type="number" inputmode="decimal" step="0.1" min="0" max="10"><em>m</em></div></div>
       <div><label class="nc-lab" for="noff">방지망 이격 (양쪽 합)</label><div class="nc-unit"><input class="nc-in" id="noff" type="number" inputmode="decimal" step="0.1" min="0" max="20"><em>m</em></div></div>
       <div><label class="nc-lab" for="nw">방지망 폭</label><div class="nc-unit"><input class="nc-in" id="nw" type="number" inputmode="decimal" step="0.1" min="0" max="10"><em>m</em></div></div>
+      <div><label class="nc-lab" for="gap">방지망 설치 간격</label><div class="nc-unit"><input class="nc-in" id="gap" type="number" inputmode="decimal" step="0.5" min="1" max="30"><em>m</em></div></div>
     </div>
-    <p class="nc-hint">· <b>비계 이격</b>: 건물 가로·세로에 각각 더해요. 기본 1.8m = 양쪽 0.9m씩.<br>· <b>낙하물 방지망</b>: 건물 가로·세로에 방지망 이격을 더한 둘레 × 폭 × 단수로 계산하고, 단수는 비계 높이 ÷ 9m예요 (소수 첫째 자리까지, 나머지 버림).<br>· 기본값은 현장에서 쓰던 비계 산출서 엑셀과 같아요. <button type="button" class="nc-link" id="defBtn">기본값으로 되돌리기</button></p>
+    <label class="nc-check"><input type="checkbox" id="addBot"><span>방지망 맨 아래에 1단 추가 <small style="font-weight:600;color:#777;font-size:13px">(첫 단을 설치 간격보다 낮게 거는 경우)</small></span></label>
+    <p class="nc-hint">· <b>비계 이격</b>: 건물 가로·세로에 각각 더해요. 기본 1.8m = 양쪽 0.9m씩.<br>· <b>낙하물 방지망</b>: 건물 가로·세로에 방지망 이격을 더한 둘레 × 폭 × 단수로 계산하고, 단수는 비계 높이 ÷ 설치 간격의 정수(나머지 버림)예요. 예) 높이 30m, 간격 9m → 9·18·27m에 3단.<br>· <b>설치 간격</b>: 기본 9m예요. 법 기준(산업안전보건기준에 관한 규칙 제14조)은 높이 10m 이내마다예요.<br>· 기본값은 현장에서 쓰던 비계 산출서 엑셀과 같아요. <button type="button" class="nc-link" id="defBtn">기본값으로 되돌리기</button></p>
   </section>
 
   <section class="nc-card" aria-labelledby="h2" id="result">
@@ -217,16 +220,19 @@ a.ar-go{background:#F2B705}
   //   외부비계  가로 = 건물가로 + 1.8, 세로 = 건물세로 + 1.8
   //             둘레 = (가로 + 세로) × 2,  면적 = INT(둘레 × 높이)
   //   낙하물방지망 가로 = 건물가로 + 3.6, 세로 = 건물세로 + 3.6
-  //             둘레 = (가로 + 세로) × 2,  단수 = TRUNC(높이 / 9, 1)
+  //             둘레 = (가로 + 세로) × 2,  단수 = 내림(높이 / 설치 간격) 정수
+  //             (엑셀은 TRUNC(높이/9,1)로 3.3단처럼 소수가 나와서, 실제 거는 단수(정수)로 바꿈 - 2026-11 결정)
   //             면적 = INT(단수 × 폭(3.6) × 둘레)
   // ------------------------------------------------------------------
-  var DEF = { off: 1.8, noff: 3.6, nw: 3.6 };
+  var DEF = { off: 1.8, noff: 3.6, nw: 3.6, gap: 9, addBot: false };
   var NAMES = ['기준층', '중간층', '옥탑'];
   var KEY = 'gp_scaffold_area_v1';
-  function fresh() { return { off: DEF.off, noff: DEF.noff, nw: DEF.nw, secs: [{ name: '기준층', w: '', d: '', h: '' }] }; }
+  function fresh() { return { off: DEF.off, noff: DEF.noff, nw: DEF.nw, gap: DEF.gap, addBot: DEF.addBot, secs: [{ name: '기준층', w: '', d: '', h: '' }] }; }
   function load() { try { var d = JSON.parse(localStorage.getItem(KEY) || 'null'); if (d && d.secs) return d; } catch (e) {} return null; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
   var S = load() || fresh();
+  if (S.gap == null) S.gap = DEF.gap;
+  if (S.addBot == null) S.addBot = DEF.addBot;
 
   var $ = function (id) { return document.getElementById(id); };
   function num(v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; }
@@ -235,26 +241,26 @@ a.ar-go{background:#F2B705}
   function fN(n, d) { return Number(n).toLocaleString('ko-KR', { maximumFractionDigits: d == null ? 2 : d }); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function INT(x) { return Math.floor(r2(x) + 1e-9); }                 // 엑셀 INT (양수)
-  function TRUNC1(x) { return Math.floor(r2(x) * 10 + 1e-9) / 10; }    // 엑셀 TRUNC(x,1) (양수)
 
   // ---------- 계산 ----------
   function calc() {
-    var off = nz(S.off), noff = nz(S.noff), nw = nz(S.nw);
+    var off = nz(S.off), noff = nz(S.noff), nw = nz(S.nw), gap = num(S.gap);
     var rows = S.secs.map(function (s) {
       var w = num(s.w), d = num(s.d), h = num(s.h), r = { name: s.name, w: w, d: d, h: h, ok: w > 0 && d > 0 };
       r.sw = r2(w + off); r.sd = r2(d + off); r.per = r2((r.sw + r.sd) * 2);
       r.area = r.ok ? INT(r.per * h) : 0;
       r.nwid = r2(w + noff); r.ndep = r2(d + noff); r.nper = r2((r.nwid + r.ndep) * 2);
-      r.tier = TRUNC1(h / 9);
+      r.tier = gap > 0 ? Math.floor(r2(h / gap) + 1e-9) : 0;      // 실제 거는 단수 (정수)
+      if (S.addBot && h > 0) r.tier += 1;                            // 맨 아래 1단 추가 선택 시
       r.narea = r.ok ? INT(r.tier * nw * r.nper) : 0;
       return r;
     });
     var t = rows.reduce(function (a, r) { if (r.ok) { a.area += r.area; a.narea += r.narea; a.per += r.per; } return a; }, { area: 0, narea: 0, per: 0 });
-    return { rows: rows, t: t, off: off, noff: noff, nw: nw };
+    return { rows: rows, t: t, off: off, noff: noff, nw: nw, gap: gap };
   }
 
   // ---------- 화면 ----------
-  function renderTop() { $('off').value = S.off; $('noff').value = S.noff; $('nw').value = S.nw; }
+  function renderTop() { $('off').value = S.off; $('noff').value = S.noff; $('nw').value = S.nw; $('gap').value = S.gap; $('addBot').checked = !!S.addBot; }
   function inp(i, f, label, ph, val) {
     return '<div><label class="nc-lab" for="in_' + f + i + '">' + label + '</label><div class="nc-unit"><input class="nc-in" id="in_' + f + i + '" data-i="' + i + '" data-f="' + f + '" type="number" inputmode="decimal" step="0.1" min="0" max="2000" placeholder="' + ph + '" value="' + esc(val) + '"><em>m</em></div></div>';
   }
@@ -274,13 +280,13 @@ a.ar-go{background:#F2B705}
       var body = c.rows.map(function (r) {
         if (!r.ok) return '<tr><td>' + esc(r.name) + '</td><td colspan="5" style="text-align:left;color:#999">가로·세로를 넣어 주세요</td></tr>';
         return '<tr><td>' + esc(r.name) + '</td><td>' + fN(r.sw) + '×' + fN(r.sd) + '</td><td>' + fN(r.per) + 'm</td><td>' + fN(r.h) + 'm</td><td class="r">' + fN(r.area, 0) + '㎡</td>' +
-          '<td>' + fN(r.narea, 0) + '㎡<small class="ar-s">' + fN(r.tier, 1) + '단</small></td></tr>';
+          '<td>' + fN(r.narea, 0) + '㎡<small class="ar-s">' + r.tier + '단</small></td></tr>';
       }).join('');
       $('resBody').innerHTML =
         '<div class="nc-big"><div class="main"><span>외부 비계 면적</span><b>' + fN(t.area, 0) + '<small style="font-size:16px">㎡</small></b></div><div><span>낙하물 방지망</span><b>' + fN(t.narea, 0) + '<small style="font-size:16px">㎡</small></b></div></div>' +
         '<div class="nc-tblwrap"><table class="nc-tbl"><thead><tr><th>구간</th><th>비계 가로×세로</th><th>둘레</th><th>높이</th><th>비계 면적</th><th>방지망</th></tr></thead><tbody>' + body +
         '</tbody><tfoot><tr><td>합계</td><td></td><td>' + fN(t.per) + 'm</td><td></td><td class="r">' + fN(t.area, 0) + '㎡</td><td>' + fN(t.narea, 0) + '㎡</td></tr></tfoot></table></div>' +
-        '<p class="nc-hint">비계 이격 ' + fN(c.off) + 'm · 방지망 이격 ' + fN(c.noff) + 'm · 방지망 폭 ' + fN(c.nw) + 'm · 방지망 단수 = 높이 ÷ 9m</p>';
+        '<p class="nc-hint">비계 이격 ' + fN(c.off) + 'm · 방지망 이격 ' + fN(c.noff) + 'm · 방지망 폭 ' + fN(c.nw) + 'm · 방지망 ' + fN(c.gap) + 'm마다 1단' + (S.addBot ? ' + 맨 아래 1단' : '') + '</p>';
       $('nextBox').style.display = '';
       $('goNet').href = netLink(c);
     }
@@ -301,7 +307,7 @@ a.ar-go{background:#F2B705}
     var b = e.target.closest('button'); if (!b) return;
     if (b.dataset.del != null) { S.secs.splice(+b.dataset.del, 1); return all(); }
     if (b.id === 'addSec') { S.secs.push({ name: NAMES[S.secs.length] || (S.secs.length + 1) + '구간', w: '', d: '', h: '' }); return all(); }
-    if (b.id === 'defBtn') { S.off = DEF.off; S.noff = DEF.noff; S.nw = DEF.nw; return all(); }
+    if (b.id === 'defBtn') { S.off = DEF.off; S.noff = DEF.noff; S.nw = DEF.nw; S.gap = DEF.gap; S.addBot = DEF.addBot; return all(); }
     if (b.id === 'reset') { S = fresh(); return all(); }
     if (b.id === 'copyArea') {
       var v = String(calc().t.area);
@@ -311,10 +317,11 @@ a.ar-go{background:#F2B705}
     }
     if (b.id === 'pdf' || b.id === 'pdf2') printReport();
   });
+  document.addEventListener('change', function (e) { if (e.target.id === 'addBot') { S.addBot = e.target.checked; renderRes(); save(); } });
   document.addEventListener('input', function (e) {
     var el = e.target;
     if (el.dataset && el.dataset.f != null && el.dataset.i != null) { S.secs[+el.dataset.i][el.dataset.f] = el.value; renderRes(); save(); return; }
-    if (el.id === 'off' || el.id === 'noff' || el.id === 'nw') { S[el.id] = el.value; renderRes(); save(); }
+    if (el.id === 'off' || el.id === 'noff' || el.id === 'nw' || el.id === 'gap') { S[el.id] = el.value; renderRes(); save(); }
   });
 
   // ---------- 견적 요청 연결 ----------
@@ -333,16 +340,16 @@ a.ar-go{background:#F2B705}
     var ds = d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.';
     var rows = c.rows.filter(function (r) { return r.ok; }).map(function (r) {
       return '<tr><td>' + esc(r.name) + '</td><td>' + fN(r.w) + '×' + fN(r.d) + '</td><td>' + fN(r.sw) + '×' + fN(r.sd) + '</td><td>' + fN(r.per) + '</td><td>' + fN(r.h) + '</td><td>' + fN(r.area, 0) + '</td>' +
-        '<td>' + fN(r.nper) + '</td><td>' + fN(r.tier, 1) + '</td><td>' + fN(r.narea, 0) + '</td></tr>';
+        '<td>' + fN(r.nper) + '</td><td>' + r.tier + '</td><td>' + fN(r.narea, 0) + '</td></tr>';
     }).join('');
     $('report').innerHTML =
       '<div class="rp-top"><h1>외부 비계 면적 산출서</h1><small>가설파트너 · gaseolpartner.com · ' + ds + '</small></div>' +
-      '<table class="rp-info"><tr><td class="k">비계 이격</td><td>가로·세로 각 +' + fN(c.off) + 'm</td><td class="k">방지망</td><td>이격 +' + fN(c.noff) + 'm · 폭 ' + fN(c.nw) + 'm · 단수 = 높이 ÷ 9m</td></tr></table>' +
+      '<table class="rp-info"><tr><td class="k">비계 이격</td><td>가로·세로 각 +' + fN(c.off) + 'm</td><td class="k">방지망</td><td>이격 +' + fN(c.noff) + 'm · 폭 ' + fN(c.nw) + 'm · ' + fN(c.gap) + 'm마다 1단' + (S.addBot ? ' + 맨 아래 1단' : '') + '</td></tr></table>' +
       '<table class="rp-tbl"><thead><tr><th rowspan="2">구간</th><th rowspan="2">건물(m)</th><th colspan="4">외부 비계</th><th colspan="3">낙하물 방지망</th></tr>' +
       '<tr><th>가로×세로(m)</th><th>둘레(m)</th><th>높이(m)</th><th>면적(㎡)</th><th>둘레(m)</th><th>단수</th><th>면적(㎡)</th></tr></thead><tbody>' + rows +
       '</tbody><tfoot><tr><td colspan="5">합계</td><td>' + fN(t.area, 0) + '</td><td colspan="2"></td><td>' + fN(t.narea, 0) + '</td></tr></tfoot></table>' +
       '<div class="rp-sum">외부 비계 ' + fN(t.area, 0) + '㎡ · 낙하물 방지망 ' + fN(t.narea, 0) + '㎡</div>' +
-      '<div class="rp-src">· 외부 비계 면적 = 버림(((건물 가로 + 이격) + (건물 세로 + 이격)) × 2 × 높이)<br>· 낙하물 방지망 = 버림(단수 × 폭 × 방지망 둘레), 단수 = 높이 ÷ 9m (소수 첫째 자리까지)<br>· 견적·발주 수량을 잡기 위한 참고값입니다. 문의: 카카오톡 채널 가설파트너 · 010-7970-2108 · fc112@naver.com</div>';
+      '<div class="rp-src">· 외부 비계 면적 = 버림(((건물 가로 + 이격) + (건물 세로 + 이격)) × 2 × 높이)<br>· 낙하물 방지망 = 버림(단수 × 폭 × 방지망 둘레), 단수 = 내림(높이 ÷ 설치 간격 ' + fN(c.gap) + 'm)' + (S.addBot ? ' + 맨 아래 1단' : '') + '<br>· 견적·발주 수량을 잡기 위한 참고값입니다. 문의: 카카오톡 채널 가설파트너 · 010-7970-2108 · fc112@naver.com</div>';
     var ti = document.title; document.title = '외부비계_면적_산출서_' + d.toISOString().slice(0, 10);
     setTimeout(function () { window.print(); document.title = ti; }, 60);
   }
