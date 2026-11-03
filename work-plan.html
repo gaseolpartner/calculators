@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="시스템동바리 설치 작업계획서 무료 작성. 현장 정보와 도면만 넣으면 A4 한 장 작업계획서 PDF가 나오고, 작업 단계별 위험요인·대책도 골라 넣을 수 있어요.">
+<meta name="theme-color" content="#1B1B1B">
+<title>시스템동바리 작업계획서 | 가설파트너</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K8NMSLZ841"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K8NMSLZ841');</script>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="가설파트너">
+<meta property="og:title" content="시스템동바리 작업계획서 | 가설파트너">
+<meta property="og:description" content="현장 정보와 도면만 넣으면 A4 한 장 작업계획서가 바로 나와요">
+<meta property="og:image" content="https://gaseolpartner.github.io/calculators/icons/og.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="gp-common.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F6F6F4;color:#2B2B2B;-webkit-tap-highlight-color:transparent;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+.nc-wrap{max-width:760px;margin:0 auto;padding:0 16px 130px}
+.nc-card{background:#fff;border:1px solid #E3E3E3;border-radius:16px;padding:20px;margin-top:16px}
+.nc-card:first-child{margin-top:-34px;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.nc-h{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:17px;font-weight:800;color:#1B1B1B}
+.nc-h i{font-style:normal;width:26px;height:26px;border-radius:50%;background:#1B1B1B;color:#F2B705;font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.nc-sub{margin:16px 0 8px;font-size:14px;color:#777;font-weight:800}
+.nc-types{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nc-type{font:inherit;text-align:left;border:1.5px solid #D5D5D5;background:#fff;border-radius:12px;padding:12px;cursor:pointer;color:#1B1B1B;min-height:64px}
+.nc-type b{display:block;font-size:15px}
+.nc-type span{font-size:12.5px;color:#777}
+.nc-type[aria-pressed="true"]{border-color:#1B1B1B;background:#1B1B1B;color:#fff}
+.nc-type[aria-pressed="true"] span{color:#F2B705}
+.nc-chips{display:flex;flex-wrap:wrap;gap:6px}
+.nc-chip{font:inherit;font-size:14px;font-weight:700;border:1.5px solid #D5D5D5;background:#fff;border-radius:999px;padding:8px 13px;cursor:pointer;color:#444}
+.nc-chip[aria-pressed="true"]{background:#F2B705;border-color:#1B1B1B;color:#1B1B1B}
+.nc-chip.add{border-style:dashed;color:#777}
+.nc-addin{display:none;gap:6px;align-items:center;margin-top:8px}
+.nc-addin.on{display:flex}
+.nc-in{font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid #D5D5D5;border-radius:10px;background:#fff;color:#1B1B1B;width:100%;min-width:0}
+.nc-in:focus{outline:none;border-color:#1B1B1B;box-shadow:0 0 0 3px rgba(242,183,5,.35)}
+.nc-in.s{width:110px}
+.nc-roll{margin-top:12px;background:#F6F6F4;border-radius:12px;padding:12px 14px;font-size:14.5px;font-weight:700;color:#1B1B1B}
+.nc-roll small{display:block;font-weight:600;color:#777;font-size:12.5px;margin-top:2px}
+.nc-mode{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#F2F2F0;border-radius:12px;padding:4px}
+.nc-mode button{font:inherit;font-size:14.5px;font-weight:800;border:none;border-radius:9px;padding:10px 6px;background:transparent;color:#666;cursor:pointer}
+.nc-mode button[aria-pressed="true"]{background:#1B1B1B;color:#fff}
+.nc-sec{border:1px solid #E8E8E8;border-radius:12px;padding:12px;margin-top:10px}
+.nc-sec-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.nc-sec-top input{font:inherit;font-weight:800;font-size:15px;border:none;border-bottom:1.5px dashed #ccc;padding:2px 2px;width:120px;background:transparent;color:#1B1B1B}
+.nc-sec-top input:focus{outline:none;border-bottom-color:#1B1B1B}
+.nc-del{margin-left:auto;font:inherit;font-size:13px;font-weight:700;border:none;background:none;color:#B00020;cursor:pointer;padding:4px}
+.nc-sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nc-lab{display:block;font-size:13px;font-weight:700;color:#444;margin-bottom:5px}
+.nc-unit{position:relative}
+.nc-unit .nc-in{padding-right:40px}
+.nc-unit em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-style:normal;font-size:13px;color:#888;font-weight:700;pointer-events:none}
+.nc-hint{font-size:12.5px;color:#777;margin-top:6px;line-height:1.5}
+.nc-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.nc-check{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:#1B1B1B;cursor:pointer;padding:10px 0}
+.nc-check input{width:20px;height:20px;accent-color:#1B1B1B}
+.nc-btn{font:inherit;font-size:15px;font-weight:800;border-radius:10px;padding:12px 16px;cursor:pointer;border:1.5px solid #1B1B1B;background:#fff;color:#1B1B1B;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.nc-btn.y{background:#F2B705}
+.nc-btn.k{background:#1B1B1B;color:#fff}
+.nc-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.nc-big{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+.nc-big div{border-radius:14px;padding:16px;background:#F6F6F4}
+.nc-big div.main{background:#1B1B1B;color:#fff}
+.nc-big b{display:block;font-size:34px;font-weight:900;line-height:1.1}
+.nc-big div.main b{color:#F2B705}
+.nc-big span{font-size:13px;color:#777;font-weight:700}
+.nc-big div.main span{color:#cfcfcf}
+.nc-tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+.nc-tbl th{font-size:12.5px;color:#777;font-weight:800;text-align:right;padding:8px 6px;border-bottom:1.5px solid #1B1B1B;white-space:nowrap}
+.nc-tbl th:first-child,.nc-tbl td:first-child{text-align:left}
+.nc-tbl td{padding:9px 6px;border-bottom:1px solid #EEE;text-align:right;white-space:nowrap}
+.nc-tbl td.r{font-weight:900;color:#1B1B1B}
+.nc-tbl tfoot td{font-weight:900;border-bottom:none;border-top:1.5px solid #1B1B1B}
+.nc-tag{display:inline-block;font-size:11.5px;font-weight:800;background:#FFF2C2;color:#7A5B00;border-radius:6px;padding:1px 6px;margin-left:4px}
+.nc-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nc-price{margin-top:16px;border:1.5px solid #E3E3E3;border-radius:14px;padding:14px 16px}
+.nc-price-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.nc-price-top b{font-size:15.5px}
+.nc-price-top .ask{margin-left:auto}
+.nc-price-in{display:none;margin-top:12px;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.nc-price-in.on{display:flex}
+.nc-money{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:14.5px}
+.nc-money b{font-size:20px;font-weight:900;color:#1B1B1B}
+.nc-note{font-size:12.5px;color:#777;line-height:1.65;margin-top:14px}
+.nc-empty{background:#FFF7DB;color:#7A5B00;border-radius:12px;padding:14px 16px;font-weight:700;font-size:14.5px}
+.nc-q{margin-top:16px;background:#1B1B1B;color:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-left:6px solid #F2B705}
+.nc-q b{display:block;font-size:17px}
+.nc-q span{display:block;color:#cfcfcf;font-size:13.5px;margin-top:3px;line-height:1.5}
+.nc-q a{background:#F2B705;color:#1B1B1B;font-weight:800;padding:12px 18px;border-radius:10px;text-decoration:none;white-space:nowrap}
+.nc-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-top:1px solid #E3E3E3;padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:50}
+.nc-bar-in{max-width:760px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nc-bar-in div{flex:1;min-width:0}
+.nc-bar-in small{display:block;font-size:12.5px;color:#666;font-weight:700}
+.nc-bar-in strong{font-size:20px;font-weight:900;color:#1B1B1B}
+#report{display:none}
+@media(max-width:560px){
+  .nc-sec-grid{grid-template-columns:1fr 1fr}
+  .nc-opts{grid-template-columns:1fr 1fr}
+  .nc-big{grid-template-columns:1fr 1fr}
+  .nc-big b{font-size:28px}
+  .nc-tbl{font-size:13px}
+  .nc-tbl th,.nc-tbl td{padding:8px 4px}
+}
+
+.wp-wrap{max-width:1240px;margin:0 auto;padding:0 16px 130px;display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:20px;align-items:start}
+.wp-form{min-width:0}
+.wp-side{position:sticky;top:12px;margin-top:-34px;background:#fff;border:1px solid #E3E3E3;border-radius:16px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.06);min-width:0}
+.wp-pvh{display:flex;align-items:baseline;gap:8px;margin:0 2px 10px}
+.wp-pvh b{font-size:15px;color:#1B1B1B}.wp-pvh span{font-size:12.5px;color:#888;font-weight:700}
+.wp-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.wp-grid .nc-in{min-width:0;max-width:100%}
+.wp-full{grid-column:1 / -1}
+.wp-ta{resize:vertical;line-height:1.5;font-size:14.5px}
+.nc-link{font:inherit;font-size:12.5px;font-weight:800;border:none;background:none;color:#1B1B1B;text-decoration:underline;cursor:pointer;padding:0}
+.wp-imgs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.wp-img{border:1px solid #E8E8E8;border-radius:12px;padding:8px;min-width:0}
+.wp-imgt{font:inherit;font-weight:800;font-size:14px;border:none;border-bottom:1.5px dashed #ccc;padding:2px;width:100%;background:transparent;color:#1B1B1B;margin-bottom:6px}
+.wp-imgt:focus{outline:none;border-bottom-color:#1B1B1B}
+.wp-drop{display:flex;align-items:center;justify-content:center;height:110px;border:1.5px dashed #CFCFCF;border-radius:10px;cursor:pointer;color:#777;font-weight:700;font-size:13.5px;background:#FAFAF8;overflow:hidden;position:relative}
+.wp-drop.on{border-style:solid;border-color:#E3E3E3;background:#fff}
+.wp-drop img{max-width:100%;max-height:100%;object-fit:contain}
+.wp-drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.wp-cta{margin-top:12px;background:#1B1B1B;color:#fff;border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-left:5px solid #F2B705}
+.wp-cta b{display:block;font-size:14.5px}.wp-cta span{display:block;color:#cfcfcf;font-size:12.5px;margin-top:2px;line-height:1.5}
+.it-tabs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;margin-bottom:8px}
+.it-tab{font:inherit;font-size:13.5px;font-weight:800;border:1.5px solid #D5D5D5;background:#fff;border-radius:10px;padding:8px 11px;cursor:pointer;color:#444;white-space:nowrap;flex:none}
+.it-tab[aria-pressed="true"]{background:#1B1B1B;border-color:#1B1B1B;color:#fff}
+.it-tab em{font-style:normal;display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:#F2B705;color:#1B1B1B;font-size:12px;line-height:18px;text-align:center}
+.rk{display:flex;gap:10px;align-items:flex-start;padding:9px 6px;border-bottom:1px solid #F0F0F0;cursor:pointer;border-radius:8px}
+.rk.on{background:#FFF8DD}
+.rk input{width:19px;height:19px;accent-color:#1B1B1B;flex:none;margin-top:2px}
+.rk span{min-width:0}
+.rk small{display:inline-block;font-size:11px;font-weight:800;color:#7A5B00;background:#FFF2C2;border-radius:5px;padding:0 5px;margin-bottom:2px}
+.rk b{display:block;font-size:13.5px;color:#1B1B1B;font-weight:700;line-height:1.45}
+.rk i{display:block;font-style:normal;font-size:13px;color:#555;line-height:1.45;margin-top:2px}
+/* ---------- 계획서 (A4 가로) ---------- */
+.pv{position:relative;width:100%;overflow:hidden;border:1px solid #DDD;background:#fff}
+.sheet{overflow:hidden;position:absolute;left:0;top:0;transform-origin:0 0;width:281mm;height:194mm;background:#fff;color:#000;font-family:Pretendard,'Malgun Gothic',sans-serif;font-size:8pt;display:grid;grid-template-columns:1fr 88mm;gap:3mm;padding:0;box-sizing:border-box}
+.sheet p{margin:0}
+.sh-l{display:flex;flex-direction:column;min-width:0;min-height:0;height:194mm}
+.sh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:4mm;margin-bottom:2mm}
+.sh-top .tt{display:flex;border:1.2pt solid #000}
+.sh-top .tt span{padding:2mm 6mm;font-weight:800;font-size:13pt;border-right:1.2pt solid #000}
+.sh-top .tt b{padding:2mm 8mm;font-size:13pt}
+.sheet table{border-collapse:collapse;width:100%}
+.sheet td{border:.6pt solid #555;padding:.8mm 1.5mm;vertical-align:middle}
+.sheet td.k{background:#F2F2F2;font-weight:700;text-align:center;white-space:nowrap}
+.mini{width:78mm!important;font-size:8.5pt}
+.mini td.k{width:20mm}
+.sh-dw{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:2.5mm;border:.8pt solid #9DB6D8;padding:2.5mm;min-height:0}
+.sl{display:flex;flex-direction:column;min-height:0;min-width:0}
+.slt{align-self:flex-start;background:#1F3864;color:#fff;font-weight:700;font-size:7.5pt;padding:.6mm 3mm;margin-bottom:1mm}
+.sli{flex:1;position:relative;display:flex;align-items:center;justify-content:center;min-height:0;border:.4pt solid #DDD;overflow:hidden}
+.sli img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.sli span{color:#BBB;font-size:9pt}
+.sh-nt{padding:2mm 1mm 0;font-size:8pt;line-height:1.55}
+.sh-r{display:flex;flex-direction:column;min-width:0;font-size:7.4pt}
+.wp-warn{display:block;color:#8A1C1C;font-weight:800}
+.info td.k{width:17mm}
+.info td.hd,.sign td.hd{text-align:center;font-weight:800;background:#fff}
+.info td.mb{line-height:1.5;padding:1.2mm 2mm}
+.info td.tx{line-height:1.45;vertical-align:top;padding:1.2mm 1.5mm}
+.info td.tx p{margin-bottom:.6mm}.info td.tx p.pk{color:#222}
+.sign{margin-top:-.6pt}
+.sign td.r{text-align:center;width:17mm}
+.sign td.n{text-align:right}
+.sign td.k{width:17mm}
+.sign td.wk{padding:0;height:8mm}
+.sign td.wk span{display:inline-block;width:25%;height:8mm;border-left:.6pt solid #555;box-sizing:border-box}
+.sign td.wk span:first-child{border-left:none}
+.how{border:.6pt solid #555;border-top:none;padding:1mm 1.5mm;font-size:7pt}
+.ph{color:#bbb}
+@media(max-width:980px){
+  .wp-wrap{grid-template-columns:minmax(0,1fr)}
+  .wp-side{position:static;margin-top:0;order:2}
+}
+@media(max-width:560px){.wp-drop{height:90px}}
+@media print{
+  @page{size:A4 landscape;margin:8mm}
+  body{background:#fff;padding:0}
+  body>*:not(main){display:none!important}
+  .wp-wrap{display:block;padding:0;max-width:none}
+  .wp-form,.wp-pvh{display:none!important}
+  .wp-side{position:static;margin:0;padding:0;border:none;box-shadow:none}
+  .pv{height:auto!important;border:none;overflow:visible}
+  .sheet{position:static;transform:none!important}
+}
+</style>
+</head>
+<body>
+<div class="gp-topbar"><div class="gp-topbar-inner"><a href="https://gaseolpartner.com"><span class="dot"></span>가설파트너 홈페이지 ↗</a><nav><a href="https://gaseolpartner.com/pages/introduction">가설 설계 프로그램</a><a href="https://gaseolpartner.com/pages/precio">가설재 견적 비교</a><a href="https://gaseolpartner.com/pages/structureatuntroduction">구조검토</a><a href="https://gaseolpartner.com/pages/calculators">무료 도구</a><a href="https://gaseolpartner.com/pages/support">고객지원</a></nav></div></div>
+<header class="gp-brandbar"><div class="gp-brandbar-inner"><a class="gp-logo" href="https://gaseolpartner.com" aria-label="가설파트너"><span class="gp-li"></span><span class="gp-lt"><b>가설파트너</b><small>GASEOL PARTNER</small></span></a><div class="gp-brand-links"><a class="gp-hide-m" href="index.html">물량·견적 계산기</a><a class="gp-cta" href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener">카카오톡 문의</a></div></div></header>
+
+<section class="gp-hero dark">
+  <div class="gp-hero-inner" style="padding-bottom:64px">
+    <span class="gp-label">무료 도구 · 작업계획서</span>
+    <h1>시스템동바리 <em>설치 작업계획서</em></h1>
+    <p>현장 정보와 도면만 넣으면 A4 한 장짜리 작업계획서가 바로 만들어져요.<br>작업 단계를 고르면 위험요인과 안전대책도 골라서 넣을 수 있어요.</p>
+  </div>
+</section>
+
+<main class="wp-wrap">
+  <div class="wp-form">
+  <section class="nc-card" aria-labelledby="h1">
+    <h2 class="nc-h" id="h1"><i>1</i>현장 정보</h2>
+    <div class="wp-grid">
+      <div class="wp-full"><label class="nc-lab" for="f_site">현장명</label><input class="nc-in" id="f_site" data-k="site" maxlength="40" placeholder="예: ○○ 신축공사"></div>
+      <div class="wp-full"><label class="nc-lab" for="f_loc">설치위치</label><input class="nc-in" id="f_loc" data-k="loc" maxlength="40" placeholder="예: 101동 지하 3층"></div>
+      <div><label class="nc-lab" for="f_area">설치 면적</label><div class="nc-unit"><input class="nc-in" id="f_area" data-k="area" type="number" inputmode="decimal" step="0.1" min="0" placeholder="예: 542"><em>㎡</em></div></div>
+      <div><label class="nc-lab" for="f_stair">수직승강로</label><div class="nc-unit"><input class="nc-in" id="f_stair" data-k="stair" type="number" inputmode="numeric" step="1" min="0" placeholder="예: 6"><em>개소</em></div></div>
+      <div><label class="nc-lab" for="f_hmin">작업 높이 (최소)</label><div class="nc-unit"><input class="nc-in" id="f_hmin" data-k="hmin" type="number" inputmode="decimal" step="0.01" min="0" placeholder="예: 4.75"><em>m</em></div></div>
+      <div><label class="nc-lab" for="f_hmax">작업 높이 (최대)</label><div class="nc-unit"><input class="nc-in" id="f_hmax" data-k="hmax" type="number" inputmode="decimal" step="0.01" min="0" placeholder="예: 5.32"><em>m</em></div></div>
+      <div class="wp-full"><label class="nc-lab" for="f_hbase">높이 기준</label><input class="nc-in" id="f_hbase" data-k="hbase" maxlength="20" placeholder="예: 슬래브 기준"></div>
+      <div class="wp-full"><label class="nc-lab" for="f_comp">설치업체</label><input class="nc-in" id="f_comp" data-k="comp" maxlength="30" placeholder="예: ○○건설"></div>
+      <div><label class="nc-lab" for="f_d1">사용기간 시작</label><input class="nc-in" id="f_d1" data-k="d1" type="date"></div>
+      <div><label class="nc-lab" for="f_d2">사용기간 끝</label><input class="nc-in" id="f_d2" data-k="d2" type="date"></div>
+    </div>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h2">
+    <h2 class="nc-h" id="h2"><i>2</i>도면 (사진·캡처)</h2>
+    <p class="nc-hint" style="margin-top:0">CAD 도면을 이미지(PNG·JPG)로 저장하거나 화면을 캡처해서 넣으세요. 평면/입면도에는 이동통로, 벽이음, 하부받침이 보이게 해 주세요.</p>
+    <div class="wp-imgs" id="imgs"></div>
+    <p class="nc-hint">· 도면 사진은 이 화면에서만 쓰고 어디에도 저장·전송하지 않아요. 새로고침하면 다시 넣어야 해요.</p>
+    <div class="wp-cta"><div><b>조립도·구조검토서가 아직 없나요?</b><span>지시사항대로 "도면과 구조검토서에 따라 설치"하려면 구조검토가 먼저예요.</span></div><a href="structural-review-request.html" class="nc-btn y s">구조검토 의뢰하기 →</a></div>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h3">
+    <h2 class="nc-h" id="h3"><i>3</i>부재·주의사항</h2>
+    <label class="nc-lab" for="f_member">부재의 치수 및 종류</label>
+    <textarea class="nc-in wp-ta" id="f_member" data-k="member" rows="5"></textarea>
+    <label class="nc-lab" for="f_note" style="margin-top:12px">도면 아래 주의사항</label>
+    <textarea class="nc-in wp-ta" id="f_note" data-k="note" rows="5"></textarea>
+    <p class="nc-hint">한 줄에 하나씩 쓰세요. <button type="button" class="nc-link" data-def="member,note">기본 문구로 되돌리기</button></p>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h4">
+    <h2 class="nc-h" id="h4"><i>4</i>위험요인 및 안전보건 지시사항</h2>
+    <label class="nc-lab" for="f_haz">위험요인</label>
+    <textarea class="nc-in wp-ta" id="f_haz" data-k="haz" rows="4"></textarea>
+    <label class="nc-lab" for="f_ord" style="margin-top:12px">안전보건 지시사항</label>
+    <textarea class="nc-in wp-ta" id="f_ord" data-k="ord" rows="4"></textarea>
+    <p class="nc-hint"><button type="button" class="nc-link" data-def="haz,ord">기본 문구로 되돌리기</button></p>
+
+    <h3 class="nc-sub" style="margin-top:20px">작업 단계별 위험요인 더 넣기</h3>
+    <p class="nc-hint" style="margin-top:0">단계를 고르고 해당하는 항목을 체크하면 위험요인과 대책이 계획서에 같이 들어가요. 글자가 읽기 좋은 크기로 한 장에 들어가려면 4개 이내를 추천해요.</p>
+    <div class="it-tabs" role="group" aria-label="작업 단계" id="stages"></div>
+    <div id="risks"></div>
+    <div class="nc-roll" id="pickInfo" style="margin-top:12px"></div>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h5">
+    <h2 class="nc-h" id="h5"><i>5</i>확인 (이름은 비워도 돼요)</h2>
+    <div class="wp-grid">
+      <div><label class="nc-lab" for="f_s1">승인자 · 현장소장</label><input class="nc-in" id="f_s1" data-k="s1" maxlength="12"></div>
+      <div><label class="nc-lab" for="f_s2">검토자 · 공사팀장</label><input class="nc-in" id="f_s2" data-k="s2" maxlength="12"></div>
+      <div><label class="nc-lab" for="f_s3">검토자 · 안전관리자</label><input class="nc-in" id="f_s3" data-k="s3" maxlength="12"></div>
+      <div><label class="nc-lab" for="f_s4">작성자 · 공사담당</label><input class="nc-in" id="f_s4" data-k="s4" maxlength="12"></div>
+      <div><label class="nc-lab" for="f_s5">작성자 · 협력사소장</label><input class="nc-in" id="f_s5" data-k="s5" maxlength="12"></div>
+    </div>
+    <div class="nc-row">
+      <button type="button" class="nc-btn y" id="pdf">📄 작업계획서 PDF 저장 · 인쇄</button>
+      <button type="button" class="nc-btn" id="reset">새로 쓰기</button>
+    </div>
+    <p class="nc-note">· 입력한 글자는 이 기기에만 저장돼요(도면 사진 제외). 다른 사람에게 전달되지 않아요.<br>· PDF는 인쇄 창에서 '대상: PDF로 저장', 용지 방향 '가로'로 저장하세요.<br>· 작업계획서는 현장 조건에 맞게 내용을 확인·수정한 뒤 사용하세요. 위험요인 문구는 시스템동바리 설치·해체 작업 위험성평가 자료를 바탕으로 했어요.</p>
+  </section>
+  </div>
+
+  <aside class="wp-side" aria-label="미리보기">
+    <div class="wp-pvh"><b>미리보기</b><span>A4 가로 한 장</span></div>
+    <div class="pv" id="pv"><div class="sheet" id="sheet"></div></div>
+  </aside>
+</main>
+
+<div class="nc-bar"><div class="nc-bar-in">
+  <div><small id="barTxt">시스템동바리 설치 작업계획서</small><strong id="barVal">A4 가로 1장</strong></div>
+  <button type="button" class="nc-btn y" id="pdf2">PDF 저장</button>
+</div></div>
+
+<footer class="gp-footer"><div class="gp-footer-inner"><div>회사명 : 가설파트너<span class="gp-sep">|</span>주소 : 서울 강남구 가로수길 5<span class="gp-sep">|</span>이메일 : <a href="mailto:fc112@naver.com">fc112@naver.com</a><span class="gp-sep">|</span>전화 : <a href="tel:01079702108">010-7970-2108</a><span class="gp-sep">|</span>사업자등록번호 : 549-20-01841</div><div class="gp-copyline">ⓒ Gaseolpartner. all right reserved. · <a href="https://gaseolpartner.com" target="_blank" rel="noopener">gaseolpartner.com</a></div></div></footer>
+
+<script>
+(function () {
+  'use strict';
+  // ------------------------------------------------------------------
+  // 양식: 시스템동바리설치계획서_엑셀양식.xlsx (A4 가로 1장) 구성 그대로
+  // 위험요인·대책: (1-18-0) 시스템동바리 설치 작업.pptx 위험성평가 표 (9단계 124항목)
+  // ------------------------------------------------------------------
+  var RISK = [{"t":"자재반입 및 준비작업","r":[["인적","작업방법 및 내용 미확인으로 인한 안전사고 발생","작업내용에 따른 위험성을 평가하고 TBM시 전달"],["인적","장비작업중 주변 근로자를 확인하지 못해 장비와 충돌 협착","신호수 배치 신호에 의한 작업실시"],["인적","지게차로 자재 하역 중 후방에 근로자 접근충돌","신호수 배치"],["인적","운반트럭 적재함에 근로자 임의로 올라가서 작업중 추락","적재함 작업 금지"],["인적","타워크레인으로 하역작업중 자재하부에 발 협착","하역자재 하부에 손, 발 넣기 금지"],["인적","자재 운반차량 후진 중 근로자와 충돌","차량계 하역운반기계 사용시 유도자를 배치하여 유도"],["기계적","해지장치가 없는 후크로 인양 중 로프가 이탈하면서 자재 낙하","인양용 후크에 해지장치를 설치하여 작업실시"],["기계적","자재반입 적재장소 미흡으로 인한 자재 적재시 전도, 추락","작업범위를 확인, 자형확인"],["기계적","지상에 적치된 자재 인력으로 운반 중 자세불량, 무리한 힘으로 인한 요통","중량물 인력운반 교육 실시 스트레칭 교육실시"],["기계적","입고된 자재 미확인으로 인한 설치 후 동바리 전도","연결핀 등 전용철물이 제조사의 제품과 동일한 것인지 확인"],["기계적","지반에 설치시 하부 지반의 지지력 검토 미흡으로 인한 설치 후 침하","지반에 설치할 경우 수직하중에 견딜 수 있도록 지반 지지력 검토"],["기계적","구조검토 및 작업계획서 미작성 상태에서 작업중 동바리 붕괴","작업전 구조검토 및 조립도 작성"],["전기적","가설전선 피복 노출에 의한 감전","가설전선은 가공으로 배선하여 피복이 손상되지 않도록 하고 손상된 전선은 절연처리 하고 작업"],["재료적","불량자재 반입 사용으로 인한 사고","자재 입고시 검수철저"],["작업특성","차량계 건설기계작업계획서 작성 미흡에 의한 사고","차량계건설기계 작업계획서 작성/검토/승인 후 근로자에게 교육 실시"],["작업특성","중량물 취급작업계획 미수립 상태에서 작업중 사고","중량물 취급작업계획서 작성/검토/승인 후 근로자 교육 실시"],["작업환경","악천후시 작업으로 인한 사고","악천후시 작업중지"]]},{"t":"하부설치(잭베이스, 수평재)","r":[["인적","수평재 설치 후 수평재를 넘어 가는 중 발이 걸려 넘어짐","조립시 순서를 정하여 가능한 수평재를 넘어 가지 않도록 작업 실시"],["인적","망치로 핀고정 작업중 손등을 가격","개인 공구 사용중 안전수칙 준수하여 작업토록 교육 철저"],["기계적","지반 지지력 미확보로 인하여 비계 설치 중 전도","수직하중에 견딜 수 있도록 지반다짐 실시"],["기계적","잭베이스 하부에 이물질 등에 의한 비계의 수직 수평도 불량","잭베이스 하부에 이물질 및 돌출부위가 없도록 바닥면 정리"],["기계적","잭베이스를 하부 경사진 곳에 설치하여 수직, 수평 불량으로 인한 사고","경사진 곳에 설치할 경우 목재쐐기 등을 이용하여 바닥면과 수평이 되도록 설치"],["기계적","잭 베이스 설치 작업자 경험치에 의한 시공 중 편심발생","조립도에 의한 시공 준수"],["기계적","수직재에 수평재 및 수평가새 연결 누락으로 인한 도괴 등 발생","조립도에 의거 수직재에 수평재와 수평가새를 누락하지 않도록 작업"],["기계적","핀을 끼운 후 고정 미흡으로 인한 비계의 흔들림 발생","핀을 끼운 후 수평가새를 설치하여 위치를 고정한다"],["기계적","잭 베이스 설치 중 바닥의 개구부에 빠짐(추락)","작업전 바닥개구부 덮개 설치"],["기계적","개구부 덮개위에 잭베이스 설치로 인한 수직하중에 의한 좌굴","바닥개구부에 잭 베이스 설치시 하부 보강 후 설치"],["기계적","잭베이스 등 설치 중 타공종 상부작업장에서 낙하물 발생으로 맞음","잭베이스 상부 작업 금지"],["기계적","어두운 곳 설치 중 조명 불량에 의한 전도","어두운 곳은 조명을 설치 후 작업"],["전기적","가설전선 피복 노출에 의한 감전","가설전선은 가공으로 배선하여 피복이 손상되지 않도록 하고 손상된 전선은 절연처리 하고 작업"],["작업특성","작업계획서 작성 미흡에 의한 사고","작업계획서 작성/검토/승인 후 근로자에게 교육 실시"],["작업환경","악천후시 작업으로 인한 사고","악천후시 작업중지"]]},{"t":"1~2단 수직재 설치 작업","r":[["인적","수직재를 한번에 높게 연결하여 설치 하던 중 수직재 전도","수직재 설치시 조립도 조립기준을 준수하여 설치"],["인적","2단설치 작업중 안전대 미착용으로 근로자 추락","2단작업전 근로자 안전대 착용상태 확인"],["인적","2단 수직재 자재를 받다가 하부로 낙하","수직재 등 자재를 인력운반시 상대방의 신호등 확인"],["기계적","수평을 맞추지 않고 설치하여 비계 도괴","수직 가새를 설치하면서 수평을 맞추고 난 후 임시 고정시켜 놓았던 연결핀을 완전히 고정"],["기계적","수직재 힌지에 의한 변형 발생","수직재 연결부 부근에 수평재 설치"],["기계적","수직가새 미설치로 인한 횡 좌굴 발생","수직가새 설치"],["기계적","수평가새 미설치로 사각틀의 변형 발생","잭베이스 설치시 수평가새 설치 및 미설치 부위 확인 후 설치"],["기계적","기설치된 1단 수평재를 딛고 작업중 바닥으로 전도","하부수평재를 견고하게 고정하고 높이가 낮은 위치라도 서두르지 않도록 교육/관리"],["기계적","기설치된 2단수평재로 이동 중 추락","승강사다리 및 작업발판을 설치"],["기계적","설치순서 미숙지 및 근로자 임의 설치중 추락 낙하물 사고 위험","필요한 높이까지 같은 순서로 반복작업 상부로 이동하는 승강계단과 작업발판을 설치하고 작업토록 한다"],["전기적","불량 공도구 사용으로 인한 감전","사용전 기계의 외함접지 설치 상태 확인 및 충전부위 절연조치 실시"],["재료적","불량자재 반입 사용으로 인한 사고","자재 입고시 검수철저"],["작업특성","수직재 수직, 수평을 견고하게 고정함으로 후속 작업시 무리하게 힘을 주어 작업함으로 근로자 전도","하부수평재를 견고하게 고정하고 높이가 낮은 위치라도 서두르지 않도록 교육/관리"],["작업환경","악천후시 작업으로 인한 사고","악천후시 작업중지"]]},{"t":"추락방지망, 작업발판, 자재 인양 작업","r":[["인적","기설치된 시스템비계위에 자재인양시 한곳에 집중하여 자재를 적치하여 시스템동바리 붕괴","자재인양 적치위치를 선정하여 한곳에 집중하여 적치하지 않도록 조치"],["인적","타워크레인으로 인양작업중 자재하부에 발을 넣어 협착","하부에 손, 발 넣기 금지"],["기계적","자재적치 장소에 작업발판 및 안전난간대 미설치 상태에서 자재를 적치중 추락","자재적치 부위에는 적치용 바닥판을 설치하고 주변에 작업발판 및 안전난간을 설치"],["기계적","자재 인양 중 인양로프가 끊어져 자재가 낙하","자재 인양 전 인양로프 상태 점검 실시"],["기계적","공장에서 묶은 자재의 일부분에 로프를 체결하여 인양 중 체결되지 않은 부위에 자재가 낙하","공장에서 묶여온 전체를 인양로프로 체결하여 운반"],["기계적","자재를 평탄하지 않는 장소에 적재하여 전도","평탄한 장소에 자재 적재"],["기계적","자재 인양중 시스템동바리 수직재에 인양하던 자재 충돌로 동바리 변형 좌굴 및 근로자 추락","자재 인양시 보조로프를 연결하여 자재가 기설치된 동바리에 충돌하지 않도록 하여 운반"],["기계적","해지장치가 없는 후크로 인양 중 로프가 이탈하면서 자재 낙하","인양용 후크에 해지장치를 설치하여 작업실시"],["기계적","추락방지망 미설치 상태에서 작업중 추락","1단을 설치한 즉시 추락방지망을 설치"],["기계적","작업발판에서 작업중 추락","작업발판 단부에 안전난간을 설치"],["전기적","불량 공도구 사용으로 인한 감전","사용전 기계의 외함접지 설치 상태 확인 및 충전부위 절연조치 실시"],["작업특성","시스템동바리 별도 독립형 부분에 좌굴 발생","동바리에 자재 인양 적치전 System동바리와 동바리 사이에 고정. 연결 작업을 한다."]]},{"t":"상부 마감 작업","r":[["인적","고소작업장에서 중량물 취급중 충돌 추락","중량물 취급 인양 등 작업시 유도로프를 설치 하고 인양"],["인적","시스템동바리 1단등에서 하부로 뛰어내림에 의한 사고 발생","통로를 설치하고 무리한 불안전한 행동을 금지토록 교육 철저"],["인적","고소작업중 몸의 균형을 잃고 하부로 추락","고소작업시 안전대 걸이 시설을 설치하고 안전대를 걸고 작업"],["기계적","수평가새 미설치로 인한 사각틀 변형","최상부 수평가새 설치"],["기계적","동바리설치구간 하부로 이동중 상부 낙하물에 맞음","동바리 설치구간 하부 출입통제"],["기계적","수평재 연결부 부근 수평재 미설치로 인한 수직재 힌지에에 의한 좌굴","수직재 연결부 부근에 수평재 설치"],["기계적","설치순서 미숙지 및 근로자 임의 설치 중 추락, 낙하","동바리 설치 작업전 근로자 특별안전교육 실시"],["기계적","해지장치 없는 후크로 인양중 로프가 이탈 자재 낙하","인양용 후크에 해지장치를 설치하여 작업실시"],["기계적","추락방지망 미설치 상태에서 작업중 추락","1단을 설치한 즉시 추락방지망을 설치"],["기계적","작업발판에서 작업중 추락","작업발판 단부에 안전난간을 설치"],["기계적","개구부 부위에서 편심발생으로 인한 동바리 좌굴","개구부 부위 페합 등 구조적 보강 실치"],["기계적","상부 작업발판 이동중 전도","상부 작업장 정리정돈 실시"],["전기적","불량 공도구 사용으로 인한 감전","사용전 기계의 외함접지 설치 상태 확인 및 충전부위 절연조치 실시"],["작업특성","작업발판과 승강통로 미설치 상태에서 시스템동바리 설치 작업중 추락","필요한 높이까지 같은 순서로 반복작업 상부로 이동하는 승강계단과 작업발판을 설치하고 작업"]]},{"t":"U-HEAD 설치 작업","r":[["인적","고소작업장에서 중량물 취급중 충돌 추락","중량물 취급 인양 등 작업시 유도로프를 설치 하고 인양"],["인적","고소작업중 몸의 균형을 잃고 하부로 추락","고소작업시 안전대 걸이 시설을 설치하고 안전대를 걸고 작업"],["인적","상부 작업발판 이동중 전도","상부 작업장 정리정돈 실시"],["기계적","U헤드 변형으로 인한 휨 좌굴 발생","수직재에 충분한 삽입길이 확보. 쐐기설치"],["기계적","자재인양을 한곳에집중 적치하여 시스템동바리 붕괴","자재인양 적치위치를 선정하여 한곳에 집중하여 적치하지 않도록 조치"],["기계적","자재적치 장소에 작업발판 및 안전난간대 미설치 상태에서 자재를 적치중 추락","자재적치 부위에는 적치용 바닥판을 설치하고 주변에 작업발판 및 안전난간을 설치"],["기계적","자재 인양중 시스템동바리 수직재에 인양하던 자재 충돌로 동바리 변형 좌굴 및 추락","자재 인양시 보조로프를 연결하여 자재가 기설치된 동바리에 충돌하지 않도록 하여 운반"],["기계적","추락방지망 미설치 상태에서 작업중 추락","1단을 설치한 즉시 추락방지망을 설치"],["기계적","작업발판에서 작업중 추락","작업발판 단부에 안전난간을 설치"],["기계적","개구부 부위에서 편심발생으로 인한 동바리 좌굴","개구부 부위 페합 등 구조적 보강 설치"],["전기적","불량 공도구 사용으로 인한 감전","사용전 기계의 외함접지 설치 상태 확인 및 충전부위 절연조치 실시"],["작업특성","멍에와 U헤드 중심축 불일치로 인한 휨 좌굴 위험","쐐기 설치 및 U헤드 회전하여 멍에 중심축에 일치토록 설치"]]},{"t":"멍애재,장선재 설치 작업","r":[["인적","멍애재 등 설치 작업시 안전대 미착용으로 인한 추락","작업시 안전대 착용 철저"],["인적","동바리 설치구간 무단 진입으로 인한 낙하물 사고","동바리 설치 구간 출입금지 등 통제조치"],["기계적","U헤드의 중심에 멍에재 및 장선재를 설치하지 않아 상부 작업중 편심에 의한 모멘트 발생으로 시스템동바리 좌굴","U헤드 중심에 멍에재 및 장선재가 놓이도록 U헤드를 조정하고 틈이 발생시 쐐기를 설치 하고 철선등으로 고정을 철저히 하여 편심이 발생하지 않도록 조치"],["기계적","멍에재 설치시 작업발판 미설치 상태에서 작업중 근로자 추락","멍에재 설치 작업부위에는 작업발판을 설치하고 단부에 안전난간 및 안전대 걸이용 로프를 설치하여 근로자가 안전대를 걸고 작업토록 지휘 감독 철저"],["기계적","멍에재 설치 작업중 낙하물 사고","멍에재 설치전 하부에 낙하물 방지망 설치"],["기계적","상부 작업발판 이동중 전도","상부 작업장 정리정돈 실시"],["기계적","동바리 설치구간 통제 미흡으로 낙하물 사고","동바리 설치 구간 출입금지 등 통제조치"],["기계적","회전톱으로 멍에재 절단 작업중 회전부위에 접촉 사고","회전톱 사용 기준 준수하여 작업"],["기계적","멍에재 및 장선재 인양 작업중 충돌 사고","인양 작업시 보조로프를 설치하여 자재 유도"],["기계적","자재를 평탄하지 않는 장소에 적재하여 전도","평탄한 장소에 자재 적재"],["기계적","해지장치가 없는 후크로 인양 중 로프가 이탈하면서 자재 낙하","인양용 후크에 해지장치를 설치하여 작업실시"],["전기적","불량 공도구 사용으로 인한 감전","사용전 기계의 외함접지 설치 상태 확인 및 충전부위 절연조치 실시"],["작업특성","작업계획서 작성 미흡에 의한 사고","작업계획서 작성/검토/승인 후 근로자에게 교육 실시"]]},{"t":"CON’C타설 및 점검작업","r":[["인적","콘크리트 타설시 한곳에 집중하여 타설 중 붕괴","콘크리트 타설전 타설 순서 및 방법에 특별안전교육"],["인적","콘크리트 타설시 동바리등 상태 점검 미흡으로 인한 사전 조치 미흠으로 인한 사고","콘크리트 타설 중 수시로 동바리 상태를 점검하여 이상시 작업을 중지하고 조치 후 작업 실시"],["인적","콘크리트 타설시 하부 점검중 콘크리트 물이 눈에 들어가는 사고","하부 점검시 보안경 등 착용"],["기계적","콘크리트 타설전 하부 동바리 확인 중 개구부에 빠짐","하부 개구부 덮개 설치 철저"],["기계적","시스템 동바리 점검 시 돌출물에 충돌","돌출물 등 동바리 설치시 제거"],["기계적","조명불량으로 인해 점검 미흡발생으로 콘크리트 타설시 붕괴","하부 조명 시설 설치"],["기계적","핀등 체결상태 점검을 하려고 비계 승강중 추락","통로를 이용하여 점검 실시 필요시 통로 재설치"],["기계적","하부 점검중 이동전선 피복손상부위에 접촉 감전","이동전선은 수시로 점검하여 피복 노출여부를 수시로 확인 후 조치"],["기계적","시스템동바리 하부 내부 이동통로 구획 미설치로 내부 점검시 전도","시공상 주요포인트를 선정하여 내부 이동통로를 설치"],["기계적","동바리 점검 중 자재에 발이 걸려 넘어짐","동바리 설치 완료 후 내부 잔재를 모두 정리하여 반출"],["기계적","하부 점검시 커버가 없는 투광등 사용중 전등이 깨지면서 감전","하부 투광등 및 조명의 전등보호 커버를 반드시 설치"],["전기적","불량 공도구 사용으로 인한 감전","사용전 기계의 점검, 외함접지 설치 상태 확인 및 충전부위 절연조치 실시"],["전기적","가설전선 피복 노출에 의한 감전","가설전선은 가공으로 배선하여 피복이 손상되지 않도록 하고 손상된 전선은 절연처리 하고 작업"],["작업특성","콘크리트 타설전 하부 동바리설치 상태 점검 미흡으로 타설 중 붕괴","타설전 연결핀, 가새 등 설치 상태를 점검하여 이상시 조치 후 타설"]]},{"t":"해체 및 반출","r":[["인적","동바리 훼손,변형여부, 잔재물 존치 여부 미점검 상태에서 작업중 붕괴 및 낙하물 사고위험","해체 작업전 훼손, 변형, 잔재물 등을 조치후 해체작업 실시"],["인적","시스템동바리 받아내리기 작업중 신호가 맞지 않아 파이프를 놓쳐 낙하","해체작업시 상하작업자 신호 확인 철저"],["인적","해체작업시 안전대를 미착용한 상태에서 작업중 몸의 균형을 잃어 추락","해체 작업시 안전대 고리 사용 철저"],["인적","무리한 힘을 가하여 작업중 몸의 균형을 잃어 추락","무리한 힘을 사용하지 않도록 하고 안전대 사용 철저"],["인적","해체된 자재를 지게차로 운반중 충돌사고","지게차 안전장치 설치 및 신호수 배치, 작업전 교육"],["인적","해체작업장 경계 미표시 등으로 타공정 근로자 출입으로 해체자재 낙하 등에 의한 사고","통제구역 설정 및 하부 감시자 배치 관계자 외 출입통제 후 작업실시"],["인적","해체된 자재정리정돈 미흡으로 근로자 이동중 전도","해체된 자재 규격 별로 정리정돈 실시"],["기계적","조명불량에 의해 돌출물등에 찔림, 오동작 위험","해제작업장에 적합한 조명을 설치"],["기계적","해체된 자재를 던지던 중 하부에 근로자가 맞음","하부는 출입을 통제하고 자재는 던지지 않도록 한다"],["기계적","해체작업시 개구부 덮개등 훼손부위에 빠짐","동바리 해체시 개구부 발생여부를 확인하고 안전조치"],["전기적","불량 공도구 사용으로 인한 감전","사용전 기계의 외함접지 설치 상태 확인 및 충전부위 절연조치 실시"],["전기적","해체중 이동전선 피복손상부위에 접촉 감전","이동전선은 수시로 점검하여 피복 노출여부를 수시로 확인 후 조치"],["작업특성","해체작업 순서 미준수로 인한 낙하 등 사고","작업전 해체계획 수립 후 특별안전교육 실시"]]}];
+  var DEF = {
+    member: '· 시스템 동바리 수직재 (P17·P12·P8·P4·P3·P2)\n· U 헤드, 멍에재, 잭베이스\n· 작업발판\n· 대각재\n· 시스템 동바리 수평대',
+    note: '※ 멍에재 구간에는 전용 고정 철물을 사용 실시.\n※ 독립 구간 상 하부 연결 실시.\n※ 발판 설치가 불가능한 구간 파이프 설치 실시.\n※ U 헤드 돌출부 400mm 이내 설치.\n※ 최하부에서 첫번째 수평대 400mm 이내 설치.',
+    haz: '1. 근로자가 임의로 시스템 동바리 설치 작업하여 동바리가 하중을 버티지 못하고 좌굴 혹은 붕괴위험\n2. 근로자가 수평대에 매달려 작업중 편심을 잃고 하부로 추락하는 위험',
+    ord: '1. 작업전 근로자에게 도면과 구조검토서에 따라 설치하도록 지시하며 중간에 도면과 구조검토서에 따라 설치가 되었는지 점검 실시 및 다른경우 수정실시\n2. 상부 작업시 작업 발판을 설치하여 작업을 실시하며 상부 수직대에 안전벨트 고리 체결 실시'
+  };
+  var SLOTS = ['설치 평면도', '멍에 배치도', '대각재 배치도', '설치 단면도'];
+  var KEY = 'gp_work_plan_v1';
+  function fresh() { return { site: '', loc: '', area: '', stair: '', hmin: '', hmax: '', hbase: '슬래브 기준', comp: '', d1: '', d2: '', member: DEF.member, note: DEF.note, haz: DEF.haz, ord: DEF.ord, s1: '', s2: '', s3: '', s4: '', s5: '', picks: [], stage: 0, slots: SLOTS.slice() }; }
+  function load() { try { var d = JSON.parse(localStorage.getItem(KEY) || 'null'); if (d && d.picks) return d; } catch (e) {} return null; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  var S = load() || fresh();
+  if (!S.slots || S.slots.length !== 4) S.slots = SLOTS.slice();
+  var IMG = [null, null, null, null];                // 도면 사진 (메모리에만)
+
+  var $ = function (id) { return document.getElementById(id); };
+  function num(v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; }
+  function fN(n, d) { return Number(n).toLocaleString('ko-KR', { maximumFractionDigits: d == null ? 2 : d }); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function lines(s) { return String(s || '').split('\n').map(function (x) { return x.trim(); }).filter(Boolean); }
+  function dt(s) { return s ? s.replace(/-/g, '. ') + '.' : ''; }
+  function blank(v, ph) { return v ? esc(v) : '<span class="ph">' + (ph || '') + '</span>'; }
+
+  // ---------- 입력 화면 ----------
+  function renderFields() {
+    [].forEach.call(document.querySelectorAll('[data-k]'), function (el) { if (document.activeElement !== el) el.value = S[el.dataset.k] == null ? '' : S[el.dataset.k]; });
+  }
+  function slotHtml(i) {
+    var t = S.slots[i];
+    return '<input class="wp-imgt" aria-label="도면 제목" maxlength="16" data-slot="' + i + '" value="' + esc(t) + '">' +
+      '<label class="wp-drop' + (IMG[i] ? ' on' : '') + '">' + (IMG[i] ? '<img alt="" src="' + IMG[i] + '">' : '<span>＋ 이미지 넣기</span>') +
+      '<input type="file" accept="image/*" data-file="' + i + '" aria-label="' + esc(t) + ' 이미지"></label>' +
+      (IMG[i] ? '<button type="button" class="nc-del" data-imgdel="' + i + '">빼기</button>' : '');
+  }
+  function renderImgs() {
+    $('imgs').innerHTML = S.slots.map(function (t, i) { return '<div class="wp-img" id="slot' + i + '">' + slotHtml(i) + '</div>'; }).join('');
+  }
+  function renderSlot(i) { var el = $('slot' + i); if (el) el.innerHTML = slotHtml(i); else renderImgs(); }
+  function renderStages() {
+    $('stages').innerHTML = RISK.map(function (g, i) {
+      var n = S.picks.filter(function (p) { return p.split('-')[0] == i; }).length;
+      return '<button type="button" class="it-tab" data-stage="' + i + '" aria-pressed="' + (S.stage === i) + '">' + (i + 1) + '. ' + esc(g.t) + (n ? '<em>' + n + '</em>' : '') + '</button>';
+    }).join('');
+    var g = RISK[S.stage] || RISK[0];
+    $('risks').innerHTML = g.r.map(function (r, j) {
+      var id = S.stage + '-' + j, on = S.picks.indexOf(id) >= 0;
+      return '<label class="rk' + (on ? ' on' : '') + '"><input type="checkbox" data-pick="' + id + '"' + (on ? ' checked' : '') + '><span><small>' + esc(r[0]) + '</small><b>' + esc(r[1]) + '</b><i>→ ' + esc(r[2]) + '</i></span></label>';
+    }).join('');
+    var n = S.picks.length;
+    $('pickInfo').innerHTML = n ? '고른 항목 ' + n + '개' + (n > 4 ? '<small>4개가 넘으면 글자가 작아져요. 너무 많으면 한 장에 다 안 들어가요.</small>' : '<small>계획서 위험요인·지시사항 칸 아래에 이어서 들어가요.</small>') + ' <button type="button" class="nc-link" id="clearPicks">모두 빼기</button>'
+      : '아직 고른 항목이 없어요.<small>기본 문구만으로도 계획서를 만들 수 있어요.</small>';
+  }
+
+  // ---------- 계획서 (미리보기 = 인쇄) ----------
+  function picked() {
+    return S.picks.map(function (id) { var a = id.split('-'), g = RISK[+a[0]]; return g && g.r[+a[1]] ? { st: g.t, r: g.r[+a[1]] } : null; }).filter(Boolean);
+  }
+  function renderSheet() {
+    var pk = picked(), haz = lines(S.haz), ord = lines(S.ord);
+    var hazH = haz.map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('') + pk.map(function (p) { return '<p class="pk">· ' + esc(p.r[1]) + '</p>'; }).join('');
+    var ordH = ord.map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('') + pk.map(function (p) { return '<p class="pk">· ' + esc(p.r[2]) + '</p>'; }).join('');
+    var h = (num(S.hmin) || num(S.hmax)) ? (num(S.hmin) && num(S.hmax) && num(S.hmin) !== num(S.hmax) ? '최소 ' + fN(num(S.hmin)) + 'm ~ 최대 ' + fN(num(S.hmax)) + 'm' : fN(num(S.hmax) || num(S.hmin)) + 'm') + (S.hbase ? ' (' + esc(S.hbase) + ')' : '') : '';
+    var hmax = num(S.hmax) || num(S.hmin);
+    var aph = num(S.area) ? fN(num(S.area)) + '㎡' + (hmax ? ' / ' + fN(hmax) + 'm' : '') : '';
+    var period = (S.d1 || S.d2) ? dt(S.d1) + ' ~ ' + dt(S.d2) : '';
+    var slots = S.slots.map(function (t, i) {
+      return '<div class="sl"><div class="slt">■ ' + esc(t || ('도면 ' + (i + 1))) + '</div><div class="sli">' + (IMG[i] ? '<img alt="" src="' + IMG[i] + '">' : '<span>도면 첨부</span>') + '</div></div>';
+    }).join('');
+    var sg = function (role, v) { return '<td class="r">' + esc(role) + '</td><td class="n">' + (v ? esc(v) + ' ' : '') + '(인)</td>'; };
+    $('sheet').innerHTML =
+      '<div class="sh-l">' +
+        '<div class="sh-top"><div class="tt"><span>위험작업</span><b>시스템동바리설치 작업계획서</b></div>' +
+          '<table class="mini"><tr><td class="k">설치 면적</td><td>' + (num(S.area) ? fN(num(S.area)) + '㎡' : '') + '</td></tr><tr><td class="k">작업 높이</td><td>' + h + '</td></tr><tr><td class="k">수직승강로</td><td>' + (num(S.stair) ? fN(num(S.stair), 0) + '개소' : '') + '</td></tr></table></div>' +
+        '<div class="sh-dw">' + slots + '</div>' +
+        '<div class="sh-nt">' + lines(S.note).map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('') + '</div>' +
+      '</div>' +
+      '<div class="sh-r">' +
+        '<table class="info">' +
+          '<tr><td class="k">현장명</td><td>' + esc(S.site) + '</td></tr>' +
+          '<tr><td class="k">설치위치</td><td>' + esc(S.loc) + '</td></tr>' +
+          '<tr><td class="k">설치면적/높이</td><td>' + aph + '</td></tr>' +
+          '<tr><td class="k">설치업체</td><td>' + esc(S.comp) + '</td></tr>' +
+          '<tr><td class="k">사용기간</td><td>' + period + '</td></tr>' +
+          '<tr><td class="hd" colspan="2">&lt;부재의 치수 및 종류&gt;</td></tr>' +
+          '<tr><td colspan="2" class="mb">' + lines(S.member).map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('') + '</td></tr>' +
+          '<tr><td class="hd" colspan="2">&lt;위험요인 및 안전보건 지시사항&gt;</td></tr>' +
+          '<tr><td class="k">위험요인</td><td class="tx">' + hazH + '</td></tr>' +
+          '<tr><td class="k">안전보건<br>지시사항</td><td class="tx">' + ordH + '</td></tr>' +
+        '</table>' +
+        '<table class="sign"><tr><td class="hd" colspan="3">&lt;확인&gt;</td></tr>' +
+          '<tr><td class="k">승인자</td>' + sg('현장소장', S.s1) + '</tr>' +
+          '<tr><td class="k" rowspan="2">검토자</td>' + sg('공사팀장', S.s2) + '</tr><tr>' + sg('안전관리자', S.s3) + '</tr>' +
+          '<tr><td class="k" rowspan="2">작성자</td>' + sg('공사담당', S.s4) + '</tr><tr>' + sg('협력사소장', S.s5) + '</tr>' +
+          '<tr><td class="k">근로자<br>안전대 사용 필</td><td colspan="2" class="wk"><span></span><span></span><span></span><span></span></td></tr>' +
+        '</table>' +
+        '<div class="how">* 작성방법<br>- 평면/입면도를 표현하고, 이동통로, 벽이음, 하부받침을 포함</div>' +
+      '</div>';
+    shrinkText();
+    fit();
+  }
+  // 오른쪽 칸이 한 장을 넘으면 위험요인·지시사항 글자를 줄임 (최소 5.4pt). 그래도 넘치면 알림
+  var OVER = false;
+  function shrinkText() {
+    var sh = $('sheet'), r = sh.querySelector('.sh-r'), tx = sh.querySelectorAll('.tx'), fs = 7.4;
+    var set = function () { [].forEach.call(tx, function (t) { t.style.fontSize = fs + 'pt'; }); };
+    set();
+    while (r.scrollHeight > sh.clientHeight + 1 && fs > 5.4) { fs = Math.round((fs - 0.2) * 10) / 10; set(); }
+    OVER = r.scrollHeight > sh.clientHeight + 1;
+    $('barVal').innerHTML = OVER ? '<span class="wp-warn">⚠ 한 장을 넘어요</span>' : 'A4 가로 1장';
+    var pi = $('pickInfo'); if (pi) { var w = pi.querySelector('.wp-warn'); if (OVER && !w) pi.insertAdjacentHTML('beforeend', '<span class="wp-warn">⚠ 내용이 많아 한 장에 다 안 들어가요. 고른 항목이나 문구를 줄여 주세요.</span>'); if (!OVER && w) w.remove(); }
+  }
+  function fit() {
+    var pv = $('pv'), sh = $('sheet'); if (!pv || !sh) return;
+    var w = pv.clientWidth, s = w / sh.offsetWidth;
+    sh.style.transform = 'scale(' + s + ')'; pv.style.height = Math.ceil(sh.offsetHeight * s) + 'px';
+  }
+  function all() { renderFields(); renderImgs(); renderStages(); renderSheet(); save(); }
+
+  // ---------- 이벤트 ----------
+  document.addEventListener('input', function (e) {
+    var el = e.target;
+    if (el.dataset && el.dataset.k) { S[el.dataset.k] = el.value; renderSheet(); save(); return; }
+    if (el.dataset && el.dataset.slot != null) { S.slots[+el.dataset.slot] = el.value; renderSheet(); save(); }
+  });
+  document.addEventListener('change', function (e) {
+    var el = e.target;
+    if (el.dataset && el.dataset.pick) {
+      var id = el.dataset.pick, k = S.picks.indexOf(id);
+      if (el.checked && k < 0) S.picks.push(id); if (!el.checked && k >= 0) S.picks.splice(k, 1);
+      renderStages(); renderSheet(); save(); return;
+    }
+    if (el.dataset && el.dataset.file != null && el.files && el.files[0]) {
+      var i = +el.dataset.file, f = el.files[0];
+      if (!/^image\//.test(f.type)) return;
+      var rd = new FileReader();
+      rd.onload = function () { shrink(rd.result, function (u) { IMG[i] = u; renderSlot(i); renderSheet(); }); };
+      rd.readAsDataURL(f);
+    }
+  });
+  // 큰 사진은 줄여서 씀 (인쇄 품질 유지: 긴 변 2400px)
+  function shrink(src, cb) {
+    var im = new Image();
+    im.onload = function () {
+      var m = 2400, w = im.naturalWidth, h = im.naturalHeight, r = Math.min(1, m / Math.max(w, h));
+      if (r === 1) return cb(src);
+      var c = document.createElement('canvas'); c.width = Math.round(w * r); c.height = Math.round(h * r);
+      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); cb(c.toDataURL('image/jpeg', 0.9));
+    };
+    im.onerror = function () { cb(src); }; im.src = src;
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.stage != null) { S.stage = +b.dataset.stage; renderStages(); save(); return; }
+    if (b.dataset.imgdel != null) { IMG[+b.dataset.imgdel] = null; renderSlot(+b.dataset.imgdel); renderSheet(); return; }
+    if (b.dataset.def) { b.dataset.def.split(',').forEach(function (k) { S[k] = DEF[k]; }); return all(); }
+    if (b.id === 'clearPicks') { S.picks = []; renderStages(); renderSheet(); save(); return; }
+    if (b.id === 'reset') { S = fresh(); IMG = [null, null, null, null]; return all(); }
+    if (b.id === 'pdf' || b.id === 'pdf2') {
+      var d = new Date(), ti = document.title;
+      document.title = '시스템동바리_작업계획서_' + (S.site ? S.site.replace(/[\\/:*?"<>|\s]+/g, '_') + '_' : '') + d.toISOString().slice(0, 10);
+      setTimeout(function () { window.print(); document.title = ti; }, 60);
+    }
+  });
+  window.addEventListener('resize', fit);
+  window.addEventListener('beforeprint', function () { $('sheet').style.transform = 'none'; });
+  window.addEventListener('afterprint', fit);
+
+  all();
+})();
+</script>
+<script src="gp-track.js" data-tool="work-plan" defer></script>
+</body>
+</html>
