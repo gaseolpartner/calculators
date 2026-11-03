@@ -425,7 +425,30 @@ body{margin:0;background:#F6F6F4;color:#2B2B2B;-webkit-tap-highlight-color:trans
 
   if (!S.extraH) S.extraH = { pvc: [], multi: [] };
   if (!S.extraL) S.extraL = { pvc: [], multi: [] };
+
+  // ---------- 외부 비계 면적 계산기에서 넘어온 구간 (이름·비계 둘레·높이) ----------
+  var fromArea = false;
+  try {
+    var qp = new URLSearchParams(location.search);
+    if (qp.get('from') === 'area' && qp.get('secs')) {
+      var arr = JSON.parse(qp.get('secs'));
+      if (Array.isArray(arr) && arr.length) {
+        S.mode = 'height';
+        S.secs = arr.slice(0, 20).map(function (a, i) {
+          return { name: String(a[0] || NAMES[i] || (i + 1) + '면').slice(0, 20), len: num(a[1]) ? String(a[1]) : '', stage: '', height: num(a[2]) ? String(a[2]) : '' };
+        });
+        fromArea = true;
+      }
+      history.replaceState(null, '', location.pathname);   // 새로고침해도 다시 덮어쓰지 않게
+    }
+  } catch (e) {}
   all();
+  if (fromArea) {
+    var nb = document.createElement('div');
+    nb.className = 'nc-roll'; nb.style.marginTop = '0'; nb.style.marginBottom = '10px';
+    nb.innerHTML = '외부 비계 면적 계산기에서 구간 둘레·높이를 가져왔어요.<small>높이(m) 입력 방식으로 바꿨어요. 망 종류·롤 규격만 고르면 돼요.</small>';
+    $('mode').parentNode.insertBefore(nb, $('mode'));
+  }
 })();
 </script>
 <script src="gp-track.js" data-tool="safety-net" defer></script>

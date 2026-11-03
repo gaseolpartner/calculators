@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="외부 비계 면적 계산기. 건물 가로·세로와 비계 높이만 넣으면 외부 비계 면적과 낙하물 방지망 면적을 바로 계산하고, 안전망 롤 수까지 이어서 계산해요. 무료.">
+<meta name="theme-color" content="#1B1B1B">
+<title>외부 비계 면적 계산기 | 가설파트너</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K8NMSLZ841"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K8NMSLZ841');</script>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="가설파트너">
+<meta property="og:title" content="외부 비계 면적 계산기 | 가설파트너">
+<meta property="og:description" content="건물 가로·세로와 높이만 넣으면 외부 비계·낙하물 방지망 면적이 바로 나와요">
+<meta property="og:image" content="https://gaseolpartner.github.io/calculators/icons/og.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="gp-common.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F6F6F4;color:#2B2B2B;-webkit-tap-highlight-color:transparent;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+.nc-wrap{max-width:760px;margin:0 auto;padding:0 16px 130px}
+.nc-card{background:#fff;border:1px solid #E3E3E3;border-radius:16px;padding:20px;margin-top:16px}
+.nc-card:first-child{margin-top:-34px;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.nc-h{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:17px;font-weight:800;color:#1B1B1B}
+.nc-h i{font-style:normal;width:26px;height:26px;border-radius:50%;background:#1B1B1B;color:#F2B705;font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.nc-sub{margin:16px 0 8px;font-size:14px;color:#777;font-weight:800}
+.nc-types{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nc-type{font:inherit;text-align:left;border:1.5px solid #D5D5D5;background:#fff;border-radius:12px;padding:12px;cursor:pointer;color:#1B1B1B;min-height:64px}
+.nc-type b{display:block;font-size:15px}
+.nc-type span{font-size:12.5px;color:#777}
+.nc-type[aria-pressed="true"]{border-color:#1B1B1B;background:#1B1B1B;color:#fff}
+.nc-type[aria-pressed="true"] span{color:#F2B705}
+.nc-chips{display:flex;flex-wrap:wrap;gap:6px}
+.nc-chip{font:inherit;font-size:14px;font-weight:700;border:1.5px solid #D5D5D5;background:#fff;border-radius:999px;padding:8px 13px;cursor:pointer;color:#444}
+.nc-chip[aria-pressed="true"]{background:#F2B705;border-color:#1B1B1B;color:#1B1B1B}
+.nc-chip.add{border-style:dashed;color:#777}
+.nc-addin{display:none;gap:6px;align-items:center;margin-top:8px}
+.nc-addin.on{display:flex}
+.nc-in{font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid #D5D5D5;border-radius:10px;background:#fff;color:#1B1B1B;width:100%;min-width:0}
+.nc-in:focus{outline:none;border-color:#1B1B1B;box-shadow:0 0 0 3px rgba(242,183,5,.35)}
+.nc-in.s{width:110px}
+.nc-roll{margin-top:12px;background:#F6F6F4;border-radius:12px;padding:12px 14px;font-size:14.5px;font-weight:700;color:#1B1B1B}
+.nc-roll small{display:block;font-weight:600;color:#777;font-size:12.5px;margin-top:2px}
+.nc-mode{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#F2F2F0;border-radius:12px;padding:4px}
+.nc-mode button{font:inherit;font-size:14.5px;font-weight:800;border:none;border-radius:9px;padding:10px 6px;background:transparent;color:#666;cursor:pointer}
+.nc-mode button[aria-pressed="true"]{background:#1B1B1B;color:#fff}
+.nc-sec{border:1px solid #E8E8E8;border-radius:12px;padding:12px;margin-top:10px}
+.nc-sec-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.nc-sec-top input{font:inherit;font-weight:800;font-size:15px;border:none;border-bottom:1.5px dashed #ccc;padding:2px 2px;width:120px;background:transparent;color:#1B1B1B}
+.nc-sec-top input:focus{outline:none;border-bottom-color:#1B1B1B}
+.nc-del{margin-left:auto;font:inherit;font-size:13px;font-weight:700;border:none;background:none;color:#B00020;cursor:pointer;padding:4px}
+.nc-sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nc-lab{display:block;font-size:13px;font-weight:700;color:#444;margin-bottom:5px}
+.nc-unit{position:relative}
+.nc-unit .nc-in{padding-right:40px}
+.nc-unit em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-style:normal;font-size:13px;color:#888;font-weight:700;pointer-events:none}
+.nc-hint{font-size:12.5px;color:#777;margin-top:6px;line-height:1.5}
+.nc-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.nc-check{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:#1B1B1B;cursor:pointer;padding:10px 0}
+.nc-check input{width:20px;height:20px;accent-color:#1B1B1B}
+.nc-btn{font:inherit;font-size:15px;font-weight:800;border-radius:10px;padding:12px 16px;cursor:pointer;border:1.5px solid #1B1B1B;background:#fff;color:#1B1B1B;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.nc-btn.y{background:#F2B705}
+.nc-btn.k{background:#1B1B1B;color:#fff}
+.nc-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.nc-big{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+.nc-big div{border-radius:14px;padding:16px;background:#F6F6F4}
+.nc-big div.main{background:#1B1B1B;color:#fff}
+.nc-big b{display:block;font-size:34px;font-weight:900;line-height:1.1}
+.nc-big div.main b{color:#F2B705}
+.nc-big span{font-size:13px;color:#777;font-weight:700}
+.nc-big div.main span{color:#cfcfcf}
+.nc-tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+.nc-tbl th{font-size:12.5px;color:#777;font-weight:800;text-align:right;padding:8px 6px;border-bottom:1.5px solid #1B1B1B;white-space:nowrap}
+.nc-tbl th:first-child,.nc-tbl td:first-child{text-align:left}
+.nc-tbl td{padding:9px 6px;border-bottom:1px solid #EEE;text-align:right;white-space:nowrap}
+.nc-tbl td.r{font-weight:900;color:#1B1B1B}
+.nc-tbl tfoot td{font-weight:900;border-bottom:none;border-top:1.5px solid #1B1B1B}
+.nc-tag{display:inline-block;font-size:11.5px;font-weight:800;background:#FFF2C2;color:#7A5B00;border-radius:6px;padding:1px 6px;margin-left:4px}
+.nc-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nc-price{margin-top:16px;border:1.5px solid #E3E3E3;border-radius:14px;padding:14px 16px}
+.nc-price-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.nc-price-top b{font-size:15.5px}
+.nc-price-top .ask{margin-left:auto}
+.nc-price-in{display:none;margin-top:12px;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.nc-price-in.on{display:flex}
+.nc-money{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:14.5px}
+.nc-money b{font-size:20px;font-weight:900;color:#1B1B1B}
+.nc-note{font-size:12.5px;color:#777;line-height:1.65;margin-top:14px}
+.nc-empty{background:#FFF7DB;color:#7A5B00;border-radius:12px;padding:14px 16px;font-weight:700;font-size:14.5px}
+.nc-q{margin-top:16px;background:#1B1B1B;color:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-left:6px solid #F2B705}
+.nc-q b{display:block;font-size:17px}
+.nc-q span{display:block;color:#cfcfcf;font-size:13.5px;margin-top:3px;line-height:1.5}
+.nc-q a{background:#F2B705;color:#1B1B1B;font-weight:800;padding:12px 18px;border-radius:10px;text-decoration:none;white-space:nowrap}
+.nc-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-top:1px solid #E3E3E3;padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:50}
+.nc-bar-in{max-width:760px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nc-bar-in div{flex:1;min-width:0}
+.nc-bar-in small{display:block;font-size:12.5px;color:#666;font-weight:700}
+.nc-bar-in strong{font-size:20px;font-weight:900;color:#1B1B1B}
+#report{display:none}
+@media(max-width:560px){
+  .nc-sec-grid{grid-template-columns:1fr 1fr}
+  .nc-opts{grid-template-columns:1fr 1fr}
+  .nc-big{grid-template-columns:1fr 1fr}
+  .nc-big b{font-size:28px}
+  .nc-tbl{font-size:13px}
+  .nc-tbl th,.nc-tbl td{padding:8px 4px}
+}
+/* ---------- 인쇄(PDF) ---------- */
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  body>*:not(#report){display:none!important}
+  #report{display:block;font-family:Pretendard,'Malgun Gothic',sans-serif;color:#000;font-size:10.5pt}
+  .rp-top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #000;padding-bottom:6px}
+  .rp-top h1{margin:0;font-size:18pt}
+  .rp-top small{font-size:9pt;color:#444}
+  .rp-info{width:100%;border-collapse:collapse;margin:8px 0 10px}
+  .rp-info td{border:1px solid #999;padding:5px 7px;font-size:10pt}
+  .rp-info td.k{background:#F2F2F2;font-weight:700;width:16%}
+  .rp-tbl{width:100%;border-collapse:collapse}
+  .rp-tbl th,.rp-tbl td{border:1px solid #999;padding:5px 6px;font-size:9.5pt;text-align:right}
+  .rp-tbl th{background:#F2F2F2;text-align:center}
+  .rp-tbl td:first-child{text-align:left}
+  .rp-tbl tfoot td{font-weight:800;background:#FAFAFA}
+  .rp-sum{margin:10px 0;padding:8px 10px;border:2px solid #000;font-weight:800;font-size:12pt}
+  .rp-src{font-size:8.5pt;color:#555;margin-top:10px;line-height:1.6}
+}
+.ar-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.nc-link{font:inherit;font-size:12.5px;font-weight:800;border:none;background:none;color:#1B1B1B;text-decoration:underline;cursor:pointer;padding:0}
+.ar-s{display:block;font-size:11.5px;color:#999;font-weight:700}
+.ar-next{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.ar-go{display:block;border:1.5px solid #1B1B1B;border-radius:14px;padding:14px 16px;text-decoration:none;color:#1B1B1B;background:#fff}
+a.ar-go{background:#F2B705}
+.ar-go b{display:block;font-size:15.5px;font-weight:900}
+.ar-go span{display:block;font-size:13px;color:#555;margin-top:4px;line-height:1.5}
+@media(max-width:560px){.ar-grid{grid-template-columns:1fr 1fr}.ar-grid>div:last-child{grid-column:1 / -1}.ar-next{grid-template-columns:1fr}}
+@media print{.rp-tbl th{font-size:9pt}}
+</style>
+</head>
+<body>
+<div class="gp-topbar"><div class="gp-topbar-inner"><a href="https://gaseolpartner.com"><span class="dot"></span>가설파트너 홈페이지 ↗</a><nav><a href="https://gaseolpartner.com/pages/introduction">가설 설계 프로그램</a><a href="https://gaseolpartner.com/pages/precio">가설재 견적 비교</a><a href="https://gaseolpartner.com/pages/structureatuntroduction">구조검토</a><a href="https://gaseolpartner.com/pages/calculators">무료 도구</a><a href="https://gaseolpartner.com/pages/support">고객지원</a></nav></div></div>
+<header class="gp-brandbar"><div class="gp-brandbar-inner"><a class="gp-logo" href="https://gaseolpartner.com" aria-label="가설파트너"><span class="gp-li"></span><span class="gp-lt"><b>가설파트너</b><small>GASEOL PARTNER</small></span></a><div class="gp-brand-links"><a class="gp-hide-m" href="index.html">물량·견적 계산기</a><a class="gp-cta" href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener">카카오톡 문의</a></div></div></header>
+
+<section class="gp-hero dark">
+  <div class="gp-hero-inner" style="padding-bottom:64px">
+    <span class="gp-label">무료 도구 · 비계 면적</span>
+    <h1>외부 비계 <em>면적 계산기</em></h1>
+    <p>건물 가로·세로와 비계 높이만 넣으면 외부 비계 면적과 낙하물 방지망 면적이 바로 나와요.<br>나온 둘레·높이로 안전망 롤 수까지 이어서 계산할 수 있어요.</p>
+  </div>
+</section>
+
+<main class="nc-wrap">
+  <section class="nc-card" aria-labelledby="h1">
+    <h2 class="nc-h" id="h1"><i>1</i>건물 크기와 비계 높이</h2>
+    <p class="nc-hint" style="margin-top:0">층마다 평면 크기가 다르면 기준층·중간층·옥탑처럼 구간을 나눠 넣으세요. 가로·세로는 <b>건물 외곽 치수</b>예요.</p>
+    <div id="secs"></div>
+    <div class="nc-row"><button type="button" class="nc-btn" id="addSec">＋ 구간 추가</button></div>
+
+    <h3 class="nc-sub" style="margin-top:20px">계산 기준</h3>
+    <div class="nc-opts">
+      <div><label class="nc-lab" for="off">비계 이격 (양쪽 합)</label><div class="nc-unit"><input class="nc-in" id="off" type="number" inputmode="decimal" step="0.1" min="0" max="10"><em>m</em></div></div>
+      <div><label class="nc-lab" for="noff">방지망 이격 (양쪽 합)</label><div class="nc-unit"><input class="nc-in" id="noff" type="number" inputmode="decimal" step="0.1" min="0" max="20"><em>m</em></div></div>
+      <div><label class="nc-lab" for="nw">방지망 폭</label><div class="nc-unit"><input class="nc-in" id="nw" type="number" inputmode="decimal" step="0.1" min="0" max="10"><em>m</em></div></div>
+    </div>
+    <p class="nc-hint">· <b>비계 이격</b>: 건물 가로·세로에 각각 더해요. 기본 1.8m = 양쪽 0.9m씩.<br>· <b>낙하물 방지망</b>: 건물 가로·세로에 방지망 이격을 더한 둘레 × 폭 × 단수로 계산하고, 단수는 비계 높이 ÷ 9m예요 (소수 첫째 자리까지, 나머지 버림).<br>· 기본값은 현장에서 쓰던 비계 산출서 엑셀과 같아요. <button type="button" class="nc-link" id="defBtn">기본값으로 되돌리기</button></p>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h2" id="result">
+    <h2 class="nc-h" id="h2"><i>2</i>산출 결과</h2>
+    <div id="resBody"></div>
+
+    <div class="ar-next" id="nextBox">
+      <a class="ar-go" id="goNet" href="safety-net-calculator.html">
+        <b>🥅 안전망 롤 수 계산하기 →</b>
+        <span>위 구간의 비계 둘레·높이를 그대로 넣어서 열어요.</span>
+      </a>
+      <div class="ar-go">
+        <b>🔧 단관비계 물량산출</b>
+        <span>단관 쌍줄비계라면 아래 면적을 단관비계 계산기에 넣으세요.</span>
+        <div class="nc-row" style="margin-top:10px">
+          <button type="button" class="nc-btn s" id="copyArea">면적 복사</button>
+          <a class="nc-btn s" href="pipe-scaffold-calculator.html" id="goPipe">단관비계 계산기 열기 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="nc-row">
+      <button type="button" class="nc-btn y" id="pdf">📄 산출서 PDF 저장 · 인쇄</button>
+      <button type="button" class="nc-btn" id="reset">새로 쓰기</button>
+    </div>
+
+    <div class="nc-q">
+      <div><b>이 면적으로 비계 견적 받아 보기</b><span>계산 결과가 견적 요청서에 자동으로 들어가요. 여러 업체 견적을 무료로 비교하세요.</span></div>
+      <a href="https://gaseolpartner.vercel.app/new-request" target="_blank" rel="noopener" id="quote">견적 요청하기 →</a>
+    </div>
+
+    <p class="nc-note">· 입력한 내용은 이 기기에만 저장돼요. 다른 사람에게 전달되지 않아요.<br>· PDF는 인쇄 창에서 '대상: PDF로 저장'을 고르면 돼요.<br>· 견적·발주 수량을 잡기 위한 참고값이에요. 돌출부·개구부·꺾이는 모서리는 구간을 나눠 넣어 주세요.</p>
+  </section>
+</main>
+
+<div class="nc-bar"><div class="nc-bar-in">
+  <div><small id="barTxt">외부 비계 면적</small><strong id="barVal">0㎡</strong></div>
+  <button type="button" class="nc-btn y" id="pdf2">PDF 저장</button>
+</div></div>
+
+<footer class="gp-footer"><div class="gp-footer-inner"><div>회사명 : 가설파트너<span class="gp-sep">|</span>주소 : 서울 강남구 가로수길 5<span class="gp-sep">|</span>이메일 : <a href="mailto:fc112@naver.com">fc112@naver.com</a><span class="gp-sep">|</span>전화 : <a href="tel:01079702108">010-7970-2108</a><span class="gp-sep">|</span>사업자등록번호 : 549-20-01841</div><div class="gp-copyline">ⓒ Gaseolpartner. all right reserved. · <a href="https://gaseolpartner.com" target="_blank" rel="noopener">gaseolpartner.com</a></div></div></footer>
+
+<div id="report" aria-hidden="true"></div>
+
+<script>
+(function () {
+  'use strict';
+  // ------------------------------------------------------------------
+  // 계산식: 비계산출.xls '비계산출서' 시트 수식 그대로
+  //   외부비계  가로 = 건물가로 + 1.8, 세로 = 건물세로 + 1.8
+  //             둘레 = (가로 + 세로) × 2,  면적 = INT(둘레 × 높이)
+  //   낙하물방지망 가로 = 건물가로 + 3.6, 세로 = 건물세로 + 3.6
+  //             둘레 = (가로 + 세로) × 2,  단수 = TRUNC(높이 / 9, 1)
+  //             면적 = INT(단수 × 폭(3.6) × 둘레)
+  // ------------------------------------------------------------------
+  var DEF = { off: 1.8, noff: 3.6, nw: 3.6 };
+  var NAMES = ['기준층', '중간층', '옥탑'];
+  var KEY = 'gp_scaffold_area_v1';
+  function fresh() { return { off: DEF.off, noff: DEF.noff, nw: DEF.nw, secs: [{ name: '기준층', w: '', d: '', h: '' }] }; }
+  function load() { try { var d = JSON.parse(localStorage.getItem(KEY) || 'null'); if (d && d.secs) return d; } catch (e) {} return null; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  var S = load() || fresh();
+
+  var $ = function (id) { return document.getElementById(id); };
+  function num(v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; }
+  function nz(v) { var n = parseFloat(v); return isFinite(n) && n >= 0 ? n : 0; }
+  function r2(n) { return Math.round(n * 1000) / 1000; }
+  function fN(n, d) { return Number(n).toLocaleString('ko-KR', { maximumFractionDigits: d == null ? 2 : d }); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function INT(x) { return Math.floor(r2(x) + 1e-9); }                 // 엑셀 INT (양수)
+  function TRUNC1(x) { return Math.floor(r2(x) * 10 + 1e-9) / 10; }    // 엑셀 TRUNC(x,1) (양수)
+
+  // ---------- 계산 ----------
+  function calc() {
+    var off = nz(S.off), noff = nz(S.noff), nw = nz(S.nw);
+    var rows = S.secs.map(function (s) {
+      var w = num(s.w), d = num(s.d), h = num(s.h), r = { name: s.name, w: w, d: d, h: h, ok: w > 0 && d > 0 };
+      r.sw = r2(w + off); r.sd = r2(d + off); r.per = r2((r.sw + r.sd) * 2);
+      r.area = r.ok ? INT(r.per * h) : 0;
+      r.nwid = r2(w + noff); r.ndep = r2(d + noff); r.nper = r2((r.nwid + r.ndep) * 2);
+      r.tier = TRUNC1(h / 9);
+      r.narea = r.ok ? INT(r.tier * nw * r.nper) : 0;
+      return r;
+    });
+    var t = rows.reduce(function (a, r) { if (r.ok) { a.area += r.area; a.narea += r.narea; a.per += r.per; } return a; }, { area: 0, narea: 0, per: 0 });
+    return { rows: rows, t: t, off: off, noff: noff, nw: nw };
+  }
+
+  // ---------- 화면 ----------
+  function renderTop() { $('off').value = S.off; $('noff').value = S.noff; $('nw').value = S.nw; }
+  function inp(i, f, label, ph, val) {
+    return '<div><label class="nc-lab" for="in_' + f + i + '">' + label + '</label><div class="nc-unit"><input class="nc-in" id="in_' + f + i + '" data-i="' + i + '" data-f="' + f + '" type="number" inputmode="decimal" step="0.1" min="0" max="2000" placeholder="' + ph + '" value="' + esc(val) + '"><em>m</em></div></div>';
+  }
+  function renderSecs() {
+    $('secs').innerHTML = S.secs.map(function (s, i) {
+      return '<div class="nc-sec"><div class="nc-sec-top"><input aria-label="구간 이름" maxlength="20" data-i="' + i + '" data-f="name" value="' + esc(s.name) + '">' +
+        (S.secs.length > 1 ? '<button type="button" class="nc-del" data-del="' + i + '">삭제</button>' : '') + '</div>' +
+        '<div class="ar-grid">' + inp(i, 'w', '건물 가로', '예: 15', s.w) + inp(i, 'd', '건물 세로', '예: 8.4', s.d) + inp(i, 'h', '비계 높이', '예: 30', s.h) + '</div></div>';
+    }).join('');
+  }
+  function renderRes() {
+    var c = calc(), t = c.t, ok = c.rows.some(function (r) { return r.ok && r.h > 0; });
+    if (!ok) {
+      $('resBody').innerHTML = '<div class="nc-empty">건물 가로·세로와 비계 높이를 넣으면 면적이 나와요.</div>';
+      $('nextBox').style.display = 'none';
+    } else {
+      var body = c.rows.map(function (r) {
+        if (!r.ok) return '<tr><td>' + esc(r.name) + '</td><td colspan="5" style="text-align:left;color:#999">가로·세로를 넣어 주세요</td></tr>';
+        return '<tr><td>' + esc(r.name) + '</td><td>' + fN(r.sw) + '×' + fN(r.sd) + '</td><td>' + fN(r.per) + 'm</td><td>' + fN(r.h) + 'm</td><td class="r">' + fN(r.area, 0) + '㎡</td>' +
+          '<td>' + fN(r.narea, 0) + '㎡<small class="ar-s">' + fN(r.tier, 1) + '단</small></td></tr>';
+      }).join('');
+      $('resBody').innerHTML =
+        '<div class="nc-big"><div class="main"><span>외부 비계 면적</span><b>' + fN(t.area, 0) + '<small style="font-size:16px">㎡</small></b></div><div><span>낙하물 방지망</span><b>' + fN(t.narea, 0) + '<small style="font-size:16px">㎡</small></b></div></div>' +
+        '<div class="nc-tblwrap"><table class="nc-tbl"><thead><tr><th>구간</th><th>비계 가로×세로</th><th>둘레</th><th>높이</th><th>비계 면적</th><th>방지망</th></tr></thead><tbody>' + body +
+        '</tbody><tfoot><tr><td>합계</td><td></td><td>' + fN(t.per) + 'm</td><td></td><td class="r">' + fN(t.area, 0) + '㎡</td><td>' + fN(t.narea, 0) + '㎡</td></tr></tfoot></table></div>' +
+        '<p class="nc-hint">비계 이격 ' + fN(c.off) + 'm · 방지망 이격 ' + fN(c.noff) + 'm · 방지망 폭 ' + fN(c.nw) + 'm · 방지망 단수 = 높이 ÷ 9m</p>';
+      $('nextBox').style.display = '';
+      $('goNet').href = netLink(c);
+    }
+    $('barVal').textContent = fN(t.area, 0) + '㎡';
+    $('barTxt').textContent = '외부 비계 면적 · 방지망 ' + fN(t.narea, 0) + '㎡';
+    return c;
+  }
+  function all() { renderTop(); renderSecs(); renderRes(); save(); }
+
+  // 안전망 계산기로 넘기기: 구간 이름·비계 둘레·높이
+  function netLink(c) {
+    var arr = c.rows.filter(function (r) { return r.ok && r.h > 0; }).map(function (r) { return [String(r.name).slice(0, 20), r.per, r.h]; });
+    return 'safety-net-calculator.html?from=area&secs=' + encodeURIComponent(JSON.stringify(arr));
+  }
+
+  // ---------- 이벤트 ----------
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.del != null) { S.secs.splice(+b.dataset.del, 1); return all(); }
+    if (b.id === 'addSec') { S.secs.push({ name: NAMES[S.secs.length] || (S.secs.length + 1) + '구간', w: '', d: '', h: '' }); return all(); }
+    if (b.id === 'defBtn') { S.off = DEF.off; S.noff = DEF.noff; S.nw = DEF.nw; return all(); }
+    if (b.id === 'reset') { S = fresh(); return all(); }
+    if (b.id === 'copyArea') {
+      var v = String(calc().t.area);
+      var done = function () { b.textContent = '복사했어요 ✓'; setTimeout(function () { b.textContent = '면적 복사'; }, 1500); };
+      try { navigator.clipboard.writeText(v).then(done, function () { prompt('면적(㎡)', v); }); } catch (err) { prompt('면적(㎡)', v); }
+      return;
+    }
+    if (b.id === 'pdf' || b.id === 'pdf2') printReport();
+  });
+  document.addEventListener('input', function (e) {
+    var el = e.target;
+    if (el.dataset && el.dataset.f != null && el.dataset.i != null) { S.secs[+el.dataset.i][el.dataset.f] = el.value; renderRes(); save(); return; }
+    if (el.id === 'off' || el.id === 'noff' || el.id === 'nw') { S[el.id] = el.value; renderRes(); save(); }
+  });
+
+  // ---------- 견적 요청 연결 ----------
+  $('quote').addEventListener('click', function () {
+    var c = calc(), lines = ['[외부 비계 면적 계산 결과]'];
+    c.rows.forEach(function (r) { if (r.ok && r.h) lines.push('- ' + r.name + ': 건물 ' + fN(r.w) + '×' + fN(r.d) + 'm, 높이 ' + fN(r.h) + 'm → 비계 ' + fN(r.area, 0) + '㎡'); });
+    lines.push('합계: 외부 비계 ' + fN(c.t.area, 0) + '㎡ / 낙하물 방지망 ' + fN(c.t.narea, 0) + '㎡', '(가설파트너 외부 비계 면적 계산기 참고 수량)');
+    try { if (typeof window.gtag === 'function') window.gtag('event', '견적요청클릭', { event_category: '견적연결', item: '비계', page_title: '외부 비계 면적 계산기' }); } catch (err) {}
+    this.href = 'https://gaseolpartner.vercel.app/new-request?from=calculators&item=' + encodeURIComponent('비계') + '&memo=' + encodeURIComponent(lines.join('\n').slice(0, 1400));
+  });
+
+  // ---------- PDF ----------
+  function printReport() {
+    var c = calc(), t = c.t, d = new Date();
+    if (!c.rows.some(function (r) { return r.ok && r.h > 0; })) { $('result').scrollIntoView({ behavior: 'smooth' }); return; }
+    var ds = d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.';
+    var rows = c.rows.filter(function (r) { return r.ok; }).map(function (r) {
+      return '<tr><td>' + esc(r.name) + '</td><td>' + fN(r.w) + '×' + fN(r.d) + '</td><td>' + fN(r.sw) + '×' + fN(r.sd) + '</td><td>' + fN(r.per) + '</td><td>' + fN(r.h) + '</td><td>' + fN(r.area, 0) + '</td>' +
+        '<td>' + fN(r.nper) + '</td><td>' + fN(r.tier, 1) + '</td><td>' + fN(r.narea, 0) + '</td></tr>';
+    }).join('');
+    $('report').innerHTML =
+      '<div class="rp-top"><h1>외부 비계 면적 산출서</h1><small>가설파트너 · gaseolpartner.com · ' + ds + '</small></div>' +
+      '<table class="rp-info"><tr><td class="k">비계 이격</td><td>가로·세로 각 +' + fN(c.off) + 'm</td><td class="k">방지망</td><td>이격 +' + fN(c.noff) + 'm · 폭 ' + fN(c.nw) + 'm · 단수 = 높이 ÷ 9m</td></tr></table>' +
+      '<table class="rp-tbl"><thead><tr><th rowspan="2">구간</th><th rowspan="2">건물(m)</th><th colspan="4">외부 비계</th><th colspan="3">낙하물 방지망</th></tr>' +
+      '<tr><th>가로×세로(m)</th><th>둘레(m)</th><th>높이(m)</th><th>면적(㎡)</th><th>둘레(m)</th><th>단수</th><th>면적(㎡)</th></tr></thead><tbody>' + rows +
+      '</tbody><tfoot><tr><td colspan="5">합계</td><td>' + fN(t.area, 0) + '</td><td colspan="2"></td><td>' + fN(t.narea, 0) + '</td></tr></tfoot></table>' +
+      '<div class="rp-sum">외부 비계 ' + fN(t.area, 0) + '㎡ · 낙하물 방지망 ' + fN(t.narea, 0) + '㎡</div>' +
+      '<div class="rp-src">· 외부 비계 면적 = 버림(((건물 가로 + 이격) + (건물 세로 + 이격)) × 2 × 높이)<br>· 낙하물 방지망 = 버림(단수 × 폭 × 방지망 둘레), 단수 = 높이 ÷ 9m (소수 첫째 자리까지)<br>· 견적·발주 수량을 잡기 위한 참고값입니다. 문의: 카카오톡 채널 가설파트너 · 010-7970-2108 · fc112@naver.com</div>';
+    var ti = document.title; document.title = '외부비계_면적_산출서_' + d.toISOString().slice(0, 10);
+    setTimeout(function () { window.print(); document.title = ti; }, 60);
+  }
+
+  all();
+})();
+</script>
+<script src="gp-track.js" data-tool="scaffold-area" defer></script>
+</body>
+</html>
