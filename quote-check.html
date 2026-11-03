@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="받은 비계·동바리 견적을 넣으면 같은 조건 견적과 비교해 ㎡당 금액이 중간값보다 얼마나 높은지·낮은지 알려 드려요. 업체명·연락처는 받지 않아요. 무료.">
+<meta name="theme-color" content="#1B1B1B">
+<title>받은 견적 비교해 보기 | 가설파트너</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K8NMSLZ841"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K8NMSLZ841');</script>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="가설파트너">
+<meta property="og:title" content="받은 견적 비교해 보기 | 가설파트너">
+<meta property="og:description" content="받은 견적이 비싼지 싼지, 같은 조건 견적과 비교해 보세요">
+<meta property="og:image" content="https://gaseolpartner.github.io/calculators/icons/og.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="gp-common.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F6F6F4;color:#2B2B2B;-webkit-tap-highlight-color:transparent;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+.nc-wrap{max-width:760px;margin:0 auto;padding:0 16px 130px}
+.nc-card{background:#fff;border:1px solid #E3E3E3;border-radius:16px;padding:20px;margin-top:16px}
+.nc-card:first-child{margin-top:-34px;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.nc-h{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:17px;font-weight:800;color:#1B1B1B}
+.nc-h i{font-style:normal;width:26px;height:26px;border-radius:50%;background:#1B1B1B;color:#F2B705;font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.nc-sub{margin:16px 0 8px;font-size:14px;color:#777;font-weight:800}
+.nc-types{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nc-type{font:inherit;text-align:left;border:1.5px solid #D5D5D5;background:#fff;border-radius:12px;padding:12px;cursor:pointer;color:#1B1B1B;min-height:64px}
+.nc-type b{display:block;font-size:15px}
+.nc-type span{font-size:12.5px;color:#777}
+.nc-type[aria-pressed="true"]{border-color:#1B1B1B;background:#1B1B1B;color:#fff}
+.nc-type[aria-pressed="true"] span{color:#F2B705}
+.nc-chips{display:flex;flex-wrap:wrap;gap:6px}
+.nc-chip{font:inherit;font-size:14px;font-weight:700;border:1.5px solid #D5D5D5;background:#fff;border-radius:999px;padding:8px 13px;cursor:pointer;color:#444}
+.nc-chip[aria-pressed="true"]{background:#F2B705;border-color:#1B1B1B;color:#1B1B1B}
+.nc-chip.add{border-style:dashed;color:#777}
+.nc-addin{display:none;gap:6px;align-items:center;margin-top:8px}
+.nc-addin.on{display:flex}
+.nc-in{font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid #D5D5D5;border-radius:10px;background:#fff;color:#1B1B1B;width:100%;min-width:0}
+.nc-in:focus{outline:none;border-color:#1B1B1B;box-shadow:0 0 0 3px rgba(242,183,5,.35)}
+.nc-in.s{width:110px}
+.nc-roll{margin-top:12px;background:#F6F6F4;border-radius:12px;padding:12px 14px;font-size:14.5px;font-weight:700;color:#1B1B1B}
+.nc-roll small{display:block;font-weight:600;color:#777;font-size:12.5px;margin-top:2px}
+.nc-mode{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#F2F2F0;border-radius:12px;padding:4px}
+.nc-mode button{font:inherit;font-size:14.5px;font-weight:800;border:none;border-radius:9px;padding:10px 6px;background:transparent;color:#666;cursor:pointer}
+.nc-mode button[aria-pressed="true"]{background:#1B1B1B;color:#fff}
+.nc-sec{border:1px solid #E8E8E8;border-radius:12px;padding:12px;margin-top:10px}
+.nc-sec-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.nc-sec-top input{font:inherit;font-weight:800;font-size:15px;border:none;border-bottom:1.5px dashed #ccc;padding:2px 2px;width:120px;background:transparent;color:#1B1B1B}
+.nc-sec-top input:focus{outline:none;border-bottom-color:#1B1B1B}
+.nc-del{margin-left:auto;font:inherit;font-size:13px;font-weight:700;border:none;background:none;color:#B00020;cursor:pointer;padding:4px}
+.nc-sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nc-lab{display:block;font-size:13px;font-weight:700;color:#444;margin-bottom:5px}
+.nc-unit{position:relative}
+.nc-unit .nc-in{padding-right:40px}
+.nc-unit em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-style:normal;font-size:13px;color:#888;font-weight:700;pointer-events:none}
+.nc-hint{font-size:12.5px;color:#777;margin-top:6px;line-height:1.5}
+.nc-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.nc-check{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:#1B1B1B;cursor:pointer;padding:10px 0}
+.nc-check input{width:20px;height:20px;accent-color:#1B1B1B}
+.nc-btn{font:inherit;font-size:15px;font-weight:800;border-radius:10px;padding:12px 16px;cursor:pointer;border:1.5px solid #1B1B1B;background:#fff;color:#1B1B1B;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.nc-btn.y{background:#F2B705}
+.nc-btn.k{background:#1B1B1B;color:#fff}
+.nc-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.nc-big{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+.nc-big div{border-radius:14px;padding:16px;background:#F6F6F4}
+.nc-big div.main{background:#1B1B1B;color:#fff}
+.nc-big b{display:block;font-size:34px;font-weight:900;line-height:1.1}
+.nc-big div.main b{color:#F2B705}
+.nc-big span{font-size:13px;color:#777;font-weight:700}
+.nc-big div.main span{color:#cfcfcf}
+.nc-tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+.nc-tbl th{font-size:12.5px;color:#777;font-weight:800;text-align:right;padding:8px 6px;border-bottom:1.5px solid #1B1B1B;white-space:nowrap}
+.nc-tbl th:first-child,.nc-tbl td:first-child{text-align:left}
+.nc-tbl td{padding:9px 6px;border-bottom:1px solid #EEE;text-align:right;white-space:nowrap}
+.nc-tbl td.r{font-weight:900;color:#1B1B1B}
+.nc-tbl tfoot td{font-weight:900;border-bottom:none;border-top:1.5px solid #1B1B1B}
+.nc-tag{display:inline-block;font-size:11.5px;font-weight:800;background:#FFF2C2;color:#7A5B00;border-radius:6px;padding:1px 6px;margin-left:4px}
+.nc-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nc-price{margin-top:16px;border:1.5px solid #E3E3E3;border-radius:14px;padding:14px 16px}
+.nc-price-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.nc-price-top b{font-size:15.5px}
+.nc-price-top .ask{margin-left:auto}
+.nc-price-in{display:none;margin-top:12px;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.nc-price-in.on{display:flex}
+.nc-money{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:14.5px}
+.nc-money b{font-size:20px;font-weight:900;color:#1B1B1B}
+.nc-note{font-size:12.5px;color:#777;line-height:1.65;margin-top:14px}
+.nc-empty{background:#FFF7DB;color:#7A5B00;border-radius:12px;padding:14px 16px;font-weight:700;font-size:14.5px}
+.nc-q{margin-top:16px;background:#1B1B1B;color:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-left:6px solid #F2B705}
+.nc-q b{display:block;font-size:17px}
+.nc-q span{display:block;color:#cfcfcf;font-size:13.5px;margin-top:3px;line-height:1.5}
+.nc-q a{background:#F2B705;color:#1B1B1B;font-weight:800;padding:12px 18px;border-radius:10px;text-decoration:none;white-space:nowrap}
+.nc-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-top:1px solid #E3E3E3;padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:50}
+.nc-bar-in{max-width:760px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nc-bar-in div{flex:1;min-width:0}
+.nc-bar-in small{display:block;font-size:12.5px;color:#666;font-weight:700}
+.nc-bar-in strong{font-size:20px;font-weight:900;color:#1B1B1B}
+#report{display:none}
+@media(max-width:560px){
+  .nc-sec-grid{grid-template-columns:1fr 1fr}
+  .nc-opts{grid-template-columns:1fr 1fr}
+  .nc-big{grid-template-columns:1fr 1fr}
+  .nc-big b{font-size:28px}
+  .nc-tbl{font-size:13px}
+  .nc-tbl th,.nc-tbl td{padding:8px 4px}
+}
+
+.qc-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.qc-full{grid-column:1 / -1}
+.qc-big{background:#1B1B1B;color:#fff;border-radius:14px;padding:16px 18px}
+.qc-big span{display:block;font-size:13px;color:#cfcfcf;font-weight:700}
+.qc-big b{display:block;font-size:22px;font-weight:900;margin-top:6px;line-height:1.35}
+.qc-big em{font-style:normal}.qc-big em.up{color:#FF9B8A}.qc-big em.dn{color:#F2B705}
+.qc-bar{position:relative;height:12px;border-radius:7px;margin:18px 4px 0;background:linear-gradient(90deg,#F2B705,#EFEFEC 50%,#FFB4A6)}
+.qc-bar i{position:absolute;top:-6px;width:4px;height:24px;margin-left:-2px;background:#1B1B1B;border-radius:2px}
+.qc-bar span{position:absolute;top:16px;transform:translateX(-50%);font-size:11.5px;color:#777;font-weight:800;white-space:nowrap}
+.qc-wait{background:#FFF7DB;border-radius:14px;padding:16px 18px;color:#5A4300}
+.qc-wait b{display:block;font-size:17px}.qc-wait span{display:block;font-size:14px;margin-top:4px;line-height:1.6}
+select.nc-in{appearance:auto}
+</style>
+</head>
+<body>
+<div class="gp-topbar"><div class="gp-topbar-inner"><a href="https://gaseolpartner.com"><span class="dot"></span>가설파트너 홈페이지 ↗</a><nav><a href="https://gaseolpartner.com/pages/introduction">가설 설계 프로그램</a><a href="https://gaseolpartner.com/pages/precio">가설재 견적 비교</a><a href="https://gaseolpartner.com/pages/structureatuntroduction">구조검토</a><a href="https://gaseolpartner.com/pages/calculators">무료 도구</a><a href="https://gaseolpartner.com/pages/support">고객지원</a></nav></div></div>
+<header class="gp-brandbar"><div class="gp-brandbar-inner"><a class="gp-logo" href="https://gaseolpartner.com" aria-label="가설파트너"><span class="gp-li"></span><span class="gp-lt"><b>가설파트너</b><small>GASEOL PARTNER</small></span></a><div class="gp-brand-links"><a class="gp-hide-m" href="index.html">물량·견적 계산기</a><a class="gp-cta" href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener">카카오톡 문의</a></div></div></header>
+
+<section class="gp-hero dark">
+  <div class="gp-hero-inner" style="padding-bottom:64px">
+    <span class="gp-label">무료 도구 · 견적 비교</span>
+    <h1>받은 견적 <em>비교해 보기</em></h1>
+    <p>받은 비계·동바리 견적을 넣으면 같은 조건의 다른 견적과 비교해서<br>㎡당 금액이 중간값보다 얼마나 높은지·낮은지 알려 드려요.</p>
+  </div>
+</section>
+
+<main class="nc-wrap">
+  <section class="nc-card" aria-labelledby="h1">
+    <h2 class="nc-h" id="h1"><i>1</i>어떤 견적인가요?</h2>
+    <h3 class="nc-sub" id="itemH" style="margin-top:0">품목</h3>
+    <div class="nc-chips" role="group" aria-labelledby="itemH" id="items"></div>
+    <h3 class="nc-sub" id="scopeH">견적 범위</h3>
+    <div class="nc-mode" role="group" aria-labelledby="scopeH" id="scopes">
+      <button type="button" data-s="rent">임대만</button>
+      <button type="button" data-s="install">임대 + 설치·해체</button>
+    </div>
+    <p class="nc-hint">운반비가 따로 적혀 있으면 빼고, 함께 들어 있으면 그대로 넣으세요.</p>
+    <h3 class="nc-sub"><label for="region">현장 지역</label></h3>
+    <select class="nc-in" id="region" style="max-width:220px"></select>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h2">
+    <h2 class="nc-h" id="h2"><i>2</i>견적 내용</h2>
+    <div class="qc-grid">
+      <div><label class="nc-lab" for="area">면적</label><div class="nc-unit"><input class="nc-in" id="area" type="number" inputmode="decimal" step="1" min="10" placeholder="예: 2883"><em>㎡</em></div></div>
+      <div><label class="nc-lab" for="months">사용기간</label><div class="nc-unit"><input class="nc-in" id="months" type="number" inputmode="decimal" step="0.5" min="0.5" max="60" placeholder="예: 5"><em>개월</em></div></div>
+      <div class="qc-full"><label class="nc-lab" for="amount">견적 금액 (부가세 별도)</label><div class="nc-unit"><input class="nc-in" id="amount" type="number" inputmode="numeric" step="10000" min="100000" placeholder="예: 25000000"><em>원</em></div><p class="nc-hint" id="amountKo"></p></div>
+    </div>
+    <div class="nc-roll" id="unitBox" style="display:none"></div>
+    <div class="nc-row"><button type="button" class="nc-btn y" id="go">비교해 보기</button></div>
+    <p class="nc-hint" id="err" role="alert" style="color:#B00020;font-weight:700"></p>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h3" id="result" style="display:none">
+    <h2 class="nc-h" id="h3"><i>3</i>비교 결과</h2>
+    <div id="resBody"></div>
+    <div class="nc-q">
+      <div><b>더 나은 견적 받아 보기</b><span>같은 조건으로 여러 업체 견적을 무료로 받아 비교할 수 있어요.</span></div>
+      <a href="https://gaseolpartner.vercel.app/new-request" target="_blank" rel="noopener" id="quote">견적 요청하기 →</a>
+    </div>
+  </section>
+
+  <section class="nc-card" aria-labelledby="h4">
+    <h2 class="nc-h" id="h4"><i>?</i>이렇게 비교해요</h2>
+    <p class="nc-note" style="margin-top:0">· 같은 <b>품목</b>, 같은 <b>견적 범위</b>, 같은 <b>기간대</b>(3개월 이하 / 4~6개월 / 7개월 이상)끼리 ㎡당 금액을 비교해요.<br>· 서로 다른 사람의 견적이 <b>5건 이상</b> 모여야 비교해 드려요. 한 사람이 여러 번 넣어도 최근 1건만 세요.<br>· 결과는 <b>중간값보다 몇 % 높은지·낮은지</b>와 순위만 보여 드리고, 다른 사람의 금액은 공개하지 않아요.<br>· 업체명·이름·연락처는 받지 않아요. 저장되는 건 위에 넣은 품목·범위·지역·면적·기간·금액뿐이에요.<br>· 넣어 주신 견적은 실제 업체 견적과 따로 모아서, 가설재 견적 시세를 알리는 데 비율로만 써요.<br>· 같은 ㎡라도 층수·높이·현장 조건에 따라 금액이 달라질 수 있어요. 참고용으로 봐 주세요.</p>
+    <div class="nc-row"><a class="nc-btn s" href="https://gaseolpartner.vercel.app/report" target="_blank" rel="noopener">가설재 견적 시세 리포트 보기 →</a></div>
+  </section>
+</main>
+
+<footer class="gp-footer"><div class="gp-footer-inner"><div>회사명 : 가설파트너<span class="gp-sep">|</span>주소 : 서울 강남구 가로수길 5<span class="gp-sep">|</span>이메일 : <a href="mailto:fc112@naver.com">fc112@naver.com</a><span class="gp-sep">|</span>전화 : <a href="tel:01079702108">010-7970-2108</a><span class="gp-sep">|</span>사업자등록번호 : 549-20-01841</div><div class="gp-copyline">ⓒ Gaseolpartner. all right reserved. · <a href="https://gaseolpartner.com" target="_blank" rel="noopener">gaseolpartner.com</a></div></div></footer>
+
+<script>
+(function () {
+  'use strict';
+  // 서버: 비교견적 앱 api/quote-check (품목·범위·지역 목록은 서버와 같아야 함)
+  var API = 'https://gaseolpartner.vercel.app/api/quote-check';
+  var ITEMS = ['시스템 비계', '시스템 동바리', '단관비계'];
+  var REGIONS = ['서울', '경기', '인천', '강원', '충북', '충남', '대전', '세종', '전북', '전남', '광주', '경북', '경남', '대구', '울산', '부산', '제주'];
+  var KEY = 'gp_quote_check_v1';
+  var S = (function () { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } })() || { item: '', scope: '', region: '', area: '', months: '', amount: '' };
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  function sid() { try { var s = localStorage.getItem('gp_sid'); if (!s) { s = Math.random().toString(36).slice(2, 12) + Date.now().toString(36); localStorage.setItem('gp_sid', s); } return s; } catch (e) { return ''; } }
+  var $ = function (id) { return document.getElementById(id); };
+  function num(v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; }
+  function fN(n, d) { return Number(n).toLocaleString('ko-KR', { maximumFractionDigits: d == null ? 0 : d }); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function won(n) {                                   // 25000000 → 2,500만 원
+    if (!n) return ''; var e = Math.floor(n / 1e8), m = Math.round((n % 1e8) / 1e4);
+    return (e ? fN(e) + '억 ' : '') + (m ? fN(m) + '만 ' : '') + '원';
+  }
+  function band(m) { return m <= 3 ? '3개월 이하' : m <= 6 ? '4~6개월' : '7개월 이상'; }
+
+  function render() {
+    $('items').innerHTML = ITEMS.map(function (v) { return '<button type="button" class="nc-chip" data-i="' + v + '" aria-pressed="' + (S.item === v) + '">' + v + '</button>'; }).join('');
+    [].forEach.call($('scopes').children, function (b) { b.setAttribute('aria-pressed', S.scope === b.dataset.s); });
+    if (!$('region').options.length) $('region').innerHTML = '<option value="">선택 안 함</option>' + REGIONS.map(function (r) { return '<option>' + r + '</option>'; }).join('');
+    $('region').value = S.region || ''; ['area', 'months', 'amount'].forEach(function (k) { if (document.activeElement !== $(k)) $(k).value = S[k]; });
+    live();
+  }
+  function live() {
+    var a = num(S.area), m = num(S.months), w = num(S.amount);
+    $('amountKo').textContent = w ? won(Math.round(w)) : '';
+    if (a && w) { $('unitBox').style.display = ''; $('unitBox').innerHTML = '㎡당 ' + fN(w / a) + '원' + (m ? '<small>' + band(m) + ' 견적끼리 비교해요</small>' : '<small>사용기간을 넣어 주세요</small>'); }
+    else $('unitBox').style.display = 'none';
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.i) { S.item = b.dataset.i; save(); return render(); }
+    if (b.dataset.s) { S.scope = b.dataset.s; save(); return render(); }
+    if (b.id === 'go') submit();
+  });
+  document.addEventListener('input', function (e) { var k = e.target.id; if (k === 'area' || k === 'months' || k === 'amount') { S[k] = e.target.value; save(); live(); $('err').textContent = ''; } });
+  $('region').addEventListener('change', function () { S.region = this.value; save(); });
+
+  function check() {
+    if (!S.item) return '품목을 골라 주세요.';
+    if (!S.scope) return '견적 범위를 골라 주세요.';
+    var a = num(S.area), m = num(S.months), w = num(S.amount);
+    if (!(a >= 10)) return '면적을 넣어 주세요 (10㎡ 이상).';
+    if (!(m >= 0.5 && m <= 60)) return '사용기간을 넣어 주세요 (0.5 ~ 60개월).';
+    if (!(w >= 100000)) return '견적 금액을 원 단위로 넣어 주세요 (10만 원 이상).';
+    var u = w / a; if (u < 500 || u > 500000) return '㎡당 ' + fN(u) + '원은 너무 크거나 작아요. 면적·금액 단위(원)를 확인해 주세요.';
+    return '';
+  }
+  var busy = false;
+  function submit() {
+    var msg = check(); $('err').textContent = msg; if (msg || busy) return;
+    busy = true; $('go').textContent = '비교하는 중…'; $('go').disabled = true;
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ item: S.item, scope: S.scope, region: S.region, area: num(S.area), months: num(S.months), amount: Math.round(num(S.amount)), sid: sid() }) })
+      .then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }, function () { return { s: r.status, j: {} }; }); })
+      .then(function (x) { if (x.s >= 400) throw new Error(x.j && x.j.error || '잠시 후 다시 해 주세요'); show(x.j); })
+      .catch(function (er) { $('err').textContent = (er && er.message && !/fetch|network/i.test(er.message)) ? er.message : '연결이 안 돼요. 잠시 후 다시 해 주세요.'; })
+      .then(function () { busy = false; $('go').textContent = '비교해 보기'; $('go').disabled = false; });
+  }
+  function show(j) {
+    var h = '', u = num(S.amount) / num(S.area);
+    var cond = esc(S.item) + ' · ' + (S.scope === 'rent' ? '임대만' : '임대+설치·해체') + ' · ' + band(num(S.months));
+    if (j.setup) {
+      h = '<div class="nc-empty">비교 기능을 준비하고 있어요. 곧 열릴 예정이에요.</div>';
+    } else if (!j.ready) {
+      h = '<div class="qc-wait"><b>제보해 주셔서 감사해요!</b><span>' + cond + ' 견적이 지금까지 ' + (j.count || 0) + '건 모였어요.<br>서로 다른 견적이 ' + (j.need || 5) + '건 모이면 비교해 드려요. 나중에 다시 눌러 보세요.</span></div>';
+    } else {
+      var d = j.diffPct, abs = Math.abs(d), hi = d > 0;
+      var word = abs < 3 ? '중간값과 거의 같아요' : '중간값보다 <em class="' + (hi ? 'up' : 'dn') + '">' + fN(abs, 1) + '% ' + (hi ? '높아요' : '낮아요') + '</em>';
+      var pos = Math.max(0, Math.min(100, 50 + d));            // 막대 위치 (±50% 범위)
+      h = '<div class="qc-big"><span>' + cond + ' · 같은 조건 ' + j.count + '건과 비교</span><b>㎡당 금액이 ' + word + '</b></div>' +
+        '<div class="qc-bar" aria-hidden="true"><i style="left:' + pos + '%"></i><span style="left:50%">중간값</span></div>' +
+        '<p class="nc-hint" style="margin-top:22px">내 견적: ㎡당 ' + fN(u) + '원 · 비교한 ' + j.count + '건 중 ' + j.cheaperThan + '건이 내 견적보다 비쌌어요.</p>';
+    }
+    $('resBody').innerHTML = h; $('result').style.display = '';
+    $('quote').href = 'https://gaseolpartner.vercel.app/new-request?from=calculators&item=' + encodeURIComponent(S.item === '시스템 동바리' ? '동바리' : '비계') + '&memo=' + encodeURIComponent(['[받은 견적 비교해 보기]', S.item + ' / ' + (S.scope === 'rent' ? '임대만' : '임대+설치·해체') + ' / ' + fN(num(S.area)) + '㎡ / ' + S.months + '개월', '(가설파트너 견적 비교 도구)'].join('\n'));
+    $('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  render();
+})();
+</script>
+<script src="gp-track.js" data-tool="quote-check" defer></script>
+</body>
+</html>
