@@ -92,6 +92,23 @@ function run(){
  var hb=document.querySelector('#gx-hero .gx-btns');if(c&&hb&&!c.b1&&window.__gxPri&&!hb.querySelector('.gx-b1')){hb.insertAdjacentHTML('afterbegin',btn('gx-b1',window.__gxPri));}
  return true;
 }
-var n=0,iv=setInterval(function(){var ok=false;try{ok=run();}catch(e){}if(ok||++n>150)clearInterval(iv);},150);
-window.addEventListener('load',function(){setTimeout(function(){try{run();}catch(e){}},2500);});
+// 노무대장 소개 3줄 → 새 노무대장(현장 웹 + PC 서류) 내용으로 (홈페이지 빌더 글은 그대로 두고 화면에서 바꿈)
+function laborList(){
+ if(P!=='/pages/labor-management')return true;
+ var ps=[].filter.call(document.querySelectorAll('#skinMainSection li.info_area p'),function(e){return /^\s*·/.test(e.textContent);});
+ if(!ps.length)return false;
+ if(ps[0].getAttribute('data-gx'))return true;
+ var L=['📉 4대 보험 리스크 제로: 8일 임박 근로자 자동 알림','📱 현장은 휴대폰으로: 카톡 출력 보고 붙여 넣기 · 작업 전/후 사진 (올린 시각 자동 기록, 수정 불가)','📁 서류는 한 번에: 노무대장·현금수령확인서·출력일보·월 청구서·신고용 자료까지 폴더로','🔒 개인정보는 PC에만: 주민번호·계좌·신분증은 암호화해서 이 PC에만 저장'];
+ function put(p,txt){var e=p;while(e.children.length===1)e=e.children[0];e.textContent=' · '+txt;p.setAttribute('data-gx','1');}
+ var last=ps[ps.length-1],gap=last.previousElementSibling;
+ for(var i=0;i<L.length;i++){
+  if(i<ps.length){put(ps[i],L[i]);continue;}
+  var g=gap&&!/\S/.test(gap.textContent)?gap.cloneNode(true):null,q=last.cloneNode(true);put(q,L[i]);
+  var ref=last.nextSibling;if(g)last.parentNode.insertBefore(g,ref);last.parentNode.insertBefore(q,ref);last=q;
+ }
+ for(var j=L.length;j<ps.length;j++)ps[j].remove();
+ return true;
+}
+var n=0,iv=setInterval(function(){var ok=false;try{ok=run();}catch(e){}var ok2=false;try{ok2=laborList();}catch(e){ok2=true;}if((ok&&ok2)||++n>150)clearInterval(iv);},150);
+window.addEventListener('load',function(){setTimeout(function(){try{run();}catch(e){}try{laborList();}catch(e){}},2500);});
 })();
