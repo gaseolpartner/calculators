@@ -186,7 +186,7 @@ a.ar-go{background:#F2B705}
       </a>
       <div class="ar-go">
         <b>🔧 단관비계 물량산출</b>
-        <span>단관 쌍줄비계라면 아래 면적을 단관비계 계산기에 넣으세요.</span>
+        <span>단관 쌍줄비계라면 외부 비계 면적을 그대로 넣어서 단관비계 계산기를 열어요.</span>
         <div class="nc-row" style="margin-top:10px">
           <button type="button" class="nc-btn s" id="copyArea">면적 복사</button>
           <a class="nc-btn s" href="pipe-scaffold-calculator.html" id="goPipe">단관비계 계산기 열기 →</a>
@@ -297,6 +297,7 @@ a.ar-go{background:#F2B705}
         '<p class="nc-hint">비계 이격 ' + fN(c.off) + 'm · 방지망 이격 ' + fN(c.noff) + 'm · 방지망 폭 ' + fN(c.nw) + 'm · 방지망 ' + fN(c.gap) + 'm마다 1단 · 소수는 ' + (S.rnd === 'up' ? '올림' : '버림') + '</p>';
       $('nextBox').style.display = '';
       $('goNet').href = netLink(c);
+      $('goPipe').href = 'pipe-scaffold-calculator.html?from=area&area=' + t.area;
     }
     var fr = c.rows.filter(function (r) { return r.ok && r.h > 0 && r.frac; })[0];
     $('rndHint').innerHTML = fr ? esc(fr.name) + ': ' + fN(fr.h) + 'm ÷ ' + fN(c.gap) + 'm = ' + fN(fr.ratio) + ' → 버림 ' + Math.floor(fr.ratio) + '단 / 올림 ' + Math.ceil(fr.ratio) + '단'

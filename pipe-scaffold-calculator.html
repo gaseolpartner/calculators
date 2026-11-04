@@ -543,5 +543,18 @@ tr[style*="background: rgb(27, 27, 27)"] td,tr[style*="background: #1B1B1B" i] t
 <script>GPQuote.init({"item": "비계", "title": "단관비계 물량산출", "section": "#result-section"});</script>
 <script src="gp-share.js"></script><script>GPShare.init({title:'단관비계 물량산출',after:'button[onclick="printResult()"]',mode:'calc',quote:{item:'비계',title:'단관비계 물량산출',section:'#result-section'}});</script>
 <script src="gp-track.js" data-tool="pipe-scaffold" defer></script>
+<script>
+/* 외부 비계 면적 계산기에서 넘어온 면적을 넣고 바로 계산 (2026-11-04 추가, 기존 계산 코드는 그대로) */
+(function () {
+  try {
+    var q = new URLSearchParams(location.search), a = parseFloat(q.get('area'));
+    if (q.get('from') === 'area' && a > 0 && a < 10000000) {
+      document.getElementById('area').value = a;
+      calculateQuantity();
+      history.replaceState(null, '', location.pathname);   // 새로고침해도 다시 계산하지 않게
+    }
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>

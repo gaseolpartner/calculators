@@ -141,7 +141,7 @@ function page(){
   +'<a class="gpp-f" href="/pages/introduction"><span class="gpp-n">1</span><h3>가설 설계 프로그램 CATS</h3><p>CAD에서 시스템 비계·서포트 자동 배치, 3D 확인, 수량 엑셀</p><span class="gpp-go">프로그램 보기 →</span></a>'
   +'<a class="gpp-f" href="/pages/structureatuntroduction"><span class="gpp-n">2</span><h3>HJ구조 구조검토</h3><p>비계·동바리 구조검토를 구조 사무실에서 직접 진행 · 비용 협의</p><span class="gpp-go">구조검토 보기 →</span></a>'
   +'<a class="gpp-f" href="/pages/precio"><span class="gpp-n">3</span><h3>가설재 견적 비교</h3><p>여러 가설재 업체의 견적을 한 번에 받아 비교</p><span class="gpp-go">견적 비교 보기 →</span></a>'
-  +'<a class="gpp-f" href="/pages/calculators"><span class="gpp-n">4</span><h3>무료 도구</h3><p>물량·견적 계산기 · 안전망 롤 수 계산기 · 작업 전 점검표 · 강풍·폭우 알림 · 안전교육 3D 시뮬레이터 · 노무 관리 프로그램 · CATS Pro(무료 CAD 애드인)</p><span class="gpp-go">무료로 쓰기 →</span></a>'
+  +'<a class="gpp-f" href="/pages/calculators"><span class="gpp-n">4</span><h3>무료 도구</h3><p>물량·견적 계산기 · 안전망 롤 수 계산기 · 외부 비계 면적 · 중량·차량 계산기 · 작업 전 점검표 · 작업계획서 · 받은 견적 비교 · 강풍·폭우 알림 · 안전교육 3D 시뮬레이터 · 노무 관리 프로그램 · CATS Pro(무료 CAD 애드인)</p><span class="gpp-go">무료로 쓰기 →</span></a>'
   +'</div><div class="gpp-btns" style="margin-top:30px"><a class="gpp-btn gpp-y" href="'+KAKAO+'" target="_blank" rel="noopener">💬 카톡 문의</a><a class="gpp-btn gpp-w" href="/pages/support">연락처·운영 시간</a></div></div></section>');b[1].parentNode.insertBefore(ab,b[1].nextSibling);}
  if(P==='/pages/structureatuntroduction'&&!document.getElementById('gpp-str')&&b[2]){var sb=el('<section id="gpp-str" class="gpp-sec gpp-g"><div class="gpp-wrap"><h2 class="gpp-h2">구조검토 의뢰는 이렇게 진행됩니다</h2><p class="gpp-h2s">외부 업체가 아니라 구조 사무실(HJ구조)에서 직접 진행합니다</p><div class="gpp-grid3">'
   +'<div class="gpp-f"><span class="gpp-n">1</span><h3>내용 보내기</h3><p>현장명, 검토 대상(비계·동바리 등), 도면이나 스케치를 의뢰서·메일·카톡으로 보내 주세요</p></div>'
