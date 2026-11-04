@@ -109,6 +109,14 @@ function laborList(){
  for(var j=L.length;j<ps.length;j++)ps[j].remove();
  return true;
 }
-var n=0,iv=setInterval(function(){var ok=false;try{ok=run();}catch(e){}var ok2=false;try{ok2=laborList();}catch(e){ok2=true;}if((ok&&ok2)||++n>150)clearInterval(iv);},150);
-window.addEventListener('load',function(){setTimeout(function(){try{run();}catch(e){}try{laborList();}catch(e){}},2500);});
+// 노무대장 다운로드 → 새 버전(v2.1). 예전 OneDrive 링크는 그대로 두고 이 페이지 버튼만 바꿈
+var NOMU_DL='https://gaseolpartner.vercel.app/download/gaseolpartner-nomu-v2.zip';
+function laborDl(){
+ if(P!=='/pages/labor-management')return true;
+ var a=[].filter.call(document.querySelectorAll('a[href*="1drv.ms"],a[href*="onedrive"]'),function(x){return x.getAttribute('data-gx')!=='dl';});
+ a.forEach(function(x){x.setAttribute('href',NOMU_DL);x.removeAttribute('target');x.setAttribute('data-gx','dl');});
+ return document.querySelectorAll('a[data-gx="dl"]').length>0;
+}
+var n=0,iv=setInterval(function(){var ok=false;try{ok=run();}catch(e){}var ok2=false,ok3=false;try{ok2=laborList();}catch(e){ok2=true;}try{ok3=laborDl();}catch(e){ok3=true;}if((ok&&ok2&&ok3)||++n>150)clearInterval(iv);},150);
+window.addEventListener('load',function(){setTimeout(function(){try{run();}catch(e){}try{laborList();}catch(e){}try{laborDl();}catch(e){}},2500);});
 })();
