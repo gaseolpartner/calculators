@@ -333,3 +333,14 @@ if(P===''){
   setTimeout(fix,2500); // 메뉴를 나중에 다시 그리는 경우 대비
 })();
 })();
+
+/* 주소의 #구역 이동 (11-06): 구역을 스크립트가 늦게 만들어서 브라우저가 처음에 못 찾는 경우,
+ * 구역이 생기면 그 자리로 이동한다. 모든 페이지·모든 #id 공통 (#sales, #req 등). */
+(function(){
+  var h=decodeURIComponent((location.hash||'').slice(1));
+  if(!h||!/^[\w-]+$/.test(h))return;
+  var n=0,moved=false;
+  function go(){var t=document.getElementById(h);if(!t)return false;t.scrollIntoView({block:'start'});moved=true;return true;}
+  var iv=setInterval(function(){if(go()||++n>80)clearInterval(iv);},100);
+  window.addEventListener('load',function(){setTimeout(function(){if(moved)go();},800);});
+})();

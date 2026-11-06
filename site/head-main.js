@@ -30,6 +30,7 @@ var CSS=''
 +'.gp-c p{font-size:15.5px;line-height:1.6;color:#666;margin:0 0 14px}'
 +'.gp-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}'
 +'.gp-chips span{font-size:13px;font-weight:600;color:#555;background:#f5f5f2;border-radius:6px;padding:4px 8px}'
++'.gp-chips .gp-chip-go{background:#1B1B1B;color:#F2B705;cursor:pointer}.gp-chips .gp-chip-go:hover{background:#000;text-decoration:underline}'
 +'.gp-go{margin-top:auto;font-size:16px;font-weight:800;color:#1b1b1b;display:flex;align-items:center;gap:6px}'
 +'.gp-go i{font-style:normal;transition:transform .2s}.gp-c:hover .gp-go i{transform:translateX(4px)}'
 +'.gp-end{text-align:center;background:#F2B705;padding:60px 0}'
@@ -72,7 +73,7 @@ quo:'<svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 
 sup:'<svg viewBox="0 0 24 24"><path d="M4 11h16v9H4zM2 7h20v4H2zM12 7v13M12 7c-2-4-6-4-6-1.5S10 7 12 7zM12 7c2-4 6-4 6-1.5S14 7 12 7z"/></svg>'};
 function card(href,ic,tag,free,title,desc,chips,go){
  return '<a class="gp-c gp-up" href="'+href+'"><span class="gp-ic">'+IC[ic]+'</span><span class="gp-tag'+(free?' free':'')+'">'+tag+'</span><h3>'+title+'</h3><p>'+desc+'</p>'
- +(chips?'<div class="gp-chips">'+chips.map(function(c){return '<span>'+c+'</span>';}).join('')+'</div>':'')
+ +(chips?'<div class="gp-chips">'+chips.map(function(c){return typeof c==='string'?'<span>'+c+'</span>':'<span class="gp-chip-go" role="link" tabindex="0" data-href="'+c[1]+'">'+c[0]+'</span>';}).join('')+'</div>':'')
  +'<span class="gp-go">'+go+' <i>→</i></span></a>';}
 var CH='https://www.youtube.com/@%EA%B0%80%EC%84%A4%ED%8C%8C%ED%8A%B8%EB%84%88';
 var SHORTS=[['HKBu94u6MBk','#64','널빤지 끝을 밟았을 뿐인데 솟구쳤다?'],['3SnY_29XoE4','#63','옥상 위 아찔한 계단, 몇 개나 설치해야 할까?'],['1xxtvCpzXZY','#62','통로가 너무 넓어지면 벌어지는 아찔한 일?'],['spOnQBDIp34','#61','발판에 적어 붙이는 숫자의 비밀']];
@@ -118,7 +119,7 @@ function run(){
  +'</div><div id="gp-svc" class="gp-svc">'
  +card('/pages/introduction','cad','프로그램',0,'가설 설계 프로그램<br>CATS','CAD에서 시스템 비계·서포트를 자동 배치하고 수량까지 뽑아 줍니다.',['3D 확인','수량 엑셀','CAD 5종','체험판','CATS Pro 무료'],'프로그램 보기')
  +card('/pages/structureatuntroduction','str','비용 협의',0,'HJ구조<br>구조검토','비계·동바리 구조검토를 구조 사무실에서 직접 맡아 드립니다.',['구조검토 의뢰','진행 조회','간편 구조계산'],'검토 의뢰하기')
- +card('/pages/precio','quo','견적 요청',0,'가설재<br>견적 비교','여러 업체 견적을 한 번에 받아 비교합니다. 업체는 승인 후 신규 현장 정보도 받아 봅니다.',['업체별 견적','한 번에 비교','현장 정보 받기','신규 수주 브리핑','현장관리 시스템'],'견적 비교하기')
+ +card('/pages/precio','quo','견적 요청',0,'가설재<br>견적 비교','여러 업체 견적을 한 번에 받아 비교합니다. 업체는 승인 후 신규 현장 정보도 받아 봅니다.',['업체별 견적','한 번에 비교',['업체라면 → 현장 정보 받기','/pages/precio#sales'],'신규 수주 브리핑','현장관리 시스템'],'견적 비교하기')
  +card('/pages/calculators','sup','무료',1,'현장 지원<br>무료 도구','현장 업무를 돕는 도구를 무료로 쓸 수 있습니다.',['물량·견적 계산기','안전망 계산기','비계 면적','중량·차량','작업 전 점검표','작업계획서','견적 비교','강풍·폭우 알림','3D 안전교육','노무 관리','CATS Pro'],'무료로 쓰기')
  +'</div></div></section>');
  var end=el('<section class="gp-end"><div class="gp-wrap gp-up"><h2>어떤 서비스가 맞는지 모르겠다면</h2><p>카톡으로 물어보세요. 현장에 맞는 방법을 바로 안내해 드립니다.</p><div class="gp-btns"><a class="gp-btn gp-btn-d" href="'+KAKAO+'" target="_blank" rel="noopener">💬 카톡으로 문의하기</a><a class="gp-btn gp-btn-w" href="/pages/support">게시판에 남기기</a></div></div></section>');
@@ -131,6 +132,8 @@ function run(){
  else{[].forEach.call(ups,function(x){x.classList.add('gp-in');});}
  var sl=document.querySelector('a[href="#gp-svc"]');if(sl){sl.addEventListener('click',function(e){e.preventDefault();document.getElementById('gp-svc').scrollIntoView({behavior:'smooth',block:'start'});});}
 }
+document.addEventListener('click',function(e){var g=e.target.closest&&e.target.closest('.gp-chip-go');if(!g)return;e.preventDefault();e.stopPropagation();location.href=g.getAttribute('data-href');},true);
+document.addEventListener('keydown',function(e){if(e.key!=='Enter')return;var g=e.target.closest&&e.target.closest('.gp-chip-go');if(!g)return;e.preventDefault();e.stopPropagation();location.href=g.getAttribute('data-href');},true);
 var n=0,iv=setInterval(function(){addStyle();run();if(document.getElementById('gp-hero')||++n>150)clearInterval(iv);},80);
 var n2=0,iv2=setInterval(function(){var ok=false;try{ok=deco();}catch(e){}if(ok||++n2>200)clearInterval(iv2);},100);
 window.addEventListener('load',function(){run();setTimeout(run,1000);setTimeout(run,2500);setTimeout(deco,1500);setTimeout(deco,4000);});
