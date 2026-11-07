@@ -1,6 +1,14 @@
 /* 가설파트너 홈페이지 head 의 <script id="gp-pages-js"> 내용 그대로 (11-02 이동). 고치면 github에 올리면 10분 안에 반영. 원본 백업: 08 폴더 gp-head-footer-backup.json */
 (function(){
 var P=location.pathname.replace(/\/+$/,'');if(P===''||P==='/')return;
+/* 페이지 맨 위 배너 그림 바꾸기 (11-08) — 관리자 디자인 화면을 안 거치고 github 그림으로 바꿈.
+ * 바꿀 페이지가 생기면 BAN 에 '페이지 주소':['옛 그림 파일 번호','새 그림 주소'] 한 줄 추가.
+ * 새 그림은 site/img/ 에 올림 (원본: 08 폴더 01. 홈페이지 배너) */
+var BAN={'/pages/calculators':['1678744446','https://gaseolpartner.github.io/calculators/site/img/banner-free-tools.png']};
+if(BAN[P]){(function(o,n){
+  var st=document.createElement('style');st.id='gp-ban';st.textContent='img[src$="/file/'+o+'"]{content:url("'+n+'")}';document.head.appendChild(st); // 크롬·사파리: 그려지기 전에 바로
+  var k=0,iv=setInterval(function(){[].forEach.call(document.querySelectorAll('img[src$="/file/'+o+'"]'),function(i){i.src=n;i.removeAttribute('srcset');});if(++k>60)clearInterval(iv);},150); // 그 밖의 브라우저
+})(BAN[P][0],BAN[P][1]);}
 var OLD={'/pages/rental':'/pages/precio','/pages/rentalform':'/pages/precio','/pages/cost':'/pages/precio','/pages/sale':'/pages/precio','/pages/anorderform':'/pages/precio','/pages/outsource':'/pages/precio','/pages/outsourceform':'/pages/precio','/pages/gallery':'/pages/about','/pages/news':'/pages/support2','/pages/history':'/pages/about','/pages/guidebook':'/pages/support2','/pages/contact':'/pages/support'};
 if(OLD[P]){location.replace(OLD[P]);return;}
 var KAKAO='https://pf.kakao.com/_xovuVG/chat';
