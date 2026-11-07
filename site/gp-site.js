@@ -301,7 +301,7 @@ if(P===''){
 }
 (function(){ // 모든 페이지 메뉴 (PC·휴대폰 메뉴 둘 다) — 11-02 사용자 결정: 무료 도구 7개 모두 두고 쓰는 사람 기준으로 묶기
   var HIDE=['구조 문의 게시판']; // 글 0개
-  var GROUPS=[['설계·견적',['CATS Pro 무료 CAD 애드인','물량·견적 계산기','안전망 롤 수 계산기']],
+  var GROUPS=[['설계·견적',['물량·견적 계산기','안전망 롤 수 계산기']],
               ['현장 안전 · 작업자용',['작업 전 점검표','강풍·폭우 현장 알림','안전교육 3D 시뮬레이터']],
               ['현장 관리',['노무 관리 프로그램']]];
   var css0=document.createElement('style');
@@ -317,6 +317,13 @@ if(P===''){
       var lis=[].slice.call(ul.children),by={};
       lis.forEach(function(li){by[txt(li)]=li});
       if(!by['물량·견적 계산기']||!by['노무 관리 프로그램'])return; // 무료 도구 메뉴만
+      // CATS Pro는 CATS와 같이 받는 애드인 → 프로그램 메뉴로 옮김 (11-07)
+      var pro=by['CATS Pro 무료 CAD 애드인'];
+      if(pro){delete by['CATS Pro 무료 CAD 애드인'];var pul=null;
+        var all2=[].slice.call(document.querySelectorAll('ul.navi_depth2')),k=all2.indexOf(ul); // 같은 메뉴 묶음(PC·휴대폰 각각)에서 바로 앞쪽의 프로그램 메뉴
+        for(var j=k-1;j>=0&&!pul;j--){if([].some.call(all2[j].children,function(x){return txt(x)==='프로그램 소개'}))pul=all2[j];}
+        if(pul){var pa=pro.querySelector('a');pa.textContent='CATS Pro (무료 CAD 애드인)';pa.setAttribute('target','_blank');pa.setAttribute('rel','noopener');pul.appendChild(pro);}
+        else pro.style.setProperty('display','none','important');}
       ul.setAttribute('data-gp-grp','1');found=true;
       var tpl=by['물량·견적 계산기'];
       GROUPS.forEach(function(g){
