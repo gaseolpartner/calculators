@@ -301,8 +301,8 @@ if(P===''){
 }
 (function(){ // 모든 페이지 메뉴 (PC·휴대폰 메뉴 둘 다) — 11-02 사용자 결정: 무료 도구 7개 모두 두고 쓰는 사람 기준으로 묶기
   var HIDE=['구조 문의 게시판']; // 글 0개
-  var GROUPS=[['설계·견적',['물량·견적 계산기','안전망 롤 수 계산기']],
-              ['현장 안전 · 작업자용',['작업 전 점검표','강풍·폭우 현장 알림','안전교육 3D 시뮬레이터']],
+  var GROUPS=[['수량·견적',['안전망 롤 수 계산기','물량·견적 계산기']],
+              ['현장 안전 · 서류',['작업 전 점검표','시스템 설치 작업계획서','강풍·폭우 현장 알림','안전교육 3D 시뮬레이터']],
               ['현장 관리',['노무 관리 프로그램']]];
   var css0=document.createElement('style');
   css0.textContent='ul.navi_depth2 li.gp-mh{pointer-events:none;padding:0!important}ul.navi_depth2 li.gp-mh span{display:block;padding:10px 16px 4px;font-size:12px;font-weight:800;color:#B88A00;letter-spacing:.02em;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
@@ -326,6 +326,11 @@ if(P===''){
         else pro.style.setProperty('display','none','important');}
       ul.setAttribute('data-gp-grp','1');found=true;
       var tpl=by['물량·견적 계산기'];
+      // 무료 도구 이름 정리 (11-07, 무료 도구 페이지와 같은 이름) — 메뉴 원래 이름은 위 by[] 찾기용으로 그대로 씀
+      var ren=function(li,t,h){var a=li&&li.querySelector('a');if(!a)return;a.textContent=t;if(h){a.setAttribute('href',h);if(/^http/.test(h)){a.setAttribute('target','_blank');a.setAttribute('rel','noopener');}}};
+      ren(by['안전망 롤 수 계산기'],'외부 비계·안전망 계산기','https://gaseolpartner.github.io/calculators/scaffold-area-calculator.html');
+      ren(by['물량·견적 계산기'],'가수량·견적서 작성');
+      if(!by['시스템 설치 작업계획서']&&by['작업 전 점검표']){var wp=by['작업 전 점검표'].cloneNode(true);ren(wp,'시스템 설치 작업계획서','https://gaseolpartner.github.io/calculators/work-plan.html');by['시스템 설치 작업계획서']=wp;}
       GROUPS.forEach(function(g){
         var h=tpl.cloneNode(false);h.className=(tpl.className?tpl.className+' ':'')+'gp-mh';h.innerHTML='<span>'+g[0]+'</span>';ul.appendChild(h);
         g[1].forEach(function(name){if(by[name]){ul.appendChild(by[name]);delete by[name]}});
