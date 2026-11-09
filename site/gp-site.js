@@ -269,6 +269,39 @@ if(P==='/pages/introduction'){
   });
 }
 
+/* ---------- 7-2. 구매 전 자주 묻는 질문 (11-10) — 가격·라이선스(sale01), 구매 요청(purchase) 맨 아래 `#gpbq` ----------
+ * 내용은 가격 페이지·구매 요청 페이지·위 FAQ에 이미 적혀 있는 사실만. 가격·환불 조건이 바뀌면 여기 BUYQ도 같이 고칠 것. */
+var BUYQ=[
+  ['사기 전에 먼저 써 볼 수 있나요?','네. 체험판을 받으면 <b>첫 사용일부터 20일</b> 동안 모든 기능을 무료로 쓸 수 있어요. <a href="https://www.autocats.co.kr/seouldream#download" target="_blank" rel="noopener">체험판 받기 →</a>'],
+  ['구매는 어떤 순서로 진행되나요?','<a href="/pages/purchase">구매 요청서</a>를 남기거나 카톡으로 연락 주시면, 확인 후 <b>견적서와 함께 연락</b>드려요. 구매가 끝나면 <b>라이선스 코드</b>를 보내 드리고, CAD 명령창에 <b>CODE11</b>을 입력해 코드를 넣으면 바로 쓸 수 있어요.'],
+  ['월 구매와 연 구매는 무엇이 다른가요?','<b>월 200,000원</b>, <b>연 2,160,000원</b>(10% 할인)이에요. 둘 다 VAT 별도이고, 쓸 수 있는 기능은 같아요.'],
+  ['환불이 되나요?','<b>월 구매는 7일 이내, 연 구매는 15일 이내</b>에 100% 환불돼요. 그 뒤에는 환불되지 않아요.'],
+  ['PC 몇 대에서 쓸 수 있나요? PC를 바꾸면요?','라이선스 코드 하나로 <b>PC 2대</b>까지 등록할 수 있어요(동시에 쓰는 것은 안 돼요). PC를 바꾸거나 등록을 풀 때는 카톡·전화로 연락 주시면 안내해 드려요.'],
+  ['CAD를 다른 종류로 바꿔도 되나요?','네. AutoCAD·ZWCAD·BricsCAD·GstarCAD·CADian 어느 것을 써도 <b>가격이 같고</b>, CAD 종류를 바꿔도 같은 라이선스로 쓸 수 있어요.']
+];
+if(P==='/pages/sale01'||P==='/pages/purchase'){
+  css('gpbq-css',
+  '#gpbq{max-width:1140px;margin:48px auto 10px;padding:0 20px;box-sizing:border-box;font-family:Pretendard,"Malgun Gothic",sans-serif;color:#2B2B2B;scroll-margin-top:80px}'+
+  '#gpbq h2{font-size:28px;font-weight:800;margin:0 0 6px;color:#1F1F1F}#gpbq .gpbq-s{color:#666;margin:0 0 18px;font-size:15.5px}'+
+  '#gpbq details{background:#fff;border:1px solid #E3E3E3;border-radius:12px;margin:0 0 10px;overflow:hidden}'+
+  '#gpbq summary{cursor:pointer;list-style:none;padding:16px 48px 16px 18px;font-weight:700;font-size:16.5px;position:relative;color:#1B1B1B}'+
+  '#gpbq summary::-webkit-details-marker{display:none}#gpbq summary:after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:22px;color:#B88A00}'+
+  '#gpbq details[open] summary:after{content:"−"}#gpbq details[open]{border-color:#F2B705}'+
+  '#gpbq .gpbq-a{padding:0 18px 16px;font-size:15px;line-height:1.75;color:#444}#gpbq .gpbq-a a{color:#1B1B1B;font-weight:700}'+
+  '#gpbq .gpbq-more{margin:16px 0 0;font-size:14.5px;color:#666}#gpbq .gpbq-more a{color:#1B1B1B;font-weight:800}'+
+  '@media(max-width:700px){#gpbq{padding:0 16px;margin-top:32px}#gpbq h2{font-size:23px}#gpbq summary{font-size:15.5px}}');
+  wait(function(){return document.getElementById('gx-hero')&&document.getElementById('skinMainSection')},function(main){
+    if(document.getElementById('gpbq'))return;
+    var s=document.createElement('section');s.id='gpbq';
+    s.innerHTML='<h2>구매 전 자주 묻는 질문</h2><p class="gpbq-s">체험판·구매 순서·환불·PC 대수, 결정하기 전에 많이 물어보시는 것만 모았어요.</p>'+
+      BUYQ.map(function(q,i){return '<details'+(i===0?' open':'')+'><summary>'+q[0]+'</summary><div class="gpbq-a">'+q[1]+'</div></details>'}).join('')+
+      '<p class="gpbq-more">설치·사용법 질문은 <a href="/pages/support2#gpfq">CATS 자주 묻는 질문 →</a> · 여기 없는 질문은 <a href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener">카톡으로 물어보기 →</a></p>';
+    s.appendChild(st('gpbq-css'));
+    main.appendChild(s);
+    s.querySelectorAll('details').forEach(function(dt){dt.addEventListener('toggle',function(){if(dt.open)ga('faq_open',{q:dt.querySelector('summary').textContent.slice(0,40),where:'buy'})})});
+  });
+}
+
 /* ---------- 8. 처음 온 방문자 기준 정리 (11-02 사용자 결정) ----------
  * ① 첫 화면 서비스 카드 아래 신뢰 숫자 띠 (숫자는 사용자가 확인해 준 값만: 정기 구독 13개 업체·상위 5개사 중 3곳·구조기술사 직접·월 약 100건·평균 2~3일)
  * ② 첫 화면 아래쪽 '바로가기' 6칸(서비스 카드와 중복)만 숨김 — 같은 묶음의 영상 2개는 그대로 + 제목
