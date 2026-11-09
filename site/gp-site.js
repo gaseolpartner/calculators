@@ -356,3 +356,22 @@ if(P===''){
   var iv=setInterval(function(){if(go()||++n>80)clearInterval(iv);},100);
   window.addEventListener('load',function(){setTimeout(function(){if(moved)go();},800);});
 })();
+
+/* 이용 안내·저작권 링크 + 프로그램 페이지 상표 고지 (11-10): 하단 ⓒ 줄 아래에 덧붙이기만 한다. */
+(function(){
+  var URL='https://gaseolpartner.github.io/calculators/legal.html';
+  var PROG=/^\/pages\/(introduction|sale01|purchase|temporarysoftware3d)\/?$/.test(location.pathname);
+  function add(){
+    var p=document.querySelector('#skinFooterSection .footer_section.copyright p');
+    if(!p)return false;
+    if(document.querySelector('.gp-legal'))return true;
+    var d=document.createElement('p');d.className='gp-legal';
+    d.style.cssText='margin-top:6px;font-size:13px;line-height:1.7;color:#919191';
+    d.innerHTML='<a href="'+URL+'" target="_blank" rel="noopener" style="color:#cfcfcf;text-decoration:underline">이용 안내 · 저작권</a>'+
+      ' · <a href="'+URL+'#privacy" target="_blank" rel="noopener" style="color:#cfcfcf;text-decoration:underline">개인정보 안내</a>'+
+      (PROG?'<br>AutoCAD, ZWCAD, BricsCAD, GstarCAD, CADian은 각 회사의 상표 또는 등록상표입니다.':'');
+    p.parentNode.insertBefore(d,p.nextSibling);
+    return true;
+  }
+  if(!add()){var n=0,iv=setInterval(function(){if(add()||++n>50)clearInterval(iv);},200);}
+})();

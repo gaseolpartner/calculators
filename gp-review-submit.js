@@ -84,6 +84,14 @@
       b.innerHTML = '<div style="font-size:30px;margin-bottom:10px">📨</div>바로 접수<div style="font-size:14px;margin-top:10px;color:#F2B705">영업일 하루 안에 견적 회신</div>';
       b.onclick = function () { send(formData, b); };
       row.insertBefore(b, row.firstChild);
+      // 개인정보 안내 (11-10): 바로 접수하면 무엇이 누구에게 가는지 버튼 아래에 한 줄로 알려 준다
+      if (row.parentNode && !modal.querySelector('.gprs-pi')) {
+        var pi = document.createElement('div');
+        pi.className = 'gprs-pi';
+        pi.style.cssText = 'margin-top:14px;font-size:13px;line-height:1.6;color:#666;text-align:center';
+        pi.innerHTML = '「바로 접수」를 누르면 입력하신 업체명·현장명·연락처·의뢰 내용이 가설파트너(HJ구조기술사사무소)에 전달되며, 견적 안내와 진행 연락에만 사용합니다. <a href="https://gaseolpartner.github.io/calculators/legal.html#privacy" target="_blank" rel="noopener" style="color:#1B1B1B;font-weight:700">개인정보 안내</a>';
+        row.parentNode.insertBefore(pi, row.nextSibling);
+      }
     } catch (e) { /* 추가 버튼이 실패해도 기존 방법은 그대로 */ }
   };
 })();
