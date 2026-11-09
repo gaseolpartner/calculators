@@ -366,7 +366,7 @@ if(P===''){
     if(!p)return false;
     if(document.querySelector('.gp-legal'))return true;
     var d=document.createElement('p');d.className='gp-legal';
-    d.style.cssText='margin-top:6px;font-size:13px;line-height:1.7;color:'+getComputedStyle(p).color;
+    d.style.cssText='margin-top:6px;font-size:13px;line-height:1.7;color:#444';
     d.innerHTML='<a href="'+URL+'" target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline">이용 안내 · 저작권</a>'+
       ' · <a href="'+URL+'#privacy" target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline">개인정보 안내</a>'+
       (PROG?'<br>AutoCAD, ZWCAD, BricsCAD, GstarCAD, CADian은 각 회사의 상표 또는 등록상표입니다.':'');
