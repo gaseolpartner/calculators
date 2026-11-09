@@ -184,6 +184,10 @@ a.ar-go{background:#F2B705}
         <b>🥅 안전망 롤 수 계산하기 →</b>
         <span>위 구간의 비계 둘레·높이를 그대로 넣어서 열어요.</span>
       </a>
+      <a class="ar-go" id="goSys" href="system-scaffold-calculator.html">
+        <b>🏗️ 시스템 비계 물량산출 →</b>
+        <span>외부 비계 면적을 그대로 넣고 바로 계산해요. 결과에서 견적서·상차 계획까지 이어서 만들 수 있어요.</span>
+      </a>
       <div class="ar-go">
         <b>🔧 단관비계 물량산출</b>
         <span>단관 쌍줄비계라면 외부 비계 면적을 그대로 넣어서 단관비계 계산기를 열어요.</span>
@@ -298,6 +302,7 @@ a.ar-go{background:#F2B705}
       $('nextBox').style.display = '';
       $('goNet').href = netLink(c);
       $('goPipe').href = 'pipe-scaffold-calculator.html?from=area&area=' + t.area;
+      $('goSys').href = 'system-scaffold-calculator.html?from=area&area=' + Math.round(t.area * 100) / 100;
     }
     var fr = c.rows.filter(function (r) { return r.ok && r.h > 0 && r.frac; })[0];
     $('rndHint').innerHTML = fr ? esc(fr.name) + ': ' + fN(fr.h) + 'm ÷ ' + fN(c.gap) + 'm = ' + fN(fr.ratio) + ' → 버림 ' + Math.floor(fr.ratio) + '단 / 올림 ' + Math.ceil(fr.ratio) + '단'

@@ -520,7 +520,39 @@ body{margin:0;background:#F6F6F4;color:#2B2B2B;-webkit-tap-highlight-color:trans
     setTimeout(function () { window.print(); document.title = ti; }, 60);
   }
 
+  // ---------- 물량산출 계산기에서 넘어온 수량 (2026-11-09) ----------
+  // 시스템 비계·시스템 동바리·단관비계 결과의 [상차 계획 만들기] → ?from=calc&q=[[분류, 품명, 수량]]&miss=[[이름, 수량]]
+  // 품명이 위 자재중량표와 같은 것만 넣고, 없는 품목은 무게를 지어내지 않고 따로 알려 줌
+  var fromCalc = null;
+  try {
+    var qp = new URLSearchParams(location.search);
+    if (qp.get('from') === 'calc' && qp.get('q')) {
+      var arr = JSON.parse(qp.get('q')), miss = qp.get('miss') ? JSON.parse(qp.get('miss')) : [];
+      var byName = {}; Object.keys(ITEMS).forEach(function (id) { byName[ITEMS[id].cat + '|' + ITEMS[id].name] = id; });
+      var nq = {}, got = 0, cat = null, lost = [];
+      (Array.isArray(arr) ? arr : []).slice(0, 80).forEach(function (a) {
+        var id = byName[a[0] + '|' + a[1]], q = Math.floor(num(a[2]));
+        if (id && q) { nq[id] = (nq[id] || 0) + q; got++; if (!cat) cat = a[0]; }
+        else if (q) lost.push([a[1], q]);
+      });
+      if (got) {
+        S.q = nq; S.unit = 'ea'; if (cat) S.tab = cat;
+        S.custom.forEach(function (c) { delete S.q[c.id]; });
+        fromCalc = { src: String(qp.get('src') || '물량산출').slice(0, 30), got: got, miss: (Array.isArray(miss) ? miss : []).concat(lost).slice(0, 20) };
+      }
+      history.replaceState(null, '', location.pathname);   // 새로고침해도 다시 덮어쓰지 않게
+    }
+  } catch (e) {}
+
   all();
+  if (fromCalc) {
+    var nb = document.createElement('div');
+    nb.setAttribute('role', 'status');
+    nb.style.cssText = 'margin:0 0 12px;background:#FFF6D6;border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.55;color:#1B1B1B';
+    nb.innerHTML = '<b>' + esc(fromCalc.src) + '</b>에서 자재 ' + fromCalc.got + '종 수량을 가져왔어요. 차량만 고르면 돼요.' +
+      (fromCalc.miss.length ? '<br><span style="color:#8a3b00">자재중량표에 없어 빠진 품목: ' + fromCalc.miss.map(function (m) { return esc(m[0]) + ' ' + fN(m[1], 0) + '개'; }).join(', ') + ' — 필요하면 [직접 추가]에서 무게를 넣어 주세요.</span>' : '');
+    $('unitMode').parentNode.insertBefore(nb, $('unitMode'));
+  }
 })();
 </script>
 <script src="gp-track.js" data-tool="truck-load" defer></script>
