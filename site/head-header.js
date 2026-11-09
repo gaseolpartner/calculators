@@ -3,7 +3,7 @@
 var SRC='/storage/upload_images/nmifMZo9uxaKHd2Wp36g3Sd6Ji1m27rzCWLnsyuk.png';
 var YT_CH='https://www.youtube.com/@%EA%B0%80%EC%84%A4%ED%8C%8C%ED%8A%B8%EB%84%88';
 var APP='https://gaseolpartner.vercel.app/welcome';
-var NEWS={key:'gpbar-cats156',tag:'NEW',text:'CATS 1.5.6 업데이트 · 일람표만 붙여 넣으면 배치부터 3D 검토까지',short:'CATS 1.5.6 업데이트',go:'영상 보기',href:'https://www.youtube.com/watch?v=KA75C-TFlFY'};
+var NEWS={key:'gpbar-cats157',tag:'NEW',text:'CATS 1.5.7 업데이트 · 서포트 종류 선택부터 비계 3D·입면까지',short:'CATS 1.5.7 업데이트',go:'영상 보기',href:'https://www.youtube.com/watch?v=7gCqHHDtMWc'};
 var CSS='.front_header_section .header_module{padding-top:12px!important;padding-bottom:12px!important}'
 +'.front_header_section .module_container{padding-top:0!important;padding-bottom:0!important;align-items:center}'
 +'.front_header_section .logo_area,.front_header_section .logo_area p,.front_header_section .logo_area a{height:auto!important;line-height:normal}'
