@@ -234,7 +234,7 @@ var FAQ=[
   ['구매 후 코드는 어디에 넣나요?','CAD 명령창에 <b>CATSDR_CODE11</b> (또는 <b>CODE11</b>)을 입력하고 받은 코드를 넣으면 돼요.'],
   ['처음에는 무엇부터 하면 되나요?','추천 순서는 ① 원도 정리·레이어 확인(PREP, DS11) → ② 도곽·층 문자·높이값 인식(DS13, DS22, DS23) → ③ 써포트/비계 규격·간격 설정(SS11) → ④ 평면·입면 배치(S11, B11, F11, AE31) → ⑤ 물량 산출(CAV)이에요. 처음이면 <a href="https://www.youtube.com/watch?v=WAHK4hAjn0E" target="_blank" rel="noopener">설치 영상(57초)</a>과 연습 #1 영상을 먼저 보세요.'],
   ['사용 설명서는 어디 있나요?','CAD에서 <b>CATSDR_WEBMANUAL</b> 명령으로 바로 열려요. 웹에서는 <a href="https://www.autocats.co.kr/seouldream/manual" target="_blank" rel="noopener">CATS 매뉴얼</a>에서 명령어를 이름·설명으로 찾을 수 있어요. 도곽 인식 테스트용 기본 도면(SHEET)도 거기서 받을 수 있어요.'],
-  ['업데이트는 어떻게 받나요?','CATS는 매주 새 기능이 추가돼요. <a href="https://autocats.co.kr/seouldream#download" target="_blank" rel="noopener">다운로드 영역</a>에서 패치노트를 보고 최신 설치 파일을 받으면 돼요. 이전 버전 파일도 패치노트에서 고를 수 있어요.'],
+  ['업데이트는 어떻게 받나요?','CATS는 매주 새 기능이 추가돼요. 이제 <b>사이트에 들어가지 않고 CAD 안에서</b> 업데이트할 수 있어요. ① 패치노트(<b>CATSDR_NOTES</b>)를 열고 ② 아래쪽 <b>「CAD 종료 후 업데이트」</b> 버튼을 누른 뒤 ③ 작업을 저장하고 CAD를 닫으면 설치 파일을 내려받아 설치 창이 열려요. <a href="https://youtu.be/C_Kg0wLyJS0" target="_blank" rel="noopener">▶ 업데이트 영상 (46초)</a><br>버튼이 보이지 않는 버전이면 <a href="https://autocats.co.kr/seouldream#download" target="_blank" rel="noopener">다운로드 영역</a>에서 최신 설치 파일을 받으면 돼요. 이전 버전 파일도 패치노트에서 고를 수 있어요.'],
   ['구조계산까지 해 주나요?','CATS는 배치·도면·수량을 만드는 설계 프로그램이에요. 구조검토서는 <b>HJ구조기술사사무소</b>에서 따로 받을 수 있어요(평균 2~3일). <a href="/pages/structureatuntroduction">구조검토 안내 →</a>'],
   ['설치나 명령이 잘 안 될 때는요?','CAD 종류·버전과 화면(오류 메시지)을 캡처해서 <a href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener">카톡</a>으로 보내 주시면 가장 빨라요. 전화 010-7970-2108.']
 ];
