@@ -137,7 +137,7 @@ function laborDl(){
    '#gpnv .t ul{margin:0 0 16px;padding:0;list-style:none}#gpnv .t li{position:relative;padding-left:20px;font-size:15px;line-height:1.8;color:#444;word-break:keep-all}#gpnv .t li:before{content:"✓";position:absolute;left:0;color:#B88A00;font-weight:800}'+
    '#gpnv .t a{display:inline-block;background:#F2B705;color:#1B1B1B!important;font-weight:800;font-size:15px;padding:11px 18px;border-radius:10px;text-decoration:none}#gpnv .t a:hover{background:#e0a900}'+
    '@media(max-width:1000px){#gpnv .g{grid-template-columns:1fr}}'+
-   '@media(max-width:560px){#gpnv{padding:32px 0 28px}#gpnv .w{padding:0 16px}#gpnv h2{font-size:23px}#gpnv .c{padding:16px;gap:14px;align-items:flex-start}#gpnv .v{flex-basis:128px}#gpnv .t b{font-size:17px}#gpnv .t li{font-size:13.5px;line-height:1.7}#gpnv .t a{font-size:14px;padding:10px 14px}#gpnv .v i{width:44px;height:44px;line-height:44px;font-size:17px}}';
+   '@media(max-width:560px){#gpnv{padding:32px 0 28px}#gpnv .w{padding:0 16px}#gpnv h2{font-size:23px}#gpnv .c{padding:16px;gap:14px;align-items:flex-start}#gpnv .v{flex-basis:128px}#gpnv .t b{font-size:17px}#gpnv .t li{font-size:13.5px;line-height:1.7}#gpnv .t a{font-size:14px;padding:10px 14px}#gpnv .v i{width:44px;height:44px;line-height:44px;font-size:17px}#gpnv .c.on{display:block}#gpnv .c.on .v{max-width:300px;margin:0 auto 16px}}';
   document.head.appendChild(st);
   var sec=document.createElement('section');sec.id='gpnv';
   sec.innerHTML='<div class="w"><h2>영상으로 먼저 보기</h2><p class="s"><b>무료</b>설치 없이 휴대폰·PC에서 바로 씁니다. 나에게 맞는 쪽을 눌러 보세요.</p><div class="g">'+NV.map(function(x){
@@ -147,7 +147,7 @@ function laborDl(){
   hero.parentNode.insertBefore(sec,hero.nextSibling);
   [].forEach.call(sec.querySelectorAll('button[data-v]'),function(b){b.addEventListener('click',function(){
    var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+b.getAttribute('data-v')+'?autoplay=1&rel=0&playsinline=1';
-   f.allow='autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;f.title=b.getAttribute('aria-label');b.parentNode.replaceChild(f,b);
+   f.allow='autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;f.title=b.getAttribute('aria-label');b.parentNode.parentNode.className+=' on';b.parentNode.replaceChild(f,b);
    try{gtag('event','youtube_click',{link_text:'nomu_'+f.src.split('/embed/')[1].slice(0,11)})}catch(e){}
   });});
  }
