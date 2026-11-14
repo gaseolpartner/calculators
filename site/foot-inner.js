@@ -116,6 +116,41 @@ function laborDl(){
  if(P!=='/pages/labor-management')return true;
  var a=[].filter.call(document.querySelectorAll('a[href*="1drv.ms"],a[href*="onedrive"]'),function(x){return x.getAttribute('data-gx')!=='dl';});
  a.forEach(function(x){x.setAttribute('href',NOMU_DL);x.removeAttribute('target');x.setAttribute('data-gx','dl');});
+ // 소개 영상 2편 (11-14): 첫 화면 바로 아래 — 근로자라면 / 사장님이라면. 썸네일을 누르면 그 자리에서 재생
+ var hero=document.getElementById('gx-hero');
+ if(hero&&!document.getElementById('gpnv')){
+  var NV=[['ihBnQ6npKm4','근로자라면','이번 달 월급, 얼마 들어올까?',['이름·현장·일당만 넣고 바로 시작','일한 날을 누르고 공수만 선택','세금·4대보험 빼고 실수령까지'],'31초'],
+          ['TRpbo0LUzqM','사장님 · 팀장님이라면','출력 보고, 카톡에서 붙여넣기만',['카톡 출력 보고를 읽어 달력에 반영','지원 인원 · 줄 돈·받는 돈·남는 돈 정산','같은 날 두 현장 · 다른 입력은 확인 필요로'],'44초']];
+  var st=document.createElement('style');st.id='gpnv-css';
+  st.textContent='#gpnv{background:#F6F6F4;padding:44px 0 40px;font-family:Pretendard,"Malgun Gothic",sans-serif;color:#2B2B2B}'+
+   '#gpnv .w{max-width:1140px;margin:0 auto;padding:0 20px;box-sizing:border-box}'+
+   '#gpnv h2{font-size:28px;font-weight:800;margin:0 0 6px;color:#1F1F1F}#gpnv .s{color:#666;font-size:15.5px;margin:0 0 20px}'+
+   '#gpnv .s b{display:inline-block;background:#F2B705;color:#1B1B1B;border-radius:999px;padding:1px 10px;font-weight:800;margin-right:6px}'+
+   '#gpnv .g{display:grid;grid-template-columns:1fr 1fr;gap:18px}'+
+   '#gpnv .c{background:#fff;border:1px solid #E3E3E3;border-radius:16px;padding:20px;display:flex;gap:20px;align-items:center}'+
+   '#gpnv .v{flex:0 0 190px}#gpnv .v button,#gpnv .v iframe{position:relative;display:block;width:100%;aspect-ratio:9/16;border:0;border-radius:12px;overflow:hidden;background:#000;padding:0;cursor:pointer}'+
+   '#gpnv .v img{width:100%;height:100%;object-fit:cover;display:block}'+
+   '#gpnv .v i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(27,27,27,.84);color:#F2B705;font-style:normal;font-size:21px;line-height:56px;text-align:center;padding-left:4px;box-sizing:border-box}'+
+   '#gpnv .v em{position:absolute;right:8px;bottom:8px;background:rgba(27,27,27,.84);color:#fff;font-style:normal;font-size:12px;font-weight:700;border-radius:6px;padding:2px 7px}'+
+   '#gpnv .t{min-width:0}#gpnv .t small{display:inline-block;background:#1B1B1B;color:#F2B705;font-weight:800;font-size:13px;border-radius:999px;padding:4px 12px;margin-bottom:10px}'+
+   '#gpnv .t b{display:block;font-size:21px;line-height:1.35;color:#1B1B1B;margin-bottom:10px;word-break:keep-all}'+
+   '#gpnv .t ul{margin:0 0 16px;padding:0;list-style:none}#gpnv .t li{position:relative;padding-left:20px;font-size:15px;line-height:1.8;color:#444;word-break:keep-all}#gpnv .t li:before{content:"✓";position:absolute;left:0;color:#B88A00;font-weight:800}'+
+   '#gpnv .t a{display:inline-block;background:#F2B705;color:#1B1B1B!important;font-weight:800;font-size:15px;padding:11px 18px;border-radius:10px;text-decoration:none}#gpnv .t a:hover{background:#e0a900}'+
+   '@media(max-width:1000px){#gpnv .g{grid-template-columns:1fr}}'+
+   '@media(max-width:560px){#gpnv{padding:32px 0 28px}#gpnv .w{padding:0 16px}#gpnv h2{font-size:23px}#gpnv .c{padding:16px;gap:14px;align-items:flex-start}#gpnv .v{flex-basis:128px}#gpnv .t b{font-size:17px}#gpnv .t li{font-size:13.5px;line-height:1.7}#gpnv .t a{font-size:14px;padding:10px 14px}#gpnv .v i{width:44px;height:44px;line-height:44px;font-size:17px}}';
+  document.head.appendChild(st);
+  var sec=document.createElement('section');sec.id='gpnv';
+  sec.innerHTML='<div class="w"><h2>영상으로 먼저 보기</h2><p class="s"><b>무료</b>설치 없이 휴대폰·PC에서 바로 씁니다. 나에게 맞는 쪽을 눌러 보세요.</p><div class="g">'+NV.map(function(x){
+   return '<div class="c"><div class="v"><button type="button" data-v="'+x[0]+'" aria-label="'+x[1]+' 소개 영상 재생"><img src="https://i.ytimg.com/vi/'+x[0]+'/oar2.jpg" alt="'+x[2]+'" loading="lazy"><i>▶</i><em>'+x[4]+'</em></button></div>'+
+    '<div class="t"><small>'+x[1]+'</small><b>'+x[2]+'</b><ul>'+x[3].map(function(l){return '<li>'+l+'</li>'}).join('')+'</ul><a href="https://gaseolpartner.vercel.app/nomu" target="_blank" rel="noopener">노무 관리 웹 열기 →</a></div></div>';
+  }).join('')+'</div></div>';
+  hero.parentNode.insertBefore(sec,hero.nextSibling);
+  [].forEach.call(sec.querySelectorAll('button[data-v]'),function(b){b.addEventListener('click',function(){
+   var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+b.getAttribute('data-v')+'?autoplay=1&rel=0&playsinline=1';
+   f.allow='autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;f.title=b.getAttribute('aria-label');b.parentNode.replaceChild(f,b);
+   try{gtag('event','youtube_click',{link_text:'nomu_'+f.src.split('/embed/')[1].slice(0,11)})}catch(e){}
+  });});
+ }
  // 바로가기 맨 앞에 '노무 관리 웹 열기' (11-12): 웹으로 들어가는 길이 페이지에 없었음
  var ag=document.querySelector('#skinMainSection .gx-acts .gx-ag');
  if(ag&&!ag.querySelector('.gx-nomu')){
