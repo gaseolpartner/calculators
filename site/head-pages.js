@@ -28,6 +28,11 @@ var CSS=''
 +'.gpp-hero{position:relative;background:linear-gradient(180deg,#fff 0%,#f5f5f2 100%);padding:64px 0 56px;text-align:center;overflow:hidden}'
 +'.gpp-hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#e6e6e2 1px,transparent 1px),linear-gradient(90deg,#e6e6e2 1px,transparent 1px);background-size:34px 34px;opacity:.55;-webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 0%,transparent 70%);mask-image:radial-gradient(ellipse at 50% 30%,#000 0%,transparent 70%)}'
 +'.gpp-hero .gpp-wrap{position:relative}'
++'.gpp-hg{display:grid;grid-template-columns:1fr 1.08fr;gap:44px;align-items:center;text-align:left;margin-bottom:10px}.gpp-hg .gpp-h1{font-size:42px;margin:18px 0 14px}.gpp-hg .gpp-sub{margin:0 0 26px;max-width:none}.gpp-hg .gpp-btns{justify-content:flex-start}'
++'.gpp-hvf{border-radius:14px;overflow:hidden;background:#000;border:1px solid #1b1b1b;box-shadow:0 18px 40px rgba(0,0,0,.16);aspect-ratio:1280/740}.gpp-hvf video{display:block;width:100%;height:100%;object-fit:cover}'
++'.gpp-hv p{margin:12px 0 0;font-size:14.5px;color:#555;text-align:center}.gpp-hv p b{display:inline-block;background:#1b1b1b;color:#F2B705;border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:800;margin-right:8px}'
++'@media (max-width:1000px){.gpp-hg{grid-template-columns:1fr;gap:26px;text-align:center}.gpp-hg .gpp-h1{font-size:40px}.gpp-hg .gpp-sub{margin:0 auto 26px;max-width:660px}.gpp-hg .gpp-btns{justify-content:center}.gpp-hv{max-width:760px;margin:0 auto;width:100%}}'
++'@media (max-width:640px){.gpp-hg .gpp-h1{font-size:31px}.gpp-hv p b{display:block;width:max-content;margin:0 auto 6px}}'
 +'.gpp-eye{display:inline-block;font-size:15px;font-weight:700;color:#8a6a00;background:#fff4cc;border:1px solid #f2d36b;padding:6px 14px;border-radius:999px}'
 +'.gpp-h1{font-size:48px;line-height:1.25;font-weight:800;color:#1b1b1b;letter-spacing:-1.6px;margin:20px 0 16px}'
 +'.gpp-mark{position:relative;white-space:nowrap;z-index:0}.gpp-mark:after{content:"";position:absolute;left:-6px;right:-6px;bottom:6px;height:18px;background:#F2B705;opacity:.55;z-index:-1}'
@@ -117,6 +122,14 @@ function intro(){
   +'<div class="gpp-cmpf"><span>같은 도면을 동시에 시작한 영상 기록입니다</span><a href="https://youtu.be/xKOEumR3I7k" target="_blank" rel="noopener">▶ 비교 영상 보기 →</a></div></div>'
   +'<div class="gpp-cmpv"><iframe src="https://www.youtube.com/embed/kNiFC3et0LM?autoplay=1&mute=1&loop=1&playlist=kNiFC3et0LM&controls=0&rel=0&playsinline=1" title="손으로 3분 16초 vs CATS 2분, 엑셀까지" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe><a href="https://youtube.com/shorts/kNiFC3et0LM" target="_blank" rel="noopener">▶ 평면 → 3D → 수량 → 엑셀까지 2분<span>같은 도면 · 손으로는 평면만 3분 16초</span></a><a href="https://youtube.com/shorts/KmQafKFlWN4" target="_blank" rel="noopener">▶ 층고가 바뀌면? 다시 그리기 15초<span>손으로는 2분 25초</span></a></div></div></div></div></section>');
  var latest=el('<section class="gpp-sec gpp-latest"><div class="gpp-wrap"><h2 class="gpp-h2"><span class="gpp-live">최신 업데이트 영상</span></h2><p class="gpp-h2s">CATS는 매주 새 기능이 추가되고 있어요. 유튜브에 올라온 가장 최근 영상이 자동으로 나옵니다</p><div class="gpp-vbox"><iframe src="https://www.youtube.com/embed/videoseries?list=UULFS4Ph5UJvlcdS5n-dLCJLYQ&rel=0" title="CATS 최신 업데이트 영상" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div><div class="gpp-btns" style="margin-top:24px"><a class="gpp-btn gpp-w" href="'+CH+'/videos" target="_blank" rel="noopener">업데이트 영상 모두 보기 →</a></div></div></section>');
+ // 첫 화면 실제 작동 영상 (11-14): 글(왼쪽) + 실제 CAD 녹화(오른쪽, 소리 없이 반복). 휴대폰은 버튼 아래. 원본 = 비교 쇼츠의 CATS 화면(6배속) 25초
+ (function(){var w=hero.querySelector('.gpp-wrap'),bt=w&&w.querySelector('.gpp-btns');if(!bt)return;
+  var g=el('<div class="gpp-hg"><div class="gpp-hl"></div><div class="gpp-hv"><div class="gpp-hvf"><video autoplay muted loop playsinline preload="metadata" poster="https://gaseolpartner.github.io/calculators/site/img/cats-hero.jpg" aria-label="CATS 실제 작동 화면: 평면 자동 배치, 3D 검토, 수량산출, 엑셀 출하의뢰서"><source src="https://gaseolpartner.github.io/calculators/site/img/cats-hero.mp4" type="video/mp4"></video></div><p><b>실제 녹화 · 6배속</b>평면 배치 → 3D → 입면도 → 수량 → 엑셀까지 2분</p></div></div>');
+  w.insertBefore(g,w.firstChild);var L=g.firstChild,n;
+  while((n=g.nextSibling)){L.appendChild(n);if(n===bt)break;}
+  var v=g.querySelector('video');if(v){v.muted=true;var pl=function(){var r=v.play();if(r&&r.catch)r.catch(function(){});};pl();
+   if('IntersectionObserver' in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)pl();else v.pause();});},{threshold:.2}).observe(v);}}
+ })();
  b[1].parentNode.insertBefore(hero,b[1]);b[1].parentNode.insertBefore(cmp,b[1]);b[1].parentNode.insertBefore(feat,b[1]);b[1].parentNode.insertBefore(price,b[1]);
  if('IntersectionObserver' in window){var co=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){cmp.classList.add('on');co.disconnect();}});},{threshold:.4});co.observe(cmp);}else{cmp.classList.add('on');}
  b[3].parentNode.insertBefore(latest,b[3]);b[3].parentNode.insertBefore(vids,b[3]);
