@@ -408,3 +408,30 @@ if(P===''){
   }
   if(!add()){var n=0,iv=setInterval(function(){if(add()||++n>50)clearInterval(iv);},200);}
 })();
+
+/* 체험판 받기 버튼 아래 안내 (11-15): 버튼을 누르면 모양이 다른 CATS 다운로드 페이지(autocats.co.kr)로 넘어가므로,
+   넘어가기 전에 "새 창으로 열림 · CAD만 고르면 됨"과 카톡 채널 추가를 알려 줌. 체험판 버튼이 있는 모든 페이지 공통 */
+(function(){
+  var DL='autocats.co.kr/seouldream#download',FR='https://pf.kakao.com/_xovuVG/friend';
+  var done=false;
+  function add(){
+    var as=document.querySelectorAll('a.gpp-btn[href*="'+DL+'"],a.gx-b1[href*="'+DL+'"],a.gx-b2[href*="'+DL+'"]'),n=0;
+    for(var i=0;i<as.length;i++){
+      var row=as[i].parentNode;if(!row||row.getAttribute('data-gpdl')||!as[i].offsetParent)continue;   // 숨겨진 버튼은 건너뜀
+      row.setAttribute('data-gpdl','1');
+      // 한 페이지에 한 번(첫 버튼) + 맨 아래 마무리 구역에만 — 버튼마다 붙이면 같은 말이 반복됨
+      var inEnd=!!(as[i].closest&&as[i].closest('.gpp-end'));if(done&&!inEnd)continue;if(!inEnd)done=true;n++;
+      var dark=!!(as[i].closest&&as[i].closest('#gx-hero,.gpp-end'));
+      var p=document.createElement('p');p.className='gp-dln';
+      p.style.cssText='margin:12px 0 0;font-size:14px;line-height:1.7;color:'+(dark?'#bdbdbd':'#666')+';font-family:Pretendard,"Malgun Gothic",sans-serif;word-break:keep-all';
+      var lc=dark?'#F2B705':'#8a6500';
+      p.innerHTML='↗ CATS 다운로드 페이지(autocats.co.kr)가 <b style="color:'+(dark?'#fff':'#1b1b1b')+'">새 창</b>으로 열려요. 쓰는 CAD만 고르면 됩니다.<br>'+
+        '<a href="'+FR+'" target="_blank" rel="noopener" style="color:'+lc+';font-weight:800;text-decoration:none;border-bottom:1.5px solid '+lc+'">💬 카톡 채널 추가</a> 해 두면 설치·사용 질문에 바로 답해 드려요.';
+      row.parentNode.insertBefore(p,row.nextSibling);
+      var a=p.querySelector('a');if(a)a.addEventListener('click',function(){try{window.gtag('event','kakao_friend_click',{where:'trial_note'})}catch(e){}});
+      as[i].addEventListener('click',function(){try{window.gtag('event','trial_download_click',{page:location.pathname})}catch(e){}});
+    }
+    return n;
+  }
+  var t=0,iv=setInterval(function(){add();if(++t>40)clearInterval(iv);},300);add();
+})();
