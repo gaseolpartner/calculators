@@ -307,13 +307,13 @@ if(P==='/pages/sale01'||P==='/pages/purchase'){
  * ② 첫 화면 아래쪽 '바로가기' 6칸(서비스 카드와 중복)만 숨김 — 같은 묶음의 영상 2개는 그대로 + 제목
  * ③ 메뉴: '구조 문의 게시판'(글 0개) 숨김, 무료 도구 7개는 모두 두고 설계·견적 / 현장 안전 · 작업자용 / 현장 관리로 묶음 + '무료 도구 전체 보기 →'
  * ④ 휴대폰: 서비스 카드 2칸 */
-var TRUST=[['13곳','정기 구독 업체 · 50여 대 사용 중'],['상위 5개사 중 3곳','CATS 사용'],['구조기술사','직접 검토'],['월 약 100건','구조검토 수행'],['평균 2~3일','검토서 회신']];
+var TRUST=[['13곳','정기 구독 업체'],['50여 대','CATS 사용 중'],['상위 5개사 중 3곳','업계 대형사 도입'],['구조기술사','직접 검토'],['월 약 100건','구조검토 수행'],['평균 2~3일','검토서 회신']];
 if(P===''){
   css('gptr-css',
-  '#gptr{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:26px 0 0;background:#1B1B1B;border-radius:14px;overflow:hidden;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
+  '#gptr{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin:26px 0 0;background:#1B1B1B;border-radius:14px;overflow:hidden;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
   '#gptr div{padding:16px 10px;text-align:center;border-left:1px solid #333}#gptr div:first-child{border-left:0}'+
   '#gptr b{display:block;color:#F2B705;font-size:19px;font-weight:800;line-height:1.3;word-break:keep-all}#gptr span{display:block;color:#cfcfcf;font-size:13px;margin-top:3px}'+
-  '@media(max-width:700px){#gptr{grid-template-columns:1fr 1fr;margin-top:16px}#gptr div{border-left:0;border-top:1px solid #333;padding:12px 8px}#gptr div:nth-child(-n+2){border-top:0}#gptr div:last-child{grid-column:1/-1}#gptr b{font-size:16px}#gptr span{font-size:12px}}'+
+  '@media(max-width:700px){#gptr{grid-template-columns:1fr 1fr;margin-top:16px}#gptr div{border-left:0;border-top:1px solid #333;padding:12px 8px}#gptr div:nth-child(-n+2){border-top:0}#gptr b{font-size:16px}#gptr span{font-size:12px}}'+
   '@media(max-width:700px){#gp-svc{grid-template-columns:1fr 1fr!important;gap:10px!important}#gp-svc .gp-c{padding:14px 12px!important;min-height:0!important}#gp-svc .gp-c p{display:none!important}#gp-svc .gp-c h3{font-size:16px!important;line-height:1.35!important;margin:6px 0 8px!important}#gp-svc .gp-ic{transform:scale(.8);transform-origin:left top}#gp-svc .gp-chips{gap:4px!important}#gp-svc .gp-chips span{font-size:11px!important;padding:3px 6px!important}#gp-svc .gp-go{font-size:13px!important}}');
   wait(function(){return document.getElementById('gp-svc')},function(svc){
     if(document.getElementById('gptr'))return;
