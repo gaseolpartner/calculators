@@ -412,7 +412,7 @@ if(P===''){
 /* 체험판 받기 버튼 아래 안내 (11-15): 버튼을 누르면 모양이 다른 CATS 다운로드 페이지(autocats.co.kr)로 넘어가므로,
    넘어가기 전에 "새 창으로 열림 · CAD만 고르면 됨"과 카톡 채널 추가를 알려 줌. 체험판 버튼이 있는 모든 페이지 공통 */
 (function(){
-  var DL='autocats.co.kr/seouldream#download',FR='https://pf.kakao.com/_xovuVG/friend';
+  var DL='autocats.co.kr/seouldream#download',FR='https://pf.kakao.com/_xovuVG';   // 채널 홈(여기서 '채널 추가'). /friend 는 PC에서 로그인 화면으로 바로 넘어가서 쓰지 않음
   var done=false;
   function add(){
     var as=document.querySelectorAll('a.gpp-btn[href*="'+DL+'"],a.gx-b1[href*="'+DL+'"],a.gx-b2[href*="'+DL+'"]'),n=0;
