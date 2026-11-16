@@ -162,7 +162,11 @@ if(P==='/pages/introduction'){
   '#gpv h3{font-size:19px;margin:0 0 8px;color:#1B1B1B}#gpv .gpv-c p{font-size:14.5px;line-height:1.7;color:#555;margin:0 0 10px}'+
   '#gpv ul{margin:0;padding:0 0 0 18px;font-size:14px;line-height:1.75;color:#444}'+
   '#gpv .gpv-more{margin:24px 0 0;font-size:14px;color:#666}#gpv .gpv-more a{color:#1B1B1B;font-weight:700}'+
-  '@media(max-width:900px){#gpv{padding:52px 0}#gpv .gpv-in{padding:0 16px}#gpv h2{font-size:25px}#gpv .gpv-cards{grid-template-columns:1fr}}');
+  '#gpv .gpv-tg{display:inline-block;font-size:14px;font-weight:800;color:#1B1B1B;border-left:4px solid #F2B705;padding:2px 0 2px 10px;margin:0 0 12px}'+
+  '#gpv .gpv-ds{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:center;background:#fff;border:1px solid #E3E3E3;border-radius:14px;padding:24px;margin:34px 0 0}'+
+  '#gpv .gpv-ds img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid #EEE}#gpv .gpv-ds .gpv-tg{margin:0 0 8px}#gpv .gpv-ds h3{font-size:21px}'+
+  '#gpv .gpv-ds a{display:inline-block;margin:12px 0 0;color:#1B1B1B;font-weight:800;font-size:14.5px;text-decoration:underline;text-decoration-color:#F2B705;text-underline-offset:3px}'+
+  '@media(max-width:900px){#gpv{padding:52px 0}#gpv .gpv-in{padding:0 16px}#gpv h2{font-size:25px}#gpv .gpv-cards{grid-template-columns:1fr}#gpv .gpv-ds{grid-template-columns:1fr;gap:16px;padding:18px}}');
   wait(function(){var h=[].slice.call(document.querySelectorAll('h3')).filter(function(x){return x.textContent.trim()==='3D 확인'})[0];return h&&h.closest('section');},function(sec){
     if(document.getElementById('gpv'))return;
     var C=[
@@ -171,10 +175,15 @@ if(P==='/pages/introduction'){
       {n:'03',t:'수량은 3D 기준으로 바로',img:'7hZTjJLrRIhjI8SIyTYMHg77cLJzZKmsTrF0s8Bc.jpg',alt:'3D 기준 수량',p:'경사 때문에 높이가 달라져도 규격별 수량이 자동으로 다시 계산됩니다. 수직재 규격별, 자키, 수평재, 멍에까지 한 번에 복사됩니다.',li:['행에 마우스를 올리면 계산 근거 표시','"수량 복사"로 엑셀에 바로 붙여넣기']}
     ];
     var s=document.createElement('section');s.id='gpv';
-    s.innerHTML='<div class="gpv-in"><span class="gpv-lb">CATS 기능 · V3d</span><h2>가설재 3D, CAD 안에서 바로 봅니다</h2>'+
-      '<p class="gpv-sub">CAD 프로그램을 바꾸지 않습니다. 평면에서 부재를 선택하면 바로 3D 창이 열립니다. 평면에 그린 시스템 동바리를 층고 기준으로 세워 보고, 경사 슬래브 문제 구간을 찾아 고치고, 수량까지 한 화면에서 끝납니다.</p>'+
+    s.innerHTML='<div class="gpv-in"><span class="gpv-lb">CATS 기능 · V3d / V3ds</span><h2>가설재 3D, CAD 안에서 바로 봅니다</h2>'+
+      '<p class="gpv-sub">CAD 프로그램을 바꾸지 않습니다. 평면에서 부재를 선택하면 바로 3D 창이 열립니다. 시스템 동바리는 <b>V3d</b>로 층고 기준으로 세워 경사 슬래브 문제 구간을 찾아 고치고, 시스템 비계는 <b>V3ds</b>로 세워 입면·단면도까지 그립니다. 수량은 둘 다 3D 기준으로 바로 나옵니다.</p>'+
+      '<span class="gpv-tg">V3d · 시스템 동바리</span>'+
       '<figure class="gpv-main"><img src="'+IMG+'PRSgefHk2OhcE6Q75ZOKQZkXxztNPUQMggOetnly.jpg" alt="V3d 실행 화면" loading="lazy"><figcaption>실제 V3d 화면 · 상부 경사 20%를 넣은 시스템 동바리</figcaption></figure>'+
       '<div class="gpv-cards">'+C.map(function(c){return '<div class="gpv-c"><img src="'+IMG+c.img+'" alt="'+c.alt+'" loading="lazy"><span class="gpv-n">'+c.n+'</span><h3>'+c.t+'</h3><p>'+c.p+'</p><ul><li>'+c.li.join('</li><li>')+'</li></ul></div>'}).join('')+'</div>'+
+      '<div class="gpv-ds"><figure><img src="https://gaseolpartner.github.io/calculators/site/img/v3ds.jpg" alt="V3ds 비계 3D 검토 화면" loading="lazy"><figcaption>실제 V3ds 화면 · 시스템 비계</figcaption></figure>'+
+      '<div><span class="gpv-tg">V3ds · 시스템 비계</span><h3>비계도 평면 그대로 3D로, 입면도까지</h3><p>선택한 비계 평면을 기준점 높이와 상부 조합으로 세워 보고, 기준선을 찍어 입면·단면을 그립니다. 창을 띄운 채 CAD 작업을 계속할 수 있습니다.</p>'+
+      '<ul><li>그리기 유형 4가지 — 입면 1·2, 단면 1·2</li><li>수직재·수평재·자키·발판 수량 바로 계산</li><li>발판 표시, 수평재 규격별 색 구분</li></ul>'+
+      '<a href="https://youtube.com/shorts/eUR0d1gqquY" target="_blank" rel="noopener">▶ 비계 평면 → 3D → 입면도 영상 (39초)</a></div></div>'+
       '<p class="gpv-more">발주처·현장 설명용 스케치업 3D 모델은 CATS와 연계해 시험 중이에요 → <a href="/pages/temporarysoftware3d">3D 자동화 설계</a></p></div>';
     s.appendChild(st('gpv-css'));
     sec.parentNode.insertBefore(s,sec.nextSibling);
