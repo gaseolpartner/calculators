@@ -444,3 +444,16 @@ if(P===''){
   }
   var t=0,iv=setInterval(function(){add();if(++t>40)clearInterval(iv);},300);add();
 })();
+
+/* 푸터: 통신판매업 신고번호가 비어 있으면 "[통신판매업신고]" 빈 칸 숨김 */
+(function(){
+  function hide(){
+    var ls=document.querySelectorAll('li.co_regist_link'),n=0;
+    for(var i=0;i<ls.length;i++){
+      var t=(ls[i].textContent||'').replace(/[\s\[\]]/g,'');
+      if(t==='통신판매업신고'||t===''){ls[i].style.setProperty('display','none','important');n++;}
+    }
+    return n;
+  }
+  var t=0,iv=setInterval(function(){hide();if(++t>20)clearInterval(iv);},500);hide();
+})();
