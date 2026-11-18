@@ -53,6 +53,9 @@ var CSS=''
 +'.gpp-p2{font-size:15.5px;color:#bbb;margin-top:8px;line-height:1.6}'
 +'.gpp-price .gpp-w{background:transparent;color:#fff!important;border-color:#666}'
 +'.gpp-vids{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}'
++'.gpp-vmore{margin-top:18px}.gpp-vmore[hidden]{display:none!important}.gpp-more{display:block;margin:20px auto 0;background:#fff;border:1.5px solid #1b1b1b;color:#1b1b1b;border-radius:999px;padding:10px 22px;font:inherit;font-size:15px;font-weight:700;cursor:pointer}.gpp-more:hover{background:#F2B705;border-color:#F2B705}'
++'.gpp-fl{background:#1b1b1b;padding:18px 0}.gpp-fl .gpp-wrap{display:flex;align-items:center;justify-content:center;gap:10px 14px;flex-wrap:wrap}.gpp-fl span{color:#fff;font-size:16px;font-weight:700;white-space:nowrap}.gpp-fl b{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#F2B705;color:#1b1b1b;font-size:12.5px;margin-right:7px;vertical-align:1px}.gpp-fl i{color:#F2B705;font-style:normal;font-weight:700}'
++'@media (max-width:640px){.gpp-fl{padding:14px 0}.gpp-fl .gpp-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px 8px;justify-items:start}.gpp-fl i{display:none}.gpp-fl span{font-size:14px}}'
 +'.gpp-new{display:inline-block;font-style:normal;background:#F2B705;color:#1b1b1b;font-size:11.5px;font-weight:800;border-radius:6px;padding:2px 7px;margin-right:6px;vertical-align:1px}'
 +'@media (max-width:600px){.gpp-vids{grid-template-columns:1fr 1fr!important;gap:14px 10px}.gpp-v b{font-size:13.5px!important;line-height:1.4}}'
 +'.gpp-v{display:block;text-decoration:none!important;color:inherit;text-align:left}'
@@ -108,19 +111,17 @@ function intro(){
  +'<div class="gpp-btns"><a class="gpp-btn gpp-y" href="https://www.autocats.co.kr/seouldream#download" target="_blank" rel="noopener">⬇ 체험판 받기 · 20일 무료</a><a class="gpp-btn gpp-w" href="/pages/sale01">가격·라이선스 보기</a></div>'
  +'<a class="gpp-pro" href="https://www.autocats.co.kr/pro" target="_blank" rel="noopener"><b>무료</b>CATS Pro · CAD 애드인도 함께 받기<small>다중 출력 · 레이어·폰트 정리</small><i>→</i></a>'
  +'<div class="gpp-steps"><span><b>1</b>CAD별 설치 파일 받기</span><span><b>2</b>첫 사용부터 20일 무료</span><span><b>3</b>구매 후 코드 입력 · 1코드 2PC</span></div><p class="gpp-stn">설치·코드 입력이 막히면 <a href="'+KAKAO+'" target="_blank" rel="noopener">💬 카톡 문의</a> · <a href="https://www.autocats.co.kr/seouldream/manual" target="_blank" rel="noopener">매뉴얼 보기</a> · <a href="https://www.autocats.co.kr/seouldream#download" target="_blank" rel="noopener">업데이트 내역</a> · <a href="https://youtube.com/shorts/WAHK4hAjn0E" target="_blank" rel="noopener">▶ 설치 영상 (57초)</a> · <a href="https://youtu.be/C_Kg0wLyJS0" target="_blank" rel="noopener">▶ 업데이트 영상 (46초)</a></p><div class="gpp-trust"><span><b>13곳</b>정기 구독 업체</span><span><b>50여 대</b>CATS 사용 중</span><span><b>상위 5개사 중 3곳</b>업계 대형사 도입</span></div><div class="gpp-cad">지원 CAD<br><span>AutoCAD 2013~</span><span>ZWCAD 2019~</span><span>BricsCAD V16~</span><span>GstarCAD 2021~</span><span>CADian 2020~</span></div></div></section>');
- var feat=el('<section class="gpp-sec"><div class="gpp-wrap"><h2 class="gpp-h2">도면 하나로, 배치부터 엑셀 수량까지</h2><p class="gpp-h2s">설계자가 손으로 반복하던 작업을 CATS가 처리합니다</p><div class="gpp-feat">'
- +'<div class="gpp-f"><span class="gpp-n">1</span><h3>평면 자동 배치</h3><p>시스템 비계·서포트를 평면에 규칙대로 자동 배치</p></div>'
- +'<div class="gpp-f"><span class="gpp-n">2</span><h3>입면·단면 정리</h3><p>입면도·단면도를 명령어 하나로 빠르게 완성</p></div>'
- +'<div class="gpp-f"><span class="gpp-n">3</span><h3>3D 확인</h3><p>배치 결과를 입체로 바로 검토</p></div>'
- +'<div class="gpp-f"><span class="gpp-n">4</span><h3>수량 → 엑셀</h3><p>자재 수량을 집계해 엑셀 출하의뢰서까지</p></div>'
- +'</div></div></section>');
+ // 기능 4가지: 카드 섹션 대신 첫 화면 바로 아래 한 줄 (11-18 길이 정리)
+ var feat=el('<section class="gpp-fl"><div class="gpp-wrap"><span><b>1</b>평면 자동 배치</span><i>→</i><span><b>2</b>입면·단면 정리</span><i>→</i><span><b>3</b>3D 확인</span><i>→</i><span><b>4</b>수량 → 엑셀 출하의뢰서</span></div></section>');
  var price=el('<section class="gpp-sec" style="padding-top:0"><div class="gpp-wrap"><div class="gpp-price"><div><small>라이선스 가격 (VAT 별도)</small><div class="gpp-p">200,000원<em>/ 월</em></div><div class="gpp-p2">연간 2,160,000원 (10% 할인) · 1인 2대 PC 설치 (동시 접속 불가)<br>CAD 종류 상관없이 사용</div></div>'
  +'<div class="gpp-btns"><a class="gpp-btn gpp-y" href="https://www.autocats.co.kr/seouldream#download" target="_blank" rel="noopener">⬇ 체험판 받기 · 20일 무료</a><a class="gpp-btn gpp-w" href="/pages/purchase">구매 요청</a></div></div></div></section>');
  var vids=el('<section class="gpp-sec gpp-g"><div class="gpp-wrap"><h2 class="gpp-h2">영상으로 먼저 보기</h2><p class="gpp-h2s">처음 시작하는 분은 연습 #1부터 차례로 따라 하시면 됩니다</p><div class="gpp-vids">'
  +VID('ncQcwocUdTE','연습 #1 · 도면 하나로 배치부터 엑셀 수량까지')+VID('4ANirXYCPxU','연습 #2 · 지붕부터 그리는 입면도 완성하기')+VID('XD8GRmJ9oX8','연습 #3 · V3D로 찾고 고치는 중복 부재 정리')
- +VID('ix7XBSyyGvc','연습 #4 · 외벽선 하나로 비계 평면 한 바퀴')+VID('FRGkh6dta-8','연습 #5 · 평면에서 선만 내리면 비계 입면 완성')+VID('gexRZ3irj5k','연습 #6 · 동바리 수량, 3D로 보고 엑셀로 뽑기')
  +VID('MXKmnAN_UgA','<em class="gpp-new">NEW</em>연습 #7 · 시스템 트러스 배치부터 입면 수평재까지')+VID('Lj7FXrdEmSQ','<em class="gpp-new">NEW</em>CATS 1.5.9 업데이트 · 막히면 이유와 해결 방법까지')+VID('BrMTPD0Lt9U','CATS 1.5.7 실전 흐름 · 샘플 도면 한 장으로 동바리부터 비계 입면까지 2분')
+ +'</div><button type="button" class="gpp-more" aria-expanded="false">연습 #4 · #5 · #6 더 보기 ▾</button><div class="gpp-vids gpp-vmore" hidden>'
+ +VID('ix7XBSyyGvc','연습 #4 · 외벽선 하나로 비계 평면 한 바퀴')+VID('FRGkh6dta-8','연습 #5 · 평면에서 선만 내리면 비계 입면 완성')+VID('gexRZ3irj5k','연습 #6 · 동바리 수량, 3D로 보고 엑셀로 뽑기')
  +'</div><p class="gpp-vsh"><b>NEW · 39초</b><a href="https://youtube.com/shorts/eUR0d1gqquY" target="_blank" rel="noopener">▶ 시스템 비계 · 평면에서 3D·입면도까지</a></p><div class="gpp-btns" style="margin-top:26px"><a class="gpp-btn gpp-w" href="'+CH+'/videos" target="_blank" rel="noopener">유튜브에서 전체 영상 보기 →</a></div></div></section>');
+ (function(){var mb=vids.querySelector('.gpp-more'),mv=vids.querySelector('.gpp-vmore');if(mb&&mv)mb.addEventListener('click',function(){var o=mv.hidden;mv.hidden=!o;mb.setAttribute('aria-expanded',o?'true':'false');mb.textContent=o?'접기 ▴':'연습 #4 · #5 · #6 더 보기 ▾';});})();
  var end=el('<section class="gpp-end"><div class="gpp-wrap"><h2>직접 써 보고 결정하세요</h2><p>체험판은 바로 받아 첫 사용부터 20일 동안 무료로 써 볼 수 있습니다</p><div class="gpp-btns"><a class="gpp-btn gpp-d" href="https://www.autocats.co.kr/seouldream#download" target="_blank" rel="noopener">⬇ 체험판 받기 · 20일 무료</a><a class="gpp-btn gpp-w" href="/pages/purchase">구매 요청</a></div></div></section>');
  b[1].classList.add('gpp-hide');b[2].classList.add('gpp-hide');b[3].classList.add('gpp-hide');[].forEach.call(b[2].querySelectorAll('iframe'),function(f){f.src='about:blank';});[].forEach.call(b[3].querySelectorAll('iframe'),function(f){f.src='about:blank';});
  var cmp=el('<section class="gpp-cmp"><div class="gpp-wrap"><div class="gpp-cmpbox"><div class="gpp-cmpg"><div><span class="gpp-eye">자체 비교 영상 기준 · 시스템 비계 입면도</span><h2>수작업은 5분 48초가 지나도 미완성,<br><b>CATS는 1분 40초</b>에 발판까지 완성</h2>'
@@ -128,7 +129,6 @@ function intro(){
   +'<div class="gpp-row"><b>수작업</b><div class="gpp-track more"><i class="gpp-fill g" style="--w:100%"></i></div><em><strong>5분 48초</strong> · 발판은 시작 전</em></div>'
   +'<div class="gpp-cmpf"><span>같은 도면을 동시에 시작한 영상 기록입니다</span><a href="https://youtu.be/xKOEumR3I7k" target="_blank" rel="noopener">▶ 비교 영상 보기 →</a></div></div>'
   +'<div class="gpp-cmpv"><iframe src="https://www.youtube.com/embed/kNiFC3et0LM?autoplay=1&mute=1&loop=1&playlist=kNiFC3et0LM&controls=0&rel=0&playsinline=1" title="손으로 3분 16초 vs CATS 2분, 엑셀까지" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe><a href="https://youtube.com/shorts/kNiFC3et0LM" target="_blank" rel="noopener">▶ 평면 → 3D → 수량 → 엑셀까지 2분<span>같은 도면 · 손으로는 평면만 3분 16초</span></a><a href="https://youtube.com/shorts/KmQafKFlWN4" target="_blank" rel="noopener">▶ 층고가 바뀌면? 다시 그리기 15초<span>손으로는 2분 25초</span></a></div></div></div></div></section>');
- var latest=el('<section class="gpp-sec gpp-latest"><div class="gpp-wrap"><h2 class="gpp-h2"><span class="gpp-live">최신 업데이트 영상</span></h2><p class="gpp-h2s">CATS는 매주 새 기능이 추가되고 있어요. 유튜브에 올라온 가장 최근 영상이 자동으로 나옵니다</p><div class="gpp-vbox"><iframe src="https://www.youtube.com/embed/videoseries?list=UULFS4Ph5UJvlcdS5n-dLCJLYQ&rel=0" title="CATS 최신 업데이트 영상" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div><div class="gpp-btns" style="margin-top:24px"><a class="gpp-btn gpp-w" href="'+CH+'/videos" target="_blank" rel="noopener">업데이트 영상 모두 보기 →</a></div></div></section>');
  // 첫 화면 실제 작동 영상 (11-14, 11-15 동바리·비계 두 편): 글(왼쪽) + 실제 CAD 녹화(오른쪽, 소리 없이 반복). 휴대폰은 버튼 아래.
  // 영상 파일: site/img/cats-dong.mp4 · cats-bi.mp4 (각 1280×720, 25~27초). 한 편이 끝나면 다음 편으로 넘어가고, 버튼으로 골라 볼 수도 있음
  (function(){var w=hero.querySelector('.gpp-wrap'),bt=w&&w.querySelector('.gpp-btns');if(!bt)return;
@@ -149,9 +149,9 @@ function intro(){
   show(0);
   if('IntersectionObserver' in window){new IntersectionObserver(function(es){es.forEach(function(e){vis=e.isIntersecting;if(vis)pl();else v.pause();});},{threshold:.2}).observe(v);}
  })();
- b[1].parentNode.insertBefore(hero,b[1]);b[1].parentNode.insertBefore(cmp,b[1]);b[1].parentNode.insertBefore(feat,b[1]);b[1].parentNode.insertBefore(price,b[1]);
+ b[1].parentNode.insertBefore(hero,b[1]);b[1].parentNode.insertBefore(feat,b[1]);b[1].parentNode.insertBefore(cmp,b[1]);b[1].parentNode.insertBefore(price,b[1]);
  if('IntersectionObserver' in window){var co=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){cmp.classList.add('on');co.disconnect();}});},{threshold:.4});co.observe(cmp);}else{cmp.classList.add('on');}
- b[3].parentNode.insertBefore(latest,b[3]);b[3].parentNode.insertBefore(vids,b[3]);
+ b[3].parentNode.insertBefore(vids,b[3]); // 최신 업데이트 재생목록(latest)은 영상 칸과 겹쳐서 뺌 (11-18)
  b[4].parentNode.insertBefore(end,b[4].nextSibling);
  return true;}
 function common(){
