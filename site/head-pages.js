@@ -53,6 +53,8 @@ var CSS=''
 +'.gpp-p2{font-size:15.5px;color:#bbb;margin-top:8px;line-height:1.6}'
 +'.gpp-price .gpp-w{background:transparent;color:#fff!important;border-color:#666}'
 +'.gpp-vids{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}'
++'.gpp-new{display:inline-block;font-style:normal;background:#F2B705;color:#1b1b1b;font-size:11.5px;font-weight:800;border-radius:6px;padding:2px 7px;margin-right:6px;vertical-align:1px}'
++'@media (max-width:600px){.gpp-vids{grid-template-columns:1fr 1fr!important;gap:14px 10px}.gpp-v b{font-size:13.5px!important;line-height:1.4}}'
 +'.gpp-v{display:block;text-decoration:none!important;color:inherit;text-align:left}'
 +'.gpp-vt{position:relative;display:block;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#111}.gpp-vt img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}.gpp-v:hover .gpp-vt img{transform:scale(1.04)}'
 +'.gpp-vt i{position:absolute;left:50%;top:50%;width:56px;height:40px;margin:-20px 0 0 -28px;border-radius:12px;background:#ff0033;color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center;font-size:18px}'
@@ -114,8 +116,10 @@ function intro(){
  +'</div></div></section>');
  var price=el('<section class="gpp-sec" style="padding-top:0"><div class="gpp-wrap"><div class="gpp-price"><div><small>라이선스 가격 (VAT 별도)</small><div class="gpp-p">200,000원<em>/ 월</em></div><div class="gpp-p2">연간 2,160,000원 (10% 할인) · 1인 2대 PC 설치 (동시 접속 불가)<br>CAD 종류 상관없이 사용</div></div>'
  +'<div class="gpp-btns"><a class="gpp-btn gpp-y" href="https://www.autocats.co.kr/seouldream#download" target="_blank" rel="noopener">⬇ 체험판 받기 · 20일 무료</a><a class="gpp-btn gpp-w" href="/pages/purchase">구매 요청</a></div></div></div></section>');
- var vids=el('<section class="gpp-sec gpp-g"><div class="gpp-wrap"><h2 class="gpp-h2">영상으로 먼저 보기</h2><p class="gpp-h2s">처음 시작하는 분은 연습 #1부터 보시면 됩니다</p><div class="gpp-vids">'
- +VID('ncQcwocUdTE','연습 #1 · 도면 하나로 배치부터 엑셀 수량까지')+VID('4ANirXYCPxU','연습 #2 · 지붕부터 그리는 입면도 완성하기')+VID('BrMTPD0Lt9U','CATS 1.5.7 실전 흐름 · 샘플 도면 한 장으로 동바리부터 비계 입면까지 2분')
+ var vids=el('<section class="gpp-sec gpp-g"><div class="gpp-wrap"><h2 class="gpp-h2">영상으로 먼저 보기</h2><p class="gpp-h2s">처음 시작하는 분은 연습 #1부터 차례로 따라 하시면 됩니다</p><div class="gpp-vids">'
+ +VID('ncQcwocUdTE','연습 #1 · 도면 하나로 배치부터 엑셀 수량까지')+VID('4ANirXYCPxU','연습 #2 · 지붕부터 그리는 입면도 완성하기')+VID('XD8GRmJ9oX8','연습 #3 · V3D로 찾고 고치는 중복 부재 정리')
+ +VID('ix7XBSyyGvc','연습 #4 · 외벽선 하나로 비계 평면 한 바퀴')+VID('FRGkh6dta-8','연습 #5 · 평면에서 선만 내리면 비계 입면 완성')+VID('gexRZ3irj5k','연습 #6 · 동바리 수량, 3D로 보고 엑셀로 뽑기')
+ +VID('MXKmnAN_UgA','<em class="gpp-new">NEW</em>연습 #7 · 시스템 트러스 배치부터 입면 수평재까지')+VID('Lj7FXrdEmSQ','<em class="gpp-new">NEW</em>CATS 1.5.9 업데이트 · 막히면 이유와 해결 방법까지')+VID('BrMTPD0Lt9U','CATS 1.5.7 실전 흐름 · 샘플 도면 한 장으로 동바리부터 비계 입면까지 2분')
  +'</div><p class="gpp-vsh"><b>NEW · 39초</b><a href="https://youtube.com/shorts/eUR0d1gqquY" target="_blank" rel="noopener">▶ 시스템 비계 · 평면에서 3D·입면도까지</a></p><div class="gpp-btns" style="margin-top:26px"><a class="gpp-btn gpp-w" href="'+CH+'/videos" target="_blank" rel="noopener">유튜브에서 전체 영상 보기 →</a></div></div></section>');
  var end=el('<section class="gpp-end"><div class="gpp-wrap"><h2>직접 써 보고 결정하세요</h2><p>체험판은 바로 받아 첫 사용부터 20일 동안 무료로 써 볼 수 있습니다</p><div class="gpp-btns"><a class="gpp-btn gpp-d" href="https://www.autocats.co.kr/seouldream#download" target="_blank" rel="noopener">⬇ 체험판 받기 · 20일 무료</a><a class="gpp-btn gpp-w" href="/pages/purchase">구매 요청</a></div></div></section>');
  b[1].classList.add('gpp-hide');b[2].classList.add('gpp-hide');b[3].classList.add('gpp-hide');[].forEach.call(b[2].querySelectorAll('iframe'),function(f){f.src='about:blank';});[].forEach.call(b[3].querySelectorAll('iframe'),function(f){f.src='about:blank';});
