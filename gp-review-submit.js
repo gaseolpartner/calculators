@@ -45,6 +45,7 @@
   // 접수 완료 창: 접수번호 + 진행 상황 조회 링크 (접수번호가 없으면 예전처럼 안내만)
   var STATUS = 'https://gaseolpartner.github.io/calculators/review-status.html';
   function done(receipt, phone) {
+    var fi = document.getElementById('attachments'); var nf = fi && fi.files ? fi.files.length : 0;
     var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
     var w = document.createElement('div');
     w.className = 'gprs-done';
@@ -55,6 +56,7 @@
       '<div style="width:56px;height:56px;border-radius:50%;background:#F2B705;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900">✓</div>' +
       '<div style="font-size:21px;font-weight:800">의뢰서가 접수됐어요</div>' +
       '<div style="margin-top:8px;font-size:15px;color:#555;line-height:1.55">영업일 기준 <b style="color:#1B1B1B">하루 안에</b> 견적을 안내해 드려요.<br>연락처 ' + esc(phone) + ' 로 연락드립니다.</div>' +
+      (nf ? '<div style="margin-top:12px;background:#FFF6D6;border:1px solid #F2B705;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.55;text-align:left"><b>📎 고른 파일 ' + nf + '개는 이 방법으로 함께 가지 않아요.</b><br>도면·사진은 <a href="https://pf.kakao.com/_xovuVG/chat" target="_blank" rel="noopener" style="color:#1B1B1B;font-weight:800">카톡</a> 또는 메일(hj_str@naver.com)로 보내 주세요. 접수번호를 같이 적어 주시면 바로 찾습니다.</div>' : '') +
       (receipt ? '<div style="margin:18px 0 6px;font-size:13px;color:#777">접수번호</div>' +
         '<div style="display:flex;gap:8px;justify-content:center;align-items:center"><span class="gprs-no" style="font-size:24px;font-weight:900;letter-spacing:.5px">' + esc(receipt) + '</span>' +
         '<button type="button" class="gprs-copy" style="border:1px solid #ccc;background:#fff;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:700;cursor:pointer">복사</button></div>' +
