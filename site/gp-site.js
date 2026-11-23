@@ -457,3 +457,47 @@ if(P===''){
   }
   var t=0,iv=setInterval(function(){hide();if(++t>20)clearInterval(iv);},500);hide();
 })();
+
+/* 체험판 받기를 누른 뒤 안내 창 (11-23): 다운로드 페이지는 새 창으로 열리고, 이 페이지로 돌아오면
+   "설치 막히면 카톡으로 화면만 보내 주세요" 안내가 떠 있게 함. 한 번 닫으면 같은 창(세션)에서는 다시 안 뜸 */
+(function(){
+  var KC='https://pf.kakao.com/_xovuVG/chat',K='gp-dlhelp';
+  function seen(){try{return sessionStorage.getItem(K)==='1'}catch(e){return false}}
+  function mark(){try{sessionStorage.setItem(K,'1')}catch(e){}}
+  function ev(n,p){try{window.gtag('event',n,p||{})}catch(e){}}
+  function show(){
+    if(seen()||document.getElementById('gp-dlh'))return;mark();
+    var st=document.createElement('style');
+    st.textContent='#gp-dlh{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.45);font-family:Pretendard,"Malgun Gothic",sans-serif}'
+    +'#gp-dlh .b{background:#fff;width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:26px 22px 22px;box-shadow:0 -10px 40px rgba(0,0,0,.2);word-break:keep-all}'
+    +'@media (min-width:700px){#gp-dlh{align-items:center}#gp-dlh .b{border-radius:20px}}'
+    +'#gp-dlh h3{margin:0 0 8px;font-size:21px;font-weight:800;color:#1b1b1b;line-height:1.4}#gp-dlh p{margin:0 0 18px;font-size:15px;line-height:1.7;color:#555}'
+    +'#gp-dlh .s{display:flex;gap:8px;margin:0 0 18px;padding:0;list-style:none}#gp-dlh .s li{flex:1;background:#F6F6F4;border-radius:12px;padding:10px 8px;font-size:13px;line-height:1.45;color:#333;text-align:center}#gp-dlh .s b{display:block;color:#1b1b1b;font-size:14px}'
+    +'#gp-dlh a{display:block;text-align:center;text-decoration:none!important;border-radius:12px;padding:14px;font-size:16px;font-weight:800;margin-top:8px}'
+    +'#gp-dlh .k{background:#FEE500;color:#1b1b1b!important}#gp-dlh .v{background:#1b1b1b;color:#fff!important}'
+    +'#gp-dlh .x{position:absolute;right:14px;top:10px;background:none;border:0;font-size:26px;color:#999;cursor:pointer;line-height:1}#gp-dlh .b{position:relative}'
+    +'#gp-dlh .c{display:block;margin:12px auto 0;background:none;border:0;color:#888;font-size:14px;cursor:pointer;font-family:inherit}';
+    document.head.appendChild(st);
+    var d=document.createElement('div');d.id='gp-dlh';d.setAttribute('role','dialog');d.setAttribute('aria-label','체험판 설치 안내');
+    d.innerHTML='<div class="b"><button type="button" class="x" aria-label="닫기">×</button>'
+     +'<h3>체험판 설치, 막히면 바로 도와드려요</h3>'
+     +'<p>새 창에서 쓰는 CAD에 맞는 파일을 받아 설치하면 됩니다. 설치나 코드 입력이 안 되면 <b>카톡으로 화면 사진만</b> 보내 주세요.</p>'
+     +'<ul class="s"><li><b>① 설치</b>CAD별 파일 받기</li><li><b>② 20일 무료</b>첫 사용부터</li><li><b>③ 연습 #1</b>10분 따라 하기</li></ul>'
+     +'<a class="k" href="'+KC+'" target="_blank" rel="noopener">💬 카톡으로 설치 도움 받기</a>'
+     +'<a class="v" href="https://youtube.com/shorts/WAHK4hAjn0E" target="_blank" rel="noopener">▶ 설치 영상 보기 (57초)</a>'
+     +'<a class="v" style="background:#F2B705;color:#1b1b1b!important" href="https://www.youtube.com/watch?v=ncQcwocUdTE" target="_blank" rel="noopener">▶ 설치 후 연습 #1 따라 하기</a>'
+     +'<button type="button" class="c">닫기</button></div>';
+    document.body.appendChild(d);ev('trial_help_show',{page:location.pathname});
+    function close(){d.remove();}
+    d.addEventListener('click',function(e){if(e.target===d)close();});
+    d.querySelector('.x').addEventListener('click',close);d.querySelector('.c').addEventListener('click',close);
+    d.querySelector('.k').addEventListener('click',function(){ev('kakao_click',{where:'trial_help'});});
+    [].forEach.call(d.querySelectorAll('.v'),function(a,i){a.addEventListener('click',function(){ev('youtube_click',{where:'trial_help',video:i?'practice1':'install'});});});
+    document.addEventListener('keydown',function k(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',k);}});
+  }
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href*="autocats.co.kr/seouldream"]');if(!a)return;
+    if(!/download/.test(a.href))return;   // 매뉴얼 링크 등은 제외
+    setTimeout(show,400);
+  },true);
+})();
