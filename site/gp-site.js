@@ -145,6 +145,17 @@ if(P==='/pages/temporarysoftware3d'){
     d.appendChild(st('gpsk-css'));
     sx.parentNode.insertBefore(d,sx);
   });
+  // 아래쪽 옛 광고 문구("1초 만에 이해합니다"…)는 "시험 중·판매 안 함" 안내와 맞지 않아 숨김 (11-24)
+  wait(function(){var m=document.getElementById('skinMainSection');return m&&/1초 만에 이해|3D라면 미리 찾아내/.test(m.textContent)&&m},function(m){
+    var w=document.createTreeWalker(m,NodeFilter.SHOW_TEXT),n,hit=[];
+    while((n=w.nextNode())){if(/1초 만에 이해|3D라면 미리 찾아내|3D 자동화 설계/.test(n.textContent))hit.push(n);}
+    hit.forEach(function(t){
+      var e=t.parentElement,len=t.textContent.trim().length;
+      // 문구만 들어 있는 가장 큰 상자까지 올라가서 숨김 (다른 내용이 함께 있는 상자는 건드리지 않음)
+      while(e.parentElement&&e.parentElement!==m&&e.parentElement.textContent.trim().length<len*1.6&&!e.parentElement.querySelector('img,video,iframe,#gpsk'))e=e.parentElement;
+      e.style.setProperty('display','none','important');
+    });
+  });
 }
 if(P==='/pages/introduction'){
   css('gpv-css',
@@ -482,7 +493,7 @@ if(P===''){
     d.innerHTML='<div class="b"><button type="button" class="x" aria-label="닫기">×</button>'
      +'<h3>체험판 설치, 막히면 바로 도와드려요</h3>'
      +'<p>새 창에서 쓰는 CAD에 맞는 파일을 받아 설치하면 됩니다. 설치나 코드 입력이 안 되면 <b>카톡으로 화면 사진만</b> 보내 주세요.</p>'
-     +'<ul class="s"><li><b>① 설치</b>CAD별 파일 받기</li><li><b>② 20일 무료</b>첫 사용부터</li><li><b>③ 연습 #1</b>10분 따라 하기</li></ul>'
+     +'<ul class="s"><li><b>① 설치</b>CAD별 파일 받기</li><li><b>② 20일 무료</b>그 뒤엔 하루 5회</li><li><b>③ 연습 #1</b>10분 따라 하기</li></ul>'
      +'<a class="k" href="'+KC+'" target="_blank" rel="noopener">💬 카톡으로 설치 도움 받기</a>'
      +'<a class="v" href="https://youtube.com/shorts/WAHK4hAjn0E" target="_blank" rel="noopener">▶ 설치 영상 보기 (57초)</a>'
      +'<a class="v" style="background:#F2B705;color:#1b1b1b!important" href="https://www.youtube.com/watch?v=ncQcwocUdTE" target="_blank" rel="noopener">▶ 설치 후 연습 #1 따라 하기</a>'
@@ -501,3 +512,26 @@ if(P===''){
     setTimeout(show,400);
   },true);
 })();
+
+/* 고객지원(자료·공지): 공지 목록이 2024~2025년 글뿐이라 멈춘 것처럼 보임 → 목록 바로 위에 최신 소식 줄 (11-24)
+   새 버전·영상이 나오면 아래 NEWS 에 한 줄 추가 (최신이 위, 3줄까지 보임) */
+if(P==='/pages/support2'){
+  var NEWS=[
+    ['2026-11-18','연습 #7 시스템 트러스 배치 영상','https://www.youtube.com/watch?v=MXKmnAN_UgA'],
+    ['2026-11-16','CATS 가설재 1.5.9 업데이트 · 막히면 이유와 해결 방법까지','https://www.youtube.com/watch?v=Lj7FXrdEmSQ'],
+    ['2026-11-11','패치노트에서 버튼 하나로 새 버전 설치','https://www.youtube.com/watch?v=C_Kg0wLyJS0']
+  ];
+  css('gpnw-css','#gpnw{max-width:1140px;margin:0 auto 18px;padding:16px 20px;box-sizing:border-box;background:#FFF8E1;border:1px solid #F2D27A;border-radius:12px;font-family:Pretendard,"Malgun Gothic",sans-serif}'+
+    '#gpnw b.t{display:block;font-size:15px;color:#1B1B1B;margin:0 0 8px}#gpnw a{display:flex;gap:12px;padding:6px 0;color:#2B2B2B;text-decoration:none;font-size:15px;line-height:1.5}#gpnw a:hover span{text-decoration:underline}'+
+    '#gpnw time{flex:none;color:#8A6D00;font-weight:700;font-size:14px}#gpnw .all{display:inline-block;margin-top:6px;font-weight:800;color:#1B1B1B}'+
+    '@media(max-width:700px){#gpnw{margin:0 16px 16px}#gpnw a{flex-direction:column;gap:0}}');
+  wait(function(){var t=[].filter.call(document.querySelectorAll('table'),function(x){return /작성자/.test(x.textContent)&&/작성일/.test(x.textContent)})[0];return t},function(t){
+    if(document.getElementById('gpnw'))return;
+    var box=t.closest('.module_container')||t.closest('div')||t;
+    var d=document.createElement('div');d.id='gpnw';
+    d.innerHTML='<b class="t">📌 최신 소식</b>'+NEWS.slice(0,3).map(function(n){return '<a href="'+n[2]+'" target="_blank" rel="noopener"><time>'+n[0].slice(5).replace('-','/')+'</time><span>'+n[1]+'</span></a>'}).join('')+
+      '<a class="all" href="https://www.autocats.co.kr/seouldream#download" target="_blank" rel="noopener">📋 버전별 업데이트 내역·패치노트 전체 보기 →</a>';
+    d.appendChild(st('gpnw-css'));
+    box.parentNode.insertBefore(d,box);
+  });
+}

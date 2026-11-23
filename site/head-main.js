@@ -124,7 +124,7 @@ function run(){
  +'<div class="gp-btns"><a class="gp-btn gp-btn-d" href="#gp-svc">서비스 보기 ↓</a><a class="gp-btn gp-btn-y" href="'+KAKAO+'" target="_blank" rel="noopener">💬 카톡 문의</a></div>'
  +'</div><div id="gp-svc" class="gp-svc">'
  +card('/pages/introduction','cad','프로그램',0,'가설 설계 프로그램<br>CATS','CAD에서 시스템 비계·서포트를 자동 배치하고 수량까지 뽑아 줍니다.',['3D 확인','수량 엑셀','CAD 5종','체험판','CATS Pro 무료'],'프로그램 보기')
- +card('/pages/structureatuntroduction','str','비용 협의',0,'HJ구조<br>구조검토','비계·동바리 구조검토를 구조 사무실에서 직접 맡아 드립니다.',['구조검토 의뢰','진행 조회','간편 구조계산'],'검토 의뢰하기')
+ +card('/pages/structureatuntroduction','str','비용 협의',0,'HJ구조<br>구조검토','비계·동바리·거푸집·인양·태양광 등 가설 구조검토를 구조 사무실에서 직접 맡아 드립니다.',['구조검토 의뢰','진행 조회','간편 구조계산'],'검토 의뢰하기')
  +card('/pages/precio','quo','견적 요청',0,'가설재<br>견적 비교','여러 업체 견적을 한 번에 받아 비교합니다. 업체는 승인 후 신규 현장 정보도 받아 봅니다.',['업체별 견적','한 번에 비교',['업체라면 → 현장 정보 받기','/pages/precio#sales'],'신규 수주 브리핑','현장관리 시스템'],'견적 비교하기')
  +card('/pages/calculators','sup','무료',1,'현장 지원<br>무료 도구','현장 업무를 돕는 도구를 무료로 쓸 수 있습니다.',['외부 비계·안전망','가수량·견적서','중량·차량','견적 시세','작업 전 점검표','작업계획서 (비계·동바리)','강풍·폭우 알림','3D 안전교육','노무 관리'],'무료로 쓰기')
  +'</div></div></section>');
